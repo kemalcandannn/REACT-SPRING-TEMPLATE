@@ -2,7 +2,6 @@ package com.my_company.service.authentication;
 
 import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
-import com.my_company.constants.enums.AuthProvider;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParameterCode;
 import com.my_company.constants.enums.Status;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -36,10 +34,7 @@ public class AuthenticationService {
     public LoginResponse localSignUp(SignUpRequest request) {
         signUpValidation(request);
 
-        UserDTO userDTO = userMapper.signUpRequestToDTO(request);
-        userDTO.setPassword(passwordEncoder.encode(request.getPassword()));
-        userDTO.setProvider(AuthProvider.LOCAL);
-        userDTO.setCreatedAt(LocalDateTime.now());
+        UserDTO userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder);
         userDTO = userService.saveOrUpdate(userDTO);
 
         return authenticate(

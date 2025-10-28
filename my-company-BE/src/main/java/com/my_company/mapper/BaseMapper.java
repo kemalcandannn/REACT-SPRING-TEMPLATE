@@ -3,6 +3,8 @@ package com.my_company.mapper;
 
 import com.my_company.domain.entity.BaseEntity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BaseMapper<ENTITY extends BaseEntity<ID>, DTO, ID> {
@@ -15,4 +17,11 @@ public interface BaseMapper<ENTITY extends BaseEntity<ID>, DTO, ID> {
 
     List<ENTITY> dtoListToEntityList(List<DTO> dtoList);
 
+    default LocalDate getLocalDateNow() {
+        return LocalDate.now();
+    }
+
+    default LocalDateTime getLocalDateTimeNow() {
+        return LocalDateTime.now();
+    }
 }
