@@ -4,7 +4,7 @@ import com.my_company.cache.ParametersCache;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParametersCode;
-import com.my_company.constants.enums.Role;
+import com.my_company.constants.enums.RoleCode;
 import com.my_company.domain.dto.system.ParametersDTO;
 import com.my_company.domain.entity.system.Parameters;
 import com.my_company.exception.BadRequestException;
@@ -27,7 +27,7 @@ public class ParametersService extends BaseService<Parameters, ParametersDTO, St
 
     @Override
     public ParametersDTO saveOrUpdate(ParametersDTO dto) {
-        if (!SecurityUtils.hasRole(Role.SYSTEM_ADMINISTRATOR)) {
+        if (!SecurityUtils.hasRole(RoleCode.SYSTEM_ADMINISTRATOR)) {
             throw new UserAuthenticationException(ErrorCode.UNAUTHORIZED_ACESS, TextConstants.UNAUTHORIZED_ACESS_MESSAGE);
         }
 
@@ -38,13 +38,13 @@ public class ParametersService extends BaseService<Parameters, ParametersDTO, St
 
     @Override
     public void deleteById(String code) {
-        if (!SecurityUtils.hasRole(Role.SYSTEM_ADMINISTRATOR)) {
+        if (!SecurityUtils.hasRole(RoleCode.SYSTEM_ADMINISTRATOR)) {
             throw new UserAuthenticationException(ErrorCode.UNAUTHORIZED_ACESS, TextConstants.UNAUTHORIZED_ACESS_MESSAGE);
         }
 
         if (Arrays
                 .stream(ParametersCode.values())
-                .anyMatch(role -> role.name().equalsIgnoreCase(code))) {
+                .anyMatch(parametersCode -> parametersCode.name().equalsIgnoreCase(code))) {
 
             throw new BadRequestException(ErrorCode.USED_BY_THE_SYSTEM, String.format(TextConstants.USED_BY_THE_SYSTEM_MESSAGE, code));
         }

@@ -2,6 +2,7 @@ package com.my_company.service.authentication;
 
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
+import com.my_company.constants.enums.RoleCode;
 import com.my_company.domain.dto.authentication.RoleDTO;
 import com.my_company.domain.entity.authentication.Role;
 import com.my_company.exception.BadRequestException;
@@ -23,8 +24,8 @@ public class RoleService extends BaseService<Role, RoleDTO, String> {
     @Override
     public void deleteById(String code) {
         if (Arrays
-                .stream(com.my_company.constants.enums.Role.values())
-                .anyMatch(role -> role.name().equalsIgnoreCase(code))) {
+                .stream(RoleCode.values())
+                .anyMatch(roleCode -> roleCode.name().equalsIgnoreCase(code))) {
 
             throw new BadRequestException(ErrorCode.USED_BY_THE_SYSTEM, String.format(TextConstants.USED_BY_THE_SYSTEM_MESSAGE, code));
         }
