@@ -8,7 +8,7 @@ const ForgotPassword: React.FC = () => {
     const { getLabel } = useLanguage();
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
@@ -21,7 +21,7 @@ const ForgotPassword: React.FC = () => {
 
         try {
             const response = await BaseApiAxios.post("api/v1/authentication/forgot-password", {
-                email: email
+                username: username
             });
 
             if (response?.data?.success) {
@@ -46,8 +46,8 @@ const ForgotPassword: React.FC = () => {
                         <input
                             type="email"
                             placeholder={getLabel("email")}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                             required
                         />
                     </div>
