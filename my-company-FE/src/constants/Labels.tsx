@@ -1,5 +1,5 @@
-//export const LANGUGAGES = ["tr", "en", "de", "ru", "ar"];
-export const LANGUGAGES = ["tr"];
+//export const LANGUGAGES = ["tr", "en", "de", "ru", "ar"] as const;
+export const LANGUGAGES = ["tr", "en"] as const;
 
 export type Language = typeof LANGUGAGES[number];
 
@@ -57,5 +57,31 @@ export const labelsData: Record<Language, Labels> = {
         unknownErrorOccured: "Bilinmeyen bir hata oluştu, sistem yönetinizle iletişime geçiniz.",
         username: "Kullanıcı Adı",
         welcomeToHomePage: "Anasayfa'ya Hoşgeldiniz",
+    },
+    en: {
+        alreadyHaveAnAccount: "Already have an account? ",
+        dontHaveAnAccount: "Don't have an account? ",
+        email: "Email",
+        emailOrUsername: "Email or Username",
+        incorrectUsernameOrPassword: "Incorrect username or password. Please check your input.",
+        loading: "Loading...",
+        login: "Login",
+        loginFailedCheckYourCredentials: "Login failed. Please check your credentials.",
+        loginTitle: "Login",
+        loginWithApple: "Login with Apple",
+        loginWithFacebook: "Login with Facebook",
+        loginWithGoogle: "Login with Google",
+        logout: "Logout",
+        or: "or",
+        password: "Password",
+        signUp: "Sign Up",
+        signUpTitle: "Sign Up",
+        signUpWithApple: "Sign Up with Apple",
+        signUpWithFacebook: "Sign Up with Facebook",
+        signUpWithGoogle: "Sign Up with Google",
+        tokenHasExpired: "Token has expired. Please log out/in and try again.",
+        unknownErrorOccured: "An unknown error occurred. Please contact support.",
+        username: "Username",
+        welcomeToHomePage: "Welcome to the homepage",
     }
 };
