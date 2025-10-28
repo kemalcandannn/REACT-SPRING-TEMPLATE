@@ -15,7 +15,7 @@ public class MyCompanyApplication {
         ApplicationContext context = SpringApplication.run(MyCompanyApplication.class, args);
         ApplicationVariable applicationVariable = context.getBean(ApplicationVariable.class);
 
-        log.info("Application Start. You can access it from the address: http://localhost:{}{}", applicationVariable.getPort(), applicationVariable.getServerServletContextPath());
+        log.info("Application Start. You can access it from the address: http://localhost:{}{}/swagger-ui/index.html", applicationVariable.getPort(), applicationVariable.getServerServletContextPath());
     }
 
     @Component
