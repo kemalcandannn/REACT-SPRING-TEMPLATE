@@ -14,7 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public interface UserMapper extends BaseMapper<User, UserDTO, String> {
 
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(request.getPassword()))")
+    @Mapping(target = "passwordValidUntil", expression = "java(getLocalDateTimeNow().plusDays(passwordExpirationDays))")
     @Mapping(target = "provider", constant = "LOCAL")
+    @Mapping(target = "status", constant = "PASSIVE")
     @Mapping(target = "createdAt", expression = "java(getLocalDateTimeNow())")
-    UserDTO signUpRequestToDTO(SignUpRequest request, @Context PasswordEncoder passwordEncoder);
+    UserDTO signUpRequestToDTO(SignUpRequest request, @Context PasswordEncoder passwordEncoder, int passwordExpirationDays);
 }

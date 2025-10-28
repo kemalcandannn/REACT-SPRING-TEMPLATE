@@ -3,6 +3,7 @@ package com.my_company.domain.entity.authentication;
 import com.my_company.constants.SchemaConstants;
 import com.my_company.constants.TableConstants;
 import com.my_company.constants.enums.AuthProvider;
+import com.my_company.constants.enums.Status;
 import com.my_company.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,12 +32,19 @@ public class User implements BaseEntity<String> {
     @Column(name = "PASSWORD3")
     private String password3;
 
+    @Column(name = "PASSWORD_VALID_UNTIL")
+    private LocalDateTime passwordValidUntil;
+
     @Column(name = "PROVIDER", nullable = false)
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
     @Column(name = "PROVIDER_ID")
     private String providerId;
+
+    @Column(name = "STATUS", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt = LocalDateTime.now();

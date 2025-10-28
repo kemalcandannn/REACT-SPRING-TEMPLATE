@@ -34,7 +34,8 @@ public class AuthenticationService {
     public LoginResponse localSignUp(SignUpRequest request) {
         signUpValidation(request);
 
-        UserDTO userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder);
+        int passwordExpirationDays = parameterService.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS);
+        UserDTO userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
         return authenticate(
@@ -126,6 +127,17 @@ public class AuthenticationService {
                     ErrorCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
                     TextConstants.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_MESSAGE
             );
+        }
+
+        Status last3PreviousPasswordDifferentStatus = parameterService.getParamValueAsStatus(ParameterCode.LAST_3_PREVIOUS_PASSWORD_DIFFERENT_CONTROL);
+        if (Status.ACTIVE.equals(last3PreviousPasswordDifferentStatus)) {
+            /*
+            TODO
+            throw new BadRequestException(
+                    ErrorCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
+                    TextConstants.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_MESSAGE
+            );
+             */
         }
     }
 
