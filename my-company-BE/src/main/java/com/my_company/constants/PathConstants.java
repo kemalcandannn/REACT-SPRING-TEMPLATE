@@ -1,7 +1,6 @@
 package com.my_company.constants;
 
 public class PathConstants {
-
     private PathConstants() {
         throw new UnsupportedOperationException(ApplicationConstants.UTILITY_CLASS);
     }
@@ -28,7 +27,4 @@ public class PathConstants {
     public static final String API_V1_ROLE_MENU_ALL_URL = "/api/v1/role-menu/**";
     public static final String API_V1_PARAMETER_URL = "/api/v1/parameter";
     public static final String API_V1_PARAMETER_ALL_URL = "/api/v1/parameter/**";
-
-    public static final String API_V1_TEST_URL = "/api/v1/test";
-
 }

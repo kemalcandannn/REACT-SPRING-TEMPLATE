@@ -13,12 +13,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ServiceResponse<T> {
-
     private boolean success;
     private int statusCode;
     private ErrorCode errorCode;
     private String errorMessage;
     private T data;
     private LocalDateTime timestamp;
-
 }

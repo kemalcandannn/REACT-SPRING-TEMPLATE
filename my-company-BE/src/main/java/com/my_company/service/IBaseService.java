@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface IBaseService<DTO extends BaseDto<ID>, ID extends Serializable> {
-
     List<DTO> findAll();
 
     Page<DTO> findAllWithPageable(Pageable pageable);
@@ -18,5 +17,4 @@ public interface IBaseService<DTO extends BaseDto<ID>, ID extends Serializable> 
     DTO saveOrUpdate(DTO dto);
 
     void deleteById(ID id);
-
 }

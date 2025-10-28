@@ -28,7 +28,6 @@ import java.time.LocalDateTime;
 @Slf4j
 @Tag(name = TextConstants.AUTHENTICATION, description = "Authorization Services for Users")
 public class AuthenticationController {
-
     private final AuthenticationService authenticationService;
 
     @PostMapping(PathConstants.LOCAL_SIGN_UP_URL)
@@ -72,5 +71,4 @@ public class AuthenticationController {
                         .timestamp(LocalDateTime.now())
                         .build());
     }
-
 }

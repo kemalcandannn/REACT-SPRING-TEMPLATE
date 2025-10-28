@@ -14,10 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ParameterDTO extends BaseDto<String> {
-
     private String code;
     private ParameterType type;
     private String value;
     private LocalDateTime createdAt;
-
 }

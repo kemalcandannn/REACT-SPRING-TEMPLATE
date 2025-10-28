@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(schema = SchemaConstants.AUTHENTICATION, name = TableConstants.ROLE)
 public class Role implements BaseEntity<String> {
-
     @Id
     @Column(name = "CODE", nullable = false)
     private String code;

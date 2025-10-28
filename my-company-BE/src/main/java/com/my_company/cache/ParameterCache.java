@@ -2,9 +2,12 @@ package com.my_company.cache;
 
 import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.enums.ParameterCode;
+import com.my_company.constants.enums.ParameterType;
+import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.system.ParameterDTO;
 import com.my_company.utils.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +15,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class ParameterCache {
-
     private ParameterCache() {
         throw new UnsupportedOperationException(ApplicationConstants.UTILITY_CLASS);
     }
@@ -55,5 +57,61 @@ public final class ParameterCache {
         if (parameterList != null) {
             parameterList.forEach(p -> PARAMETERS_MAP.put(p.getCode(), p));
         }
+    }
+
+    public static String getParamValueAsString(ParameterCode parameterCode) {
+        if (parameterCode == null) {
+            return null;
+        }
+
+        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
+
+        if (parameterDTO == null) {
+            return null;
+        }
+
+        return parameterDTO.getValue();
+    }
+
+    public static Integer getParamValueAsInteger(ParameterCode parameterCode) {
+        if (parameterCode == null) {
+            return null;
+        }
+
+        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
+
+        if (parameterDTO == null || !ParameterType.NUMERIC.equals(parameterDTO.getType())) {
+            return null;
+        }
+
+        return Integer.valueOf(parameterDTO.getValue());
+    }
+
+    public static BigDecimal getParamValueAsBigDecimal(ParameterCode parameterCode) {
+        if (parameterCode == null) {
+            return null;
+        }
+
+        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
+
+        if (parameterDTO == null || !ParameterType.NUMERIC.equals(parameterDTO.getType())) {
+            return null;
+        }
+
+        return new BigDecimal(parameterDTO.getValue());
+    }
+
+    public static Status getParamValueAsStatus(ParameterCode parameterCode) {
+        if (parameterCode == null) {
+            return null;
+        }
+
+        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
+
+        if (parameterDTO == null || !ParameterType.STATUS.equals(parameterDTO.getType())) {
+            return null;
+        }
+
+        return Status.getStatus(parameterDTO.getValue());
     }
 }

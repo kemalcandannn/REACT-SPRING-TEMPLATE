@@ -13,10 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class MenuDTO extends BaseDto<String> {
-
     private String code;
     private String name;
     private String path;
     private LocalDateTime createdAt;
-
 }

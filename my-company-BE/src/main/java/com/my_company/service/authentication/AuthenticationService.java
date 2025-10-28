@@ -1,5 +1,6 @@
 package com.my_company.service.authentication;
 
+import com.my_company.cache.ParameterCache;
 import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
@@ -14,7 +15,6 @@ import com.my_company.domain.response.authentication.LoginResponse;
 import com.my_company.exception.BadRequestException;
 import com.my_company.exception.UserAuthenticationException;
 import com.my_company.mapper.authentication.UserMapper;
-import com.my_company.service.system.ParameterService;
 import com.my_company.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +29,12 @@ import java.util.Objects;
 public class AuthenticationService {
     private final UserService userService;
     private final UserMapper userMapper;
-    private final ParameterService parameterService;
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponse localSignUp(SignUpRequest request) {
         signUpValidation(request);
 
-        int passwordExpirationDays = parameterService.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS);
+        int passwordExpirationDays = ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS);
         UserDTO userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
@@ -76,7 +75,7 @@ public class AuthenticationService {
 
         passwordValidation(request.getPassword());
 
-        UserDTO userDTO = userService.findByUsername(request.getUsername());
+        UserDTO userDTO = userService.findById(request.getUsername(), false);
         if (Objects.nonNull(userDTO)) {
             throw new UserAuthenticationException(ErrorCode.USERNAME_ALREADY_REGISTERED, TextConstants.USERNAME_ALREADY_REGISTERED_MESSAGE);
         }
@@ -87,8 +86,8 @@ public class AuthenticationService {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
         }
 
-        Status passwordAtLeastChracterLongStatus = parameterService.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_CHARACTER_LONG_CONTROL);
-        int atLeastPasswordLength = parameterService.getParamValueAsInteger(ParameterCode.PASSWORD_AT_LEAST_CHARACTER_LONG);
+        Status passwordAtLeastChracterLongStatus = ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_CHARACTER_LONG_CONTROL);
+        int atLeastPasswordLength = ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_AT_LEAST_CHARACTER_LONG);
 
         if (Status.ACTIVE.equals(passwordAtLeastChracterLongStatus) &&
                 password.length() < atLeastPasswordLength) {
@@ -98,7 +97,7 @@ public class AuthenticationService {
             );
         }
 
-        Status passwordAtLeastOneUppercaseStatus = parameterService.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_ONE_UPPERCASE_CONTROL);
+        Status passwordAtLeastOneUppercaseStatus = ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_ONE_UPPERCASE_CONTROL);
         if (Status.ACTIVE.equals(passwordAtLeastOneUppercaseStatus) &&
                 !password.matches(".*[A-Z].*")) {
             throw new BadRequestException(
@@ -107,7 +106,7 @@ public class AuthenticationService {
             );
         }
 
-        Status passwordAtLeastOneLowercaseStatus = parameterService.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_ONE_LOWERCASE_CONTROL);
+        Status passwordAtLeastOneLowercaseStatus = ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_ONE_LOWERCASE_CONTROL);
         if (Status.ACTIVE.equals(passwordAtLeastOneLowercaseStatus) &&
                 !password.matches(".*[a-z].*")) {
             throw new BadRequestException(
@@ -116,7 +115,7 @@ public class AuthenticationService {
             );
         }
 
-        Status passwordAtLeastOneDigitStatus = parameterService.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_ONE_DIGIT_CONTROL);
+        Status passwordAtLeastOneDigitStatus = ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_ONE_DIGIT_CONTROL);
         if (Status.ACTIVE.equals(passwordAtLeastOneDigitStatus) &&
                 !password.matches(".*\\d.*")) {
             throw new BadRequestException(
@@ -125,7 +124,7 @@ public class AuthenticationService {
             );
         }
 
-        Status passwordAtLeastOneSpecialCharacterStatus = parameterService.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_CONTROL);
+        Status passwordAtLeastOneSpecialCharacterStatus = ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_CONTROL);
         if (Status.ACTIVE.equals(passwordAtLeastOneSpecialCharacterStatus) &&
                 !password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
             throw new BadRequestException(
@@ -134,7 +133,7 @@ public class AuthenticationService {
             );
         }
 
-        Status last3PreviousPasswordDifferentStatus = parameterService.getParamValueAsStatus(ParameterCode.LAST_3_PREVIOUS_PASSWORD_DIFFERENT_CONTROL);
+        Status last3PreviousPasswordDifferentStatus = ParameterCache.getParamValueAsStatus(ParameterCode.LAST_3_PREVIOUS_PASSWORD_DIFFERENT_CONTROL);
         if (Status.ACTIVE.equals(last3PreviousPasswordDifferentStatus)) {
             /*
             TODO

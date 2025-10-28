@@ -13,9 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class RoleDTO extends BaseDto<String> {
-
     private String code;
     private String name;
     private LocalDateTime createdAt;
-
 }

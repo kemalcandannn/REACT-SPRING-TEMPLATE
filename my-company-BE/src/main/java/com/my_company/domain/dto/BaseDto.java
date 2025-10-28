@@ -10,7 +10,5 @@ import lombok.experimental.FieldNameConstants;
 @AllArgsConstructor
 @FieldNameConstants
 public class BaseDto<ID> {
-
     private ID id;
-
 }

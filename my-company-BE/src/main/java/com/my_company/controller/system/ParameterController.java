@@ -12,9 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +22,6 @@ import java.util.List;
 @Slf4j
 @Tag(name = TextConstants.PARAMETER, description = TextConstants.CRUD_SERVICES_FOR + TextConstants.PARAMETER)
 public class ParameterController extends BaseController<ParameterDTO, String> {
-
     public ParameterController(ParameterService service) {
         super(service);
     }
@@ -42,4 +39,17 @@ public class ParameterController extends BaseController<ParameterDTO, String> {
                         .build());
     }
 
+    @GetMapping(value = "/find/{code}")
+    @Operation(summary = "Find by Code", description = "Find Record By Code")
+    @Override
+    public ResponseEntity<ServiceResponse<ParameterDTO>> findById(@PathVariable String code) {
+        return super.findById(code);
+    }
+
+    @DeleteMapping(value = "/delete/{code}")
+    @Operation(summary = "Delete by Code", description = "Delete Record By Code")
+    @Override
+    public ResponseEntity<ServiceResponse<Boolean>> deleteById(@PathVariable String code) {
+        return super.deleteById(code);
+    }
 }

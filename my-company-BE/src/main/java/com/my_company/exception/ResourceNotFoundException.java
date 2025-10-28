@@ -7,12 +7,10 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ResourceNotFoundException extends RuntimeException {
-
     private final ErrorCode errorCode;
 
     public ResourceNotFoundException(ErrorCode errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
     }
-
 }

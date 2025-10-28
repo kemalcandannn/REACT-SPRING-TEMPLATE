@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(schema = SchemaConstants.SYSTEM, name = TableConstants.PARAMETER)
 public class Parameter implements BaseEntity<String> {
-
     @Id
     @Column(name = "CODE", nullable = false)
     private String code;

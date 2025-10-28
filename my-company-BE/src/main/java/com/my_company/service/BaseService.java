@@ -20,7 +20,6 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 public abstract class BaseService<ENTITY extends BaseEntity<ID>, DTO extends BaseDto<ID>, ID extends Serializable> implements IBaseService<DTO, ID> {
-
     private final BaseRepository<ENTITY, ID> repository;
     private final BaseMapper<ENTITY, DTO, ID> mapper;
 
@@ -36,7 +35,7 @@ public abstract class BaseService<ENTITY extends BaseEntity<ID>, DTO extends Bas
     public DTO findById(ID id, boolean throwException) {
         if (Objects.isNull(id)) {
             if (throwException) {
-                throw new ResourceNotFoundException(ErrorCode.TOKEN_EXPIRED, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.ID));
+                throw new ResourceNotFoundException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.ID));
             }
 
             return null;
@@ -73,5 +72,4 @@ public abstract class BaseService<ENTITY extends BaseEntity<ID>, DTO extends Bas
         DTO dto = findById(id, true);
         repository.delete(mapper.dtoToEntity(dto));
     }
-
 }

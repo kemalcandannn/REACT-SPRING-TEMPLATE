@@ -2,7 +2,6 @@ package com.my_company.domain.entity.authentication;
 
 import com.my_company.constants.SchemaConstants;
 import com.my_company.constants.TableConstants;
-import com.my_company.domain.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -18,12 +17,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(schema = SchemaConstants.AUTHENTICATION, name = TableConstants.USER_ROLE)
-public class UserRole implements BaseEntity<UserRoleId> {
-
+public class UserRole {
     @EmbeddedId
     private UserRoleId id;
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt = LocalDateTime.now();
-
 }

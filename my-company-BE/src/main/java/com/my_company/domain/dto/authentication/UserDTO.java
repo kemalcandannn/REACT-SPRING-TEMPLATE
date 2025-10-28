@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UserDTO extends BaseDto<String> {
-
     private String username;
     @JsonIgnore
     private String password;
@@ -29,5 +28,4 @@ public class UserDTO extends BaseDto<String> {
     private String providerId;
     private Status status;
     private LocalDateTime createdAt;
-
 }

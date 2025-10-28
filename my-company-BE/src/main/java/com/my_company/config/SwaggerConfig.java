@@ -17,7 +17,6 @@ import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
-
     private static final String SECURITY_SCHEME_NAME = "bearerAuth";
     private static final String OPEN_API_TITLE = "My Company API";
     private static final String OPEN_API_DESCRIPTION = "Backend API Documentation";
@@ -60,5 +59,4 @@ public class SwaggerConfig {
                 .pathsToMatch(paths)
                 .build();
     }
-
 }

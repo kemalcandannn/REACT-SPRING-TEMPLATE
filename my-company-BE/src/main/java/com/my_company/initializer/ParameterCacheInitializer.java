@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ParameterCacheInitializer {
-
     private final ParameterService parameterService;
 
     @PostConstruct

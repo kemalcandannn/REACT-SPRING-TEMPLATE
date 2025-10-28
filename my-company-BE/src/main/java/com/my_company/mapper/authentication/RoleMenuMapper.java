@@ -1,23 +1,21 @@
 package com.my_company.mapper.authentication;
 
-
 import com.my_company.domain.dto.authentication.RoleMenuDTO;
 import com.my_company.domain.entity.authentication.RoleMenu;
-import com.my_company.domain.entity.authentication.RoleMenuId;
-import com.my_company.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public interface RoleMenuMapper extends BaseMapper<RoleMenu, RoleMenuDTO, RoleMenuId> {
+import java.util.List;
 
-    @Override
+@Mapper(componentModel = "spring")
+public interface RoleMenuMapper {
     @Mapping(source = "id.roleCode", target = "roleCode")
     @Mapping(source = "id.menuCode", target = "menuCode")
-    RoleMenuDTO entityToDto(RoleMenu entity);
+    RoleMenuDTO entityToDto(RoleMenu roleMenu);
 
-    @Override
     @Mapping(source = "roleCode", target = "id.roleCode")
     @Mapping(source = "menuCode", target = "id.menuCode")
     RoleMenu dtoToEntity(RoleMenuDTO roleMenuDTO);
+
+    List<RoleMenuDTO> entityListToDtoList(List<RoleMenu> roleMenuList);
 }

@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ServiceResponse<Object>> handleGeneralException(Exception e) {
         log.error("Unexpected error: ", e);
@@ -120,5 +119,4 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(response);
     }
-
 }

@@ -21,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public abstract class BaseController<DTO extends BaseDto<ID>, ID extends Serializable> {
-
     private final IBaseService<DTO, ID> crudService;
 
     @GetMapping(value = "/find-all")
@@ -68,14 +67,14 @@ public abstract class BaseController<DTO extends BaseDto<ID>, ID extends Seriali
 
     @PostMapping(value = "/save-or-update")
     @Operation(summary = "Save or Update Record", description = "Save or Update Record by Request Body")
-    public ResponseEntity<ServiceResponse<DTO>> saveOrUpdate(@Valid @RequestBody DTO dto) {
-        DTO responseDto = crudService.saveOrUpdate(dto);
+    public ResponseEntity<ServiceResponse<DTO>> saveOrUpdate(@Valid @RequestBody DTO request) {
+        DTO dto = crudService.saveOrUpdate(request);
         return ResponseEntity.ok(
                 ServiceResponse
                         .<DTO>builder()
                         .success(true)
                         .statusCode(HttpStatus.OK.value())
-                        .data(responseDto)
+                        .data(dto)
                         .timestamp(LocalDateTime.now())
                         .build());
     }
@@ -93,5 +92,4 @@ public abstract class BaseController<DTO extends BaseDto<ID>, ID extends Seriali
                         .timestamp(LocalDateTime.now())
                         .build());
     }
-
 }

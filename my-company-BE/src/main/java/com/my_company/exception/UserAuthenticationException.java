@@ -7,12 +7,10 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class UserAuthenticationException extends RuntimeException {
-
     private final ErrorCode errorCode;
 
     public UserAuthenticationException(ErrorCode errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
     }
-
 }

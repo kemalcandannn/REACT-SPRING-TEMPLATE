@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(schema = SchemaConstants.AUTHENTICATION, name = TableConstants.USER)
 public class User implements BaseEntity<String> {
-
     @Id
     @Column(name = "USERNAME", nullable = false)
     private String username;
@@ -53,5 +52,4 @@ public class User implements BaseEntity<String> {
     public String getId() {
         return this.username;
     }
-
 }

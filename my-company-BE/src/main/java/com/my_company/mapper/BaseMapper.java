@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BaseMapper<ENTITY extends BaseEntity<ID>, DTO, ID> {
-
     DTO entityToDto(ENTITY entity);
 
     ENTITY dtoToEntity(DTO dto);

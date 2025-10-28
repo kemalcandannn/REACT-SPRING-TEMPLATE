@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class MenuService extends BaseService<Menu, MenuDTO, String> {
-
     public MenuService(MenuRepository repository, MenuMapper mapper) {
         super(repository, mapper);
     }
-
 }

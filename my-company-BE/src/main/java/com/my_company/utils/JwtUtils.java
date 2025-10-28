@@ -8,7 +8,6 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 public final class JwtUtils {
-
     private static final SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
 
     private JwtUtils() {
@@ -41,5 +40,4 @@ public final class JwtUtils {
                 .getPayload();
         return claims.getExpiration().before(new Date());
     }
-
 }

@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Objects;
 
 public final class CollectionUtils {
-
     private CollectionUtils() {
         throw new UnsupportedOperationException(ApplicationConstants.UTILITY_CLASS);
     }
@@ -18,5 +17,4 @@ public final class CollectionUtils {
     public static <LIST extends Collection<?>> boolean isNotEmpty(LIST list) {
         return !isEmpty(list);
     }
-
 }

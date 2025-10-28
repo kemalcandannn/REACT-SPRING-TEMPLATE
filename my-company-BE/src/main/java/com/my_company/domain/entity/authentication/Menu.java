@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(schema = SchemaConstants.AUTHENTICATION, name = TableConstants.MENU)
 public class Menu implements BaseEntity<String> {
-
     @Id
     @Column(name = "CODE", nullable = false)
     private String code;
@@ -37,5 +36,4 @@ public class Menu implements BaseEntity<String> {
     public String getId() {
         return this.code;
     }
-
 }
