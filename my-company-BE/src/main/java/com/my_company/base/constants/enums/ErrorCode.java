@@ -1,0 +1,19 @@
+package com.my_company.base.constants.enums;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public enum ErrorCode {
+    TOKEN_EXPIRED,
+    INCORRECT_USERNAME_OR_PASSWORD,
+    REQUIRED_FIELD,
+    USERNAME_ALREADY_REGISTERED,
+    RECORD_WITH_ID_NOT_FOUND,
+    PASSWORD_AT_LEAST_CHARACTERS_LONG,
+    PASSWORD_AT_LEAST_ONE_UPPERCASE,
+    PASSWORD_AT_LEAST_ONE_LOWERCASE,
+    PASSWORD_AT_LEAST_ONE_DIGIT,
+    PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER
+}
