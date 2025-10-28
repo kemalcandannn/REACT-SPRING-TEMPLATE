@@ -1,7 +1,7 @@
 package com.my_company.controller;
 
-import com.my_company.base.constants.PathConstants;
-import com.my_company.base.domain.response.ServiceResponse;
+import com.my_company.constants.PathConstants;
+import com.my_company.domain.response.ServiceResponse;
 import com.my_company.service.TestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
