@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ParameterDTO extends BaseDto<String> {
+public class ParametersDTO extends BaseDto<String> {
     private String code;
     private ParameterType type;
     private String value;

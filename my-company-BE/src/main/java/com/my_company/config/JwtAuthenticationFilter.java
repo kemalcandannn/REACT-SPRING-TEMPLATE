@@ -2,9 +2,12 @@ package com.my_company.config;
 
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
+import com.my_company.domain.dto.authentication.UserRoleDTO;
 import com.my_company.domain.entity.authentication.User;
 import com.my_company.exception.UserAuthenticationException;
+import com.my_company.service.authentication.UserRoleService;
 import com.my_company.service.authentication.UserService;
+import com.my_company.utils.CollectionUtils;
 import com.my_company.utils.JwtUtils;
 import com.my_company.utils.StringUtils;
 import jakarta.servlet.FilterChain;
@@ -15,6 +18,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -29,6 +33,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserService userService;
+    private final UserRoleService userRoleService;
 
     @Override
     protected void doFilterInternal(
@@ -56,11 +61,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (!StringUtils.isNullOrBlank(username) && Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
             User user = userService.findAuthenticationUserByUsername(username);
+            List<UserRoleDTO> userRoleDTOList = userRoleService.findByUsername(user.getUsername());
+            List<SimpleGrantedAuthority> grantedAuthorityList = List.of();
+            if (CollectionUtils.isNotEmpty(userRoleDTOList)) {
+                grantedAuthorityList = userRoleDTOList
+                        .stream()
+                        .map(userRoleDTO -> new SimpleGrantedAuthority(userRoleDTO.getRoleCode()))
+                        .toList();
+            }
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    new org.springframework.security.core.userdetails.User(username, user.getPassword(), List.of()),
+                    new org.springframework.security.core.userdetails.User(username, user.getPassword(), grantedAuthorityList),
                     null,
-                    List.of()
+                    grantedAuthorityList
             );
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);

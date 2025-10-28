@@ -26,7 +26,7 @@ public class Role implements BaseEntity<String> {
     @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "CREATED_AT")
+    @Column(name = "CREATED_AT", updatable = false, insertable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Override

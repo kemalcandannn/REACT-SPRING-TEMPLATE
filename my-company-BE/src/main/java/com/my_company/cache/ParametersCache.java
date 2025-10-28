@@ -4,7 +4,7 @@ import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.enums.ParameterCode;
 import com.my_company.constants.enums.ParameterType;
 import com.my_company.constants.enums.Status;
-import com.my_company.domain.dto.system.ParameterDTO;
+import com.my_company.domain.dto.system.ParametersDTO;
 import com.my_company.utils.StringUtils;
 
 import java.math.BigDecimal;
@@ -14,45 +14,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class ParameterCache {
-    private ParameterCache() {
+public final class ParametersCache {
+    private ParametersCache() {
         throw new UnsupportedOperationException(ApplicationConstants.UTILITY_CLASS);
     }
 
     // Thread-safe static map (code -> ParameterDTO)
-    private static final Map<String, ParameterDTO> PARAMETERS_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, ParametersDTO> PARAMETERS_MAP = new ConcurrentHashMap<>();
 
-    // Tüm parametreleri liste olarak almak için
-    public static List<ParameterDTO> getParameters() {
+    // Get all parameters as a list
+    public static List<ParametersDTO> getParameters() {
         return Collections.unmodifiableList(new ArrayList<>(PARAMETERS_MAP.values()));
     }
 
-    // Parametreyi code üzerinden al
-    public static ParameterDTO getParameter(String code) {
+    // Get a parameter by its code
+    public static ParametersDTO getParameter(String code) {
         if (StringUtils.isNullOrBlank(code)) return null;
         return PARAMETERS_MAP.get(code);
     }
 
-    // Parametreyi enum üzerinden al
-    public static ParameterDTO getParameter(ParameterCode parameterCode) {
+    // Get a parameter by its enum
+    public static ParametersDTO getParameter(ParameterCode parameterCode) {
         if (parameterCode == null) return null;
         return getParameter(parameterCode.name());
     }
 
-    // Parametre ekle (varsa eklemez)
-    public static void addParameter(ParameterDTO parameterDTO) {
-        if (parameterDTO == null || StringUtils.isNullOrBlank(parameterDTO.getCode())) return;
-        PARAMETERS_MAP.put(parameterDTO.getCode(), parameterDTO);
+    // Add a parameter (update if it already exists)
+    public static void addParameter(ParametersDTO parametersDTO) {
+        if (parametersDTO == null || StringUtils.isNullOrBlank(parametersDTO.getCode())) return;
+        PARAMETERS_MAP.put(parametersDTO.getCode(), parametersDTO);
     }
 
-    // Parametreyi sil
+    // Remove a parameter
     public static void removeParameter(String code) {
         if (StringUtils.isNullOrBlank(code)) return;
         PARAMETERS_MAP.remove(code);
     }
 
-    // Parametreleri tamamen yenile (refresh)
-    public static void refreshParameters(List<ParameterDTO> parameterList) {
+    // Completely refresh all parameters
+    public static void refreshParameters(List<ParametersDTO> parameterList) {
         PARAMETERS_MAP.clear();
         if (parameterList != null) {
             parameterList.forEach(p -> PARAMETERS_MAP.put(p.getCode(), p));
@@ -64,13 +64,13 @@ public final class ParameterCache {
             return null;
         }
 
-        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
+        ParametersDTO parametersDTO = ParametersCache.getParameter(parameterCode);
 
-        if (parameterDTO == null) {
+        if (parametersDTO == null) {
             return null;
         }
 
-        return parameterDTO.getValue();
+        return parametersDTO.getValue();
     }
 
     public static Integer getParamValueAsInteger(ParameterCode parameterCode) {
@@ -78,13 +78,13 @@ public final class ParameterCache {
             return null;
         }
 
-        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
+        ParametersDTO parametersDTO = ParametersCache.getParameter(parameterCode);
 
-        if (parameterDTO == null || !ParameterType.NUMERIC.equals(parameterDTO.getType())) {
+        if (parametersDTO == null || !ParameterType.NUMERIC.equals(parametersDTO.getType())) {
             return null;
         }
 
-        return Integer.valueOf(parameterDTO.getValue());
+        return Integer.valueOf(parametersDTO.getValue());
     }
 
     public static BigDecimal getParamValueAsBigDecimal(ParameterCode parameterCode) {
@@ -92,13 +92,13 @@ public final class ParameterCache {
             return null;
         }
 
-        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
+        ParametersDTO parametersDTO = ParametersCache.getParameter(parameterCode);
 
-        if (parameterDTO == null || !ParameterType.NUMERIC.equals(parameterDTO.getType())) {
+        if (parametersDTO == null || !ParameterType.NUMERIC.equals(parametersDTO.getType())) {
             return null;
         }
 
-        return new BigDecimal(parameterDTO.getValue());
+        return new BigDecimal(parametersDTO.getValue());
     }
 
     public static Status getParamValueAsStatus(ParameterCode parameterCode) {
@@ -106,12 +106,12 @@ public final class ParameterCache {
             return null;
         }
 
-        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
+        ParametersDTO parametersDTO = ParametersCache.getParameter(parameterCode);
 
-        if (parameterDTO == null || !ParameterType.STATUS.equals(parameterDTO.getType())) {
+        if (parametersDTO == null || !ParameterType.STATUS.equals(parametersDTO.getType())) {
             return null;
         }
 
-        return Status.getStatus(parameterDTO.getValue());
+        return Status.getStatus(parametersDTO.getValue());
     }
 }

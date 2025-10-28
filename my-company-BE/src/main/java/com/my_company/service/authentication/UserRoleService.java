@@ -88,4 +88,8 @@ public class UserRoleService {
         UserRoleDTO userRoleDTO = findByUsernameAndRoleCode(username, roleCode, true);
         repository.delete(mapper.dtoToEntity(userRoleDTO));
     }
+
+    public List<UserRoleDTO> findByUsername(String username) {
+        return mapper.entityListToDtoList(repository.findByIdUsername(username));
+    }
 }

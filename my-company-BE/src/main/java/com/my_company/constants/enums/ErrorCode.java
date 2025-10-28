@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode {
     TOKEN_EXPIRED,
     INCORRECT_USERNAME_OR_PASSWORD,
+    UNAUTHORIZED_ACESS,
     REQUIRED_FIELD,
     USERNAME_ALREADY_REGISTERED,
     USED_BY_THE_SYSTEM,

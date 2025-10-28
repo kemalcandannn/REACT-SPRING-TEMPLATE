@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(schema = SchemaConstants.SYSTEM, name = TableConstants.PARAMETER)
-public class Parameter implements BaseEntity<String> {
+public class Parameters implements BaseEntity<String> {
     @Id
     @Column(name = "CODE", nullable = false)
     private String code;
@@ -28,7 +28,7 @@ public class Parameter implements BaseEntity<String> {
     @Column(name = "VALUE", nullable = false)
     private String value;
 
-    @Column(name = "CREATED_AT")
+    @Column(name = "CREATED_AT", updatable = false, insertable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Override

@@ -45,7 +45,7 @@ public class User implements BaseEntity<String> {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "CREATED_AT")
+    @Column(name = "CREATED_AT", updatable = false, insertable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Override

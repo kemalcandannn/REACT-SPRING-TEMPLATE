@@ -1,8 +1,8 @@
 package com.my_company.initializer;
 
-import com.my_company.cache.ParameterCache;
-import com.my_company.domain.dto.system.ParameterDTO;
-import com.my_company.service.system.ParameterService;
+import com.my_company.cache.ParametersCache;
+import com.my_company.domain.dto.system.ParametersDTO;
+import com.my_company.service.system.ParametersService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ParameterCacheInitializer {
-    private final ParameterService parameterService;
+    private final ParametersService parametersService;
 
     @PostConstruct
     public void init() {
-        List<ParameterDTO> parameterDTOList = parameterService.findAll();
-        ParameterCache.refreshParameters(parameterDTOList);
+        List<ParametersDTO> parametersDTOList = parametersService.findAll();
+        ParametersCache.refreshParameters(parametersDTOList);
     }
 }
