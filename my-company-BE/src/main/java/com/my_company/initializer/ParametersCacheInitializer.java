@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ParameterCacheInitializer {
+public class ParametersCacheInitializer {
     private final ParametersService parametersService;
 
     @PostConstruct

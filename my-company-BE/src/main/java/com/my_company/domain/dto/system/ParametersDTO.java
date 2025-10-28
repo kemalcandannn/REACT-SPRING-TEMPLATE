@@ -1,6 +1,6 @@
 package com.my_company.domain.dto.system;
 
-import com.my_company.constants.enums.ParameterType;
+import com.my_company.constants.enums.ParametersType;
 import com.my_company.domain.dto.BaseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class ParametersDTO extends BaseDto<String> {
     private String code;
-    private ParameterType type;
+    private ParametersType type;
     private String value;
     private LocalDateTime createdAt;
 }

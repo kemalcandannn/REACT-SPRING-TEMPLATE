@@ -1,8 +1,8 @@
 package com.my_company.cache;
 
 import com.my_company.constants.ApplicationConstants;
-import com.my_company.constants.enums.ParameterCode;
-import com.my_company.constants.enums.ParameterType;
+import com.my_company.constants.enums.ParametersCode;
+import com.my_company.constants.enums.ParametersType;
 import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.system.ParametersDTO;
 import com.my_company.utils.StringUtils;
@@ -34,9 +34,9 @@ public final class ParametersCache {
     }
 
     // Get a parameter by its enum
-    public static ParametersDTO getParameter(ParameterCode parameterCode) {
-        if (parameterCode == null) return null;
-        return getParameter(parameterCode.name());
+    public static ParametersDTO getParameter(ParametersCode parametersCode) {
+        if (parametersCode == null) return null;
+        return getParameter(parametersCode.name());
     }
 
     // Add a parameter (update if it already exists)
@@ -59,12 +59,12 @@ public final class ParametersCache {
         }
     }
 
-    public static String getParamValueAsString(ParameterCode parameterCode) {
-        if (parameterCode == null) {
+    public static String getParamValueAsString(ParametersCode parametersCode) {
+        if (parametersCode == null) {
             return null;
         }
 
-        ParametersDTO parametersDTO = ParametersCache.getParameter(parameterCode);
+        ParametersDTO parametersDTO = ParametersCache.getParameter(parametersCode);
 
         if (parametersDTO == null) {
             return null;
@@ -73,42 +73,42 @@ public final class ParametersCache {
         return parametersDTO.getValue();
     }
 
-    public static Integer getParamValueAsInteger(ParameterCode parameterCode) {
-        if (parameterCode == null) {
+    public static Integer getParamValueAsInteger(ParametersCode parametersCode) {
+        if (parametersCode == null) {
             return null;
         }
 
-        ParametersDTO parametersDTO = ParametersCache.getParameter(parameterCode);
+        ParametersDTO parametersDTO = ParametersCache.getParameter(parametersCode);
 
-        if (parametersDTO == null || !ParameterType.NUMERIC.equals(parametersDTO.getType())) {
+        if (parametersDTO == null || !ParametersType.NUMERIC.equals(parametersDTO.getType())) {
             return null;
         }
 
         return Integer.valueOf(parametersDTO.getValue());
     }
 
-    public static BigDecimal getParamValueAsBigDecimal(ParameterCode parameterCode) {
-        if (parameterCode == null) {
+    public static BigDecimal getParamValueAsBigDecimal(ParametersCode parametersCode) {
+        if (parametersCode == null) {
             return null;
         }
 
-        ParametersDTO parametersDTO = ParametersCache.getParameter(parameterCode);
+        ParametersDTO parametersDTO = ParametersCache.getParameter(parametersCode);
 
-        if (parametersDTO == null || !ParameterType.NUMERIC.equals(parametersDTO.getType())) {
+        if (parametersDTO == null || !ParametersType.NUMERIC.equals(parametersDTO.getType())) {
             return null;
         }
 
         return new BigDecimal(parametersDTO.getValue());
     }
 
-    public static Status getParamValueAsStatus(ParameterCode parameterCode) {
-        if (parameterCode == null) {
+    public static Status getParamValueAsStatus(ParametersCode parametersCode) {
+        if (parametersCode == null) {
             return null;
         }
 
-        ParametersDTO parametersDTO = ParametersCache.getParameter(parameterCode);
+        ParametersDTO parametersDTO = ParametersCache.getParameter(parametersCode);
 
-        if (parametersDTO == null || !ParameterType.STATUS.equals(parametersDTO.getType())) {
+        if (parametersDTO == null || !ParametersType.STATUS.equals(parametersDTO.getType())) {
             return null;
         }
 

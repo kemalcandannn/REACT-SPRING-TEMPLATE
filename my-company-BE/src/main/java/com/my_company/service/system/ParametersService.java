@@ -3,9 +3,11 @@ package com.my_company.service.system;
 import com.my_company.cache.ParametersCache;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
+import com.my_company.constants.enums.ParametersCode;
 import com.my_company.constants.enums.Role;
 import com.my_company.domain.dto.system.ParametersDTO;
 import com.my_company.domain.entity.system.Parameters;
+import com.my_company.exception.BadRequestException;
 import com.my_company.exception.UserAuthenticationException;
 import com.my_company.mapper.system.ParametersMapper;
 import com.my_company.repository.system.ParametersRepository;
@@ -13,6 +15,8 @@ import com.my_company.service.BaseService;
 import com.my_company.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 @Service
 @Slf4j
@@ -36,6 +40,13 @@ public class ParametersService extends BaseService<Parameters, ParametersDTO, St
     public void deleteById(String code) {
         if (!SecurityUtils.hasRole(Role.SYSTEM_ADMINISTRATOR)) {
             throw new UserAuthenticationException(ErrorCode.UNAUTHORIZED_ACESS, TextConstants.UNAUTHORIZED_ACESS_MESSAGE);
+        }
+
+        if (Arrays
+                .stream(ParametersCode.values())
+                .anyMatch(role -> role.name().equalsIgnoreCase(code))) {
+
+            throw new BadRequestException(ErrorCode.USED_BY_THE_SYSTEM, String.format(TextConstants.USED_BY_THE_SYSTEM_MESSAGE, code));
         }
 
         super.deleteById(code);

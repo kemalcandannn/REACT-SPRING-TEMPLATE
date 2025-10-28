@@ -2,7 +2,7 @@ package com.my_company.domain.entity.system;
 
 import com.my_company.constants.SchemaConstants;
 import com.my_company.constants.TableConstants;
-import com.my_company.constants.enums.ParameterType;
+import com.my_company.constants.enums.ParametersType;
 import com.my_company.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class Parameters implements BaseEntity<String> {
 
     @Column(name = "TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ParameterType type;
+    private ParametersType type;
 
     @Column(name = "VALUE", nullable = false)
     private String value;
