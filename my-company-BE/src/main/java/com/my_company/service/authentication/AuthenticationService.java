@@ -5,17 +5,20 @@ import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParametersCode;
-import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
+import com.my_company.domain.request.authentication.ChangePasswordRequest;
 import com.my_company.domain.request.authentication.ForgotPasswordRequest;
 import com.my_company.domain.request.authentication.LoginRequest;
 import com.my_company.domain.request.authentication.SignUpRequest;
 import com.my_company.domain.response.authentication.LoginResponse;
 import com.my_company.exception.BadRequestException;
+import com.my_company.exception.InternalServerException;
 import com.my_company.exception.UserAuthenticationException;
 import com.my_company.mapper.authentication.UserMapper;
 import com.my_company.utils.JwtUtils;
+import com.my_company.utils.PasswordUtils;
+import com.my_company.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,10 +35,23 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponse localSignUp(SignUpRequest request) {
-        signUpValidation(request);
+        if (Objects.isNull(request)) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        }
+
+        if (Objects.isNull(request.getUsername())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        }
+
+        PasswordUtils.passwordValidation(passwordEncoder, null, request.getPassword());
+
+        UserDTO userDTO = userService.findById(request.getUsername(), false);
+        if (Objects.nonNull(userDTO)) {
+            throw new UserAuthenticationException(ErrorCode.USERNAME_ALREADY_REGISTERED, TextConstants.USERNAME_ALREADY_REGISTERED_MESSAGE);
+        }
 
         int passwordExpirationDays = ParametersCache.getParamValueAsInteger(ParametersCode.PASSWORD_EXPIRATION_DAYS);
-        UserDTO userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
+        userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
         return login(
@@ -48,6 +64,10 @@ public class AuthenticationService {
     }
 
     public LoginResponse login(LoginRequest request) {
+        if (Objects.isNull(request)) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        }
+
         User user = userService.findAuthenticationUserByUsername(request.getUsername());
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -64,84 +84,36 @@ public class AuthenticationService {
         log.info("{}", request);
     }
 
-    private void signUpValidation(SignUpRequest request) {
+    public void changePassword(ChangePasswordRequest request) {
         if (Objects.isNull(request)) {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
         }
 
-        if (Objects.isNull(request.getUsername())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        if (Objects.isNull(request.getOldPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.oldPassword));
         }
 
-        passwordValidation(request.getPassword());
-
-        UserDTO userDTO = userService.findById(request.getUsername(), false);
-        if (Objects.nonNull(userDTO)) {
-            throw new UserAuthenticationException(ErrorCode.USERNAME_ALREADY_REGISTERED, TextConstants.USERNAME_ALREADY_REGISTERED_MESSAGE);
-        }
-    }
-
-    private void passwordValidation(String password) {
-        if (Objects.isNull(password)) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        if (Objects.isNull(request.getNewPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.newPassword));
         }
 
-        Status passwordAtLeastChracterLongStatus = ParametersCache.getParamValueAsStatus(ParametersCode.PASSWORD_AT_LEAST_CHARACTER_LONG_CONTROL);
-        int atLeastPasswordLength = ParametersCache.getParamValueAsInteger(ParametersCode.PASSWORD_AT_LEAST_CHARACTER_LONG);
-
-        if (Status.ACTIVE.equals(passwordAtLeastChracterLongStatus) &&
-                password.length() < atLeastPasswordLength) {
-            throw new BadRequestException(
-                    ErrorCode.PASSWORD_AT_LEAST_CHARACTERS_LONG,
-                    String.format(TextConstants.PASSWORD_AT_LEAST_CHARACTERS_LONG_MESSAGE, atLeastPasswordLength)
-            );
+        if (Objects.isNull(request.getConfirmPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.confirmPassword));
         }
 
-        Status passwordAtLeastOneUppercaseStatus = ParametersCache.getParamValueAsStatus(ParametersCode.PASSWORD_AT_LEAST_ONE_UPPERCASE_CONTROL);
-        if (Status.ACTIVE.equals(passwordAtLeastOneUppercaseStatus) &&
-                !password.matches(".*[A-Z].*")) {
-            throw new BadRequestException(
-                    ErrorCode.PASSWORD_AT_LEAST_ONE_UPPERCASE,
-                    TextConstants.PASSWORD_AT_LEAST_ONE_UPPERCASE_MESSAGE
-            );
+        User user = SecurityUtils.getCurrentUser();
+        assert user != null;
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new UserAuthenticationException(ErrorCode.INCORRECT_OLD_PASSWORD, TextConstants.INCORRECT_OLD_PASSWORD_MESSAGE);
         }
 
-        Status passwordAtLeastOneLowercaseStatus = ParametersCache.getParamValueAsStatus(ParametersCode.PASSWORD_AT_LEAST_ONE_LOWERCASE_CONTROL);
-        if (Status.ACTIVE.equals(passwordAtLeastOneLowercaseStatus) &&
-                !password.matches(".*[a-z].*")) {
-            throw new BadRequestException(
-                    ErrorCode.PASSWORD_AT_LEAST_ONE_LOWERCASE,
-                    TextConstants.PASSWORD_AT_LEAST_ONE_LOWERCASE_MESSAGE
-            );
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new InternalServerException(ErrorCode.NEW_PASSWORD_DOES_NOT_CONFIRM, TextConstants.NEW_PASSWORD_DOES_NOT_CONFIRM_MESSAGE);
         }
 
-        Status passwordAtLeastOneDigitStatus = ParametersCache.getParamValueAsStatus(ParametersCode.PASSWORD_AT_LEAST_ONE_DIGIT_CONTROL);
-        if (Status.ACTIVE.equals(passwordAtLeastOneDigitStatus) &&
-                !password.matches(".*\\d.*")) {
-            throw new BadRequestException(
-                    ErrorCode.PASSWORD_AT_LEAST_ONE_DIGIT,
-                    TextConstants.PASSWORD_AT_LEAST_ONE_DIGIT_MESSAGE
-            );
-        }
+        PasswordUtils.passwordValidation(passwordEncoder, user, request.getNewPassword());
 
-        Status passwordAtLeastOneSpecialCharacterStatus = ParametersCache.getParamValueAsStatus(ParametersCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_CONTROL);
-        if (Status.ACTIVE.equals(passwordAtLeastOneSpecialCharacterStatus) &&
-                !password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
-            throw new BadRequestException(
-                    ErrorCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
-                    TextConstants.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_MESSAGE
-            );
-        }
-
-        Status last3PreviousPasswordDifferentStatus = ParametersCache.getParamValueAsStatus(ParametersCode.LAST_3_PREVIOUS_PASSWORD_DIFFERENT_CONTROL);
-        if (Status.ACTIVE.equals(last3PreviousPasswordDifferentStatus)) {
-            /*
-            TODO
-            throw new BadRequestException(
-                    ErrorCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
-                    TextConstants.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_MESSAGE
-            );
-             */
-        }
+        userService.changePassword(user, request);
     }
 }

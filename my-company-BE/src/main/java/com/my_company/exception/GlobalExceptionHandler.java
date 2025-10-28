@@ -52,7 +52,6 @@ public class GlobalExceptionHandler {
         log.error(errorMessage);
         ServiceResponse<Object> response = ServiceResponse.builder()
                 .success(false)
-                .statusCode(HttpStatus.BAD_REQUEST.value())
                 .errorCode(e.getErrorCode())
                 .errorMessage(errorMessage)
                 .data(null)
@@ -60,6 +59,23 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(InternalServerException.class)
+    public ResponseEntity<ServiceResponse<Object>> handleInternalServer(InternalServerException e) {
+        String errorMessage = getErrorMessage(e);
+
+        log.error(errorMessage);
+        ServiceResponse<Object> response = ServiceResponse.builder()
+                .success(false)
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .errorCode(e.getErrorCode())
+                .errorMessage(errorMessage)
+                .data(null)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @ExceptionHandler(UserAuthenticationException.class)

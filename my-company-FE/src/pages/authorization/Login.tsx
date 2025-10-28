@@ -30,24 +30,15 @@ const Login: React.FC = () => {
                 password: password
             });
 
-            if (!response?.data?.success) {
-                setError(response?.data?.errorMessage ?? getLabel("unknownErrorOccured"));
-                return;
-            }
-
             const token = response.data.data.token;
             processLogin(token);
         } catch (err: any) {
-            if (!err?.response?.data?.success) {
-                if (err?.response?.data?.errorCode == "TOKEN_EXPIRED") {
-                    setError(getLabel("tokenHasExpired"));
-                } else if (err?.response?.data?.errorCode == "INCORRECT_USERNAME_OR_PASSWORD") {
-                    setError(getLabel("incorrectUsernameOrPassword"));
-                } else {
-                    setError(getLabel("loginFailedCheckYourCredentials"));
-                }
+            if (err?.response?.data?.errorCode == "TOKEN_EXPIRED") {
+                setError(getLabel("tokenHasExpired"));
+            } else if (err?.response?.data?.errorCode == "INCORRECT_USERNAME_OR_PASSWORD") {
+                setError(getLabel("incorrectUsernameOrPassword"));
             } else {
-                setError(getLabel("loginFailedCheckYourCredentials"));
+                setError(err?.response?.data?.errorMessage ?? getLabel("loginFailedCheckYourCredentials"));
             }
         }
 

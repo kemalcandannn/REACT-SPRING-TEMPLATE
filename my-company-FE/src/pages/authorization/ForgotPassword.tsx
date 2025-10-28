@@ -20,20 +20,16 @@ const ForgotPassword: React.FC = () => {
         setError("");
 
         try {
-            const response = await BaseApiAxios.post("api/v1/authentication/forgot-password", {
+            await BaseApiAxios.post("api/v1/authentication/forgot-password", {
                 username: username
             });
 
-            if (response?.data?.success) {
-                setMessage(getLabel("passwordResetEmailSent"));
-            } else {
-                setError(response?.data?.errorMessage ?? getLabel("unknownErrorOccured"));
-            }
+            setMessage(getLabel("passwordResetEmailSent"));
         } catch (err: any) {
             setError(getLabel("unknownErrorOccured"));
-        } finally {
-            setLoading(false);
         }
+
+        setLoading(false);
     };
 
     return (

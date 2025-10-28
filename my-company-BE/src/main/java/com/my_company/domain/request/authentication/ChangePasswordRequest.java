@@ -9,6 +9,8 @@ import lombok.experimental.FieldNameConstants;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldNameConstants
-public class ForgotPasswordRequest {
-    private String username;
+public class ChangePasswordRequest {
+    private String oldPassword;
+    private String newPassword;
+    private String confirmPassword;
 }

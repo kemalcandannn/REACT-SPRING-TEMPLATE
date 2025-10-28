@@ -7,7 +7,7 @@ import com.my_company.constants.enums.ParametersCode;
 import com.my_company.constants.enums.RoleCode;
 import com.my_company.domain.dto.system.ParametersDTO;
 import com.my_company.domain.entity.system.Parameters;
-import com.my_company.exception.BadRequestException;
+import com.my_company.exception.InternalServerException;
 import com.my_company.exception.UserAuthenticationException;
 import com.my_company.mapper.system.ParametersMapper;
 import com.my_company.repository.system.ParametersRepository;
@@ -46,7 +46,7 @@ public class ParametersService extends BaseService<Parameters, ParametersDTO, St
                 .stream(ParametersCode.values())
                 .anyMatch(parametersCode -> parametersCode.name().equalsIgnoreCase(code))) {
 
-            throw new BadRequestException(ErrorCode.USED_BY_THE_SYSTEM, String.format(TextConstants.USED_BY_THE_SYSTEM_MESSAGE, code));
+            throw new InternalServerException(ErrorCode.USED_BY_THE_SYSTEM, String.format(TextConstants.USED_BY_THE_SYSTEM_MESSAGE, code));
         }
 
         super.deleteById(code);

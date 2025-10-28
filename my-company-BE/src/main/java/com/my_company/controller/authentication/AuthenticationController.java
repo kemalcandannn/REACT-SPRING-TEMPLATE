@@ -2,6 +2,7 @@ package com.my_company.controller.authentication;
 
 import com.my_company.constants.PathConstants;
 import com.my_company.constants.TextConstants;
+import com.my_company.domain.request.authentication.ChangePasswordRequest;
 import com.my_company.domain.request.authentication.ForgotPasswordRequest;
 import com.my_company.domain.request.authentication.LoginRequest;
 import com.my_company.domain.request.authentication.SignUpRequest;
@@ -62,6 +63,20 @@ public class AuthenticationController {
     @Operation(summary = "Forgot Password", description = "Forgot Password Operation")
     public ResponseEntity<ServiceResponse<Void>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         authenticationService.forgotPassword(request);
+        return ResponseEntity.ok(
+                ServiceResponse
+                        .<Void>builder()
+                        .success(true)
+                        .statusCode(HttpStatus.OK.value())
+                        .data(null)
+                        .timestamp(LocalDateTime.now())
+                        .build());
+    }
+
+    @PostMapping("/change-password")
+    @Operation(summary = "Change Password", description = "Change Password Operation")
+    public ResponseEntity<ServiceResponse<Void>> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        authenticationService.changePassword(request);
         return ResponseEntity.ok(
                 ServiceResponse
                         .<Void>builder()

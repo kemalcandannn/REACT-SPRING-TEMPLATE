@@ -5,7 +5,7 @@ import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.RoleCode;
 import com.my_company.domain.dto.authentication.RoleDTO;
 import com.my_company.domain.entity.authentication.Role;
-import com.my_company.exception.BadRequestException;
+import com.my_company.exception.InternalServerException;
 import com.my_company.mapper.authentication.RoleMapper;
 import com.my_company.repository.authentication.RoleRepository;
 import com.my_company.service.BaseService;
@@ -27,7 +27,7 @@ public class RoleService extends BaseService<Role, RoleDTO, String> {
                 .stream(RoleCode.values())
                 .anyMatch(roleCode -> roleCode.name().equalsIgnoreCase(code))) {
 
-            throw new BadRequestException(ErrorCode.USED_BY_THE_SYSTEM, String.format(TextConstants.USED_BY_THE_SYSTEM_MESSAGE, code));
+            throw new InternalServerException(ErrorCode.USED_BY_THE_SYSTEM, String.format(TextConstants.USED_BY_THE_SYSTEM_MESSAGE, code));
         }
 
         super.deleteById(code);

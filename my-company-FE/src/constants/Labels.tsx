@@ -6,9 +6,13 @@ export type Language = typeof LANGUGAGES[number];
 export interface Labels {
     alreadyHaveAnAccount: string;
     backToLogin: string;
+    changePassword: string;
+    changePasswordTitle: string;
+    confirmNewPassword: string;
     dontHaveAnAccount: string;
     email: string;
     emailOrUsername: string;
+    incorrectOldPassword: string;
     forgotPassword: string,
     forgotPasswordTitle: string;
     incorrectUsernameOrPassword: string;
@@ -20,8 +24,12 @@ export interface Labels {
     loginWithFacebook: string;
     loginWithGoogle: string;
     logout: string;
+    newPassword: string;
+    newPasswordDoesNotConfirm: string;
+    oldPassword: string;
     or: string;
     password: string;
+    passwordChangedSuccessfully: string;
     passwordResetEmailSent: string;
     resetPassword: string;
     signUp: string;
@@ -40,11 +48,15 @@ export const labelsData: Record<Language, Labels> = {
     tr: {
         alreadyHaveAnAccount: "Zaten bir hesabınız var mı? ",
         backToLogin: "Giriş ekranına dön",
+        changePassword: "Parolayı Güncelle",
+        changePasswordTitle: "Parolayı Güncelle",
+        confirmNewPassword: "Yeni Parola Doğrula",
         dontHaveAnAccount: "Hesabın yok mu? ",
         forgotPassword: "Parolanızı mı unuttunuz?",
         forgotPasswordTitle: "Parolanızı mı unuttunuz?",
         email: "E-Posta",
         emailOrUsername: "E-Posta veya Kullanıcı Adı",
+        incorrectOldPassword: "Mevcut parolanız hatalı.",
         incorrectUsernameOrPassword: "Kullanıcı adı veya Parola Hatalı, girdiğiniz bilgileri kontrol ediniz.",
         loading: "Yükleniyor...",
         login: "Giriş Yap",
@@ -54,8 +66,12 @@ export const labelsData: Record<Language, Labels> = {
         loginWithFacebook: "Facebook ile giriş",
         loginWithGoogle: "Google ile giriş",
         logout: "Çıkış Yap",
+        newPassword: "Yeni Parola",
+        newPasswordDoesNotConfirm: "Yeni parola doğrulanamadı.",
+        oldPassword: "Eski Parola",
         or: "veya",
         password: "Parola",
+        passwordChangedSuccessfully: "Parolanız başarıyla güncellendi.",
         passwordResetEmailSent: "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.",
         resetPassword: "Şifre Sıfırlama Bağlantısı Gönder",
         signUp: "Kaydol",
