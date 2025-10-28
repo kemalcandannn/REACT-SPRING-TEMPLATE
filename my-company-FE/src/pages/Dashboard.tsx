@@ -1,21 +1,19 @@
-import { BiLogOut } from "react-icons/bi";
+import React, { useEffect } from "react";
+import { BiLogOut, BiTestTube } from "react-icons/bi";
 import { useLanguage } from "../contexts/language/LanguageContext";
 import { useAuthentication } from "../contexts/authentication/AuthenticationContext";
-import { useEffect } from "react";
-import BaseApiAxios from "../helpers/BaseApiAxios";
 
 const Dashboard: React.FC = ({ }) => {
     const { getLabel } = useLanguage();
     const { logout } = useAuthentication();
 
     useEffect(() => {
-        getTestData();
+        test();
     }, []);
 
-    const getTestData = async () => {
-        const response = await BaseApiAxios.get("/api/v1/test/random-integer-list");
-        console.log(response);
-    }
+    const test = () => {
+        console.log("TEST BUTONUNA BASILDI");
+    };
 
     return (
         <>
@@ -28,7 +26,13 @@ const Dashboard: React.FC = ({ }) => {
                             onClick={logout}>
                             <BiLogOut className="logo" /> {getLabel("logout")}
                         </button>
+                    </div>
 
+                    <div>
+                        <button
+                            onClick={test}>
+                            <BiTestTube className="logo" /> {"TEST"}
+                        </button>
                     </div>
                 </div>
             </div>

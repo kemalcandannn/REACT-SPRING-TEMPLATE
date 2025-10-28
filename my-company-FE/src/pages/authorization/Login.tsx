@@ -6,10 +6,12 @@ import { useAuthentication } from "../../contexts/authentication/AuthenticationC
 import { useNavigate } from "react-router-dom";
 import "./style/Authorization.css";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
+import { useParameters } from "../../contexts/parameters/ParametersContext";
 
 const Login: React.FC = () => {
     const { getLabel } = useLanguage();
     const { login } = useAuthentication();
+    const { initParameters } = useParameters();
     const navigate = useNavigate();
 
     const [emailOrUsername, setEmailOrUsername] = useState("");
@@ -34,7 +36,7 @@ const Login: React.FC = () => {
             }
 
             const token = response.data.data.token;
-            login(token);
+            processLogin(token);
         } catch (err: any) {
             if (!err?.response?.data?.success) {
                 if (err?.response?.data?.errorCode == "TOKEN_EXPIRED") {
@@ -59,13 +61,18 @@ const Login: React.FC = () => {
         try {
             console.log(`${provider} ile giriş yapılıyor`);
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            login("TEST");
+            processLogin("TEST");
         } catch {
             setError(`${provider} ile giriş yapılamadı.`);
         }
 
         setLoading(false);
     };
+
+    const processLogin = (token: string) => {
+        login(token);
+        initParameters();
+    }
 
     return (
         <>
