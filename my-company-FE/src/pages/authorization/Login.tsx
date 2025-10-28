@@ -14,7 +14,7 @@ const Login: React.FC = () => {
     const { initParameters } = useParameters();
     const navigate = useNavigate();
 
-    const [emailOrUsername, setEmailOrUsername] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -26,7 +26,7 @@ const Login: React.FC = () => {
 
         try {
             const response = await BaseApiAxios.post("api/v1/authentication/login", {
-                username: emailOrUsername,
+                username: username,
                 password: password
             });
 
@@ -86,9 +86,9 @@ const Login: React.FC = () => {
                         <div>
                             <input
                                 type="text"
-                                placeholder={getLabel("emailOrUsername")}
-                                value={emailOrUsername}
-                                onChange={(e) => setEmailOrUsername(e.target.value)}
+                                placeholder={getLabel("username")}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 required
                             />
                         </div>
@@ -108,6 +108,19 @@ const Login: React.FC = () => {
                                 disabled={loading}>
                                 {loading ? getLabel("loading") : getLabel("login")}
                             </button>
+                        </div>
+
+                        {/* 🔹 Parolanızı mı unuttunuz bağlantısı */}
+                        <div className="forgot-password">
+                            <a
+                                onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                                    e.preventDefault();
+                                    navigate("/forgotPassword"); // veya istediğin route
+                                }}
+                                href="#"
+                            >
+                                {getLabel("forgotPassword")}
+                            </a>
                         </div>
 
                         {error &&

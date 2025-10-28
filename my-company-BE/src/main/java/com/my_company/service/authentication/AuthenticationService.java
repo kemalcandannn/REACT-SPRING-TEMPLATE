@@ -7,6 +7,7 @@ import com.my_company.constants.enums.ParameterCode;
 import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
+import com.my_company.domain.request.authentication.ForgotPasswordRequest;
 import com.my_company.domain.request.authentication.LoginRequest;
 import com.my_company.domain.request.authentication.SignUpRequest;
 import com.my_company.domain.response.authentication.LoginResponse;
@@ -38,7 +39,7 @@ public class AuthenticationService {
         UserDTO userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
-        return authenticate(
+        return login(
                 LoginRequest
                         .builder()
                         .username(userDTO.getUsername())
@@ -47,7 +48,7 @@ public class AuthenticationService {
         );
     }
 
-    public LoginResponse authenticate(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         User user = userService.findAuthenticationUserByUsername(request.getUsername());
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -58,6 +59,10 @@ public class AuthenticationService {
                 .builder()
                 .token(JwtUtils.generateToken(request.getUsername()))
                 .build();
+    }
+
+    public void forgotPassword(ForgotPasswordRequest request) {
+        log.info("{}", request);
     }
 
     private void signUpValidation(SignUpRequest request) {
@@ -140,5 +145,4 @@ public class AuthenticationService {
              */
         }
     }
-
 }

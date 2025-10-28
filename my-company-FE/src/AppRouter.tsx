@@ -5,6 +5,7 @@ import LanguageSwitcher from "./contexts/language/LanguageSwitcher";
 import Login from "./pages/authorization/Login";
 import Dashboard from "./pages/Dashboard";
 import SignUp from "./pages/authorization/SignUp";
+import ForgotPassword from "./pages/authorization/ForgotPassword";
 
 const AppRouter: React.FC = () => {
     const { token } = useAuthentication(); // JWT token varsa kullanıcı giriş yapmış demektir
@@ -27,6 +28,11 @@ const AppRouter: React.FC = () => {
                     path="/dashboard"
                     element={token ? <Dashboard /> : <Navigate to="/login" />}
                 />
+
+                <Route
+                    path="/forgotPassword"
+                    element={<ForgotPassword />} />
+
 
                 <Route path="*" element={<Navigate to="/login" />} />
             </Routes>

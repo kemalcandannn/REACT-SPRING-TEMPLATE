@@ -1,13 +1,16 @@
 //export const LANGUGAGES = ["tr", "en", "de", "ru", "ar"] as const;
-export const LANGUGAGES = ["tr", "en"] as const;
+export const LANGUGAGES = ["tr"] as const;
 
 export type Language = typeof LANGUGAGES[number];
 
 export interface Labels {
     alreadyHaveAnAccount: string;
+    backToLogin: string;
     dontHaveAnAccount: string;
     email: string;
     emailOrUsername: string;
+    forgotPassword: string,
+    forgotPasswordTitle: string;
     incorrectUsernameOrPassword: string;
     loading: string;
     login: string;
@@ -19,6 +22,8 @@ export interface Labels {
     logout: string;
     or: string;
     password: string;
+    passwordResetEmailSent: string;
+    resetPassword: string;
     signUp: string;
     signUpTitle: string;
     signUpWithApple: string;
@@ -34,7 +39,10 @@ export interface Labels {
 export const labelsData: Record<Language, Labels> = {
     tr: {
         alreadyHaveAnAccount: "Zaten bir hesabınız var mı? ",
+        backToLogin: "Giriş ekranına dön",
         dontHaveAnAccount: "Hesabın yok mu? ",
+        forgotPassword: "Parolanızı mı unuttunuz?",
+        forgotPasswordTitle: "Parolanızı mı unuttunuz?",
         email: "E-Posta",
         emailOrUsername: "E-Posta veya Kullanıcı Adı",
         incorrectUsernameOrPassword: "Kullanıcı adı veya Parola Hatalı, girdiğiniz bilgileri kontrol ediniz.",
@@ -48,6 +56,8 @@ export const labelsData: Record<Language, Labels> = {
         logout: "Çıkış Yap",
         or: "veya",
         password: "Parola",
+        passwordResetEmailSent: "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.",
+        resetPassword: "Şifre Sıfırlama Bağlantısı Gönder",
         signUp: "Kaydol",
         signUpTitle: "Kaydol",
         signUpWithApple: "Apple ile Kaydol",
@@ -57,31 +67,5 @@ export const labelsData: Record<Language, Labels> = {
         unknownErrorOccured: "Bilinmeyen bir hata oluştu, sistem yönetinizle iletişime geçiniz.",
         username: "Kullanıcı Adı",
         welcomeToHomePage: "Anasayfa'ya Hoşgeldiniz",
-    },
-    en: {
-        alreadyHaveAnAccount: "Already have an account? ",
-        dontHaveAnAccount: "Don't have an account? ",
-        email: "Email",
-        emailOrUsername: "Email or Username",
-        incorrectUsernameOrPassword: "Incorrect username or password. Please check your input.",
-        loading: "Loading...",
-        login: "Login",
-        loginFailedCheckYourCredentials: "Login failed. Please check your credentials.",
-        loginTitle: "Login",
-        loginWithApple: "Login with Apple",
-        loginWithFacebook: "Login with Facebook",
-        loginWithGoogle: "Login with Google",
-        logout: "Logout",
-        or: "or",
-        password: "Password",
-        signUp: "Sign Up",
-        signUpTitle: "Sign Up",
-        signUpWithApple: "Sign Up with Apple",
-        signUpWithFacebook: "Sign Up with Facebook",
-        signUpWithGoogle: "Sign Up with Google",
-        tokenHasExpired: "Token has expired. Please log out/in and try again.",
-        unknownErrorOccured: "An unknown error occurred. Please contact support.",
-        username: "Username",
-        welcomeToHomePage: "Welcome to the homepage",
     }
 };

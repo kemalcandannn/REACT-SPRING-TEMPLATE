@@ -80,7 +80,7 @@ const SignUp: React.FC = () => {
                     <form onSubmit={handleSubmit}>
                         <div>
                             <input
-                                type="text"
+                                type="email"
                                 placeholder={getLabel("username")}
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
