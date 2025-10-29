@@ -12,6 +12,9 @@ export interface Labels {
     changePasswordTitle: string;
     checkRequiredField: string;
     confirmNewPassword: string;
+    continueWithApple: string;
+    continueWithFacebook: string;
+    continueWithGoogle: string;
     dontHaveAnAccount: string;
     dontHavePermission: string;
     email: string;
@@ -25,9 +28,6 @@ export interface Labels {
     login: string;
     loginFailedCheckYourCredentials: string;
     loginTitle: string;
-    loginWithApple: string;
-    loginWithFacebook: string;
-    loginWithGoogle: string;
     logout: string;
     newPassword: string;
     newPasswordDoesNotConfirm: string;
@@ -71,6 +71,9 @@ export const labelsData: Record<Language, Labels> = {
         changePasswordTitle: "Parolayı Güncelle",
         checkRequiredField: "Zorunlu alanları kontrol ediniz.",
         confirmNewPassword: "Yeni Parola Doğrula",
+        continueWithApple: "Apple ile Devam Et",
+        continueWithFacebook: "Facebook ile Devam Et",
+        continueWithGoogle: "Google ile Devam Et",
         dontHaveAnAccount: "Hesabın yok mu? ",
         dontHavePermission: "Yapmaya çalıştığınız işlemi gerçekleştirme yetkiniz bulunmamaktadır",
         forgotPassword: "Parolanızı mı unuttunuz?",
@@ -84,9 +87,6 @@ export const labelsData: Record<Language, Labels> = {
         login: "Giriş Yap",
         loginFailedCheckYourCredentials: "Giriş yapılamadı. Bilgilerinizi kontrol edin.",
         loginTitle: "Giriş Yap",
-        loginWithApple: "Apple ile giriş",
-        loginWithFacebook: "Facebook ile giriş",
-        loginWithGoogle: "Google ile giriş",
         logout: "Çıkış Yap",
         newPassword: "Yeni Parola",
         newPasswordDoesNotConfirm: "Yeni parola doğrulanamadı.",

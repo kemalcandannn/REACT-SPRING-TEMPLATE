@@ -116,19 +116,19 @@ const Login: React.FC = () => {
                         <button
                             onClick={() => handleSocialLogin("apple")}
                             disabled={loading}>
-                            <FaApple className="logo" /> {getLabel("loginWithApple")}
+                            <FaApple className="logo" /> {getLabel("continueWithApple")}
                         </button>
 
                         <button
                             onClick={() => handleSocialLogin("facebook")}
                             disabled={loading}>
-                            <FaFacebook className="logo" /> {getLabel("loginWithFacebook")}
+                            <FaFacebook className="logo" /> {getLabel("continueWithFacebook")}
                         </button>
 
                         <button
                             onClick={() => handleSocialLogin("google")}
                             disabled={loading}>
-                            <FcGoogle className="logo" /> {getLabel("loginWithGoogle")}
+                            <FcGoogle className="logo" /> {getLabel("continueWithGoogle")}
                         </button>
                     </div>
 
