@@ -2,14 +2,14 @@ import React, { createContext, useState, useContext, type ReactNode, useEffect }
 import type { User } from "./model/User";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import { SERVICE_PATHS } from "../../constants/Paths";
-import type { Parameters } from "./model/Parameters";
+import type { Parameter } from "./model/Parameter";
 
 interface AuthenticationContextType {
     jwtToken: string | null;
     fillToken: (token: string) => void;
     clearToken: () => void;
     sessionUser: User | null;
-    parameters: Parameters[];
+    parameters: Parameter[];
 }
 
 const AuthenticationContext = createContext<AuthenticationContextType | undefined>(undefined);
@@ -17,13 +17,19 @@ const AuthenticationContext = createContext<AuthenticationContextType | undefine
 export const AuthenticationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [jwtToken, setJwtToken] = useState<string | null>(sessionStorage.getItem("jwtToken"));
     const [sessionUser, setSessionUser] = useState<User | null>(null);
-    const [parameters, setParameters] = useState<Parameters[]>([]);
+    const [parameters, setParameters] = useState<Parameter[]>([]);
 
     useEffect(() => {
         const savedParameters = sessionStorage.getItem("parametersProviderItems");
         if (savedParameters) {
             setParameters(JSON.parse(savedParameters));
             sessionStorage.removeItem("parametersProviderItems");
+        }
+
+        const savedSessionUser = sessionStorage.getItem("sessionUserProviderItems");
+        if (savedSessionUser) {
+            setSessionUser(JSON.parse(savedSessionUser));
+            sessionStorage.removeItem("sessionUserProviderItems");
         }
     }, []);
 
@@ -32,6 +38,10 @@ export const AuthenticationProvider: React.FC<{ children: ReactNode }> = ({ chil
             if (parameters) {
                 sessionStorage.setItem("parametersProviderItems", JSON.stringify(parameters));
             }
+
+            if (sessionUser) {
+                sessionStorage.setItem("sessionUserProviderItems", JSON.stringify(sessionUser));
+            }
         }
 
         window.addEventListener("beforeunload", handleBeforeUnload);
@@ -39,7 +49,7 @@ export const AuthenticationProvider: React.FC<{ children: ReactNode }> = ({ chil
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
         }
-    }, [parameters]);
+    }, [parameters, sessionUser]);
 
     const fillToken = (newToken: string) => {
         sessionStorage.setItem("jwtToken", newToken);
@@ -61,7 +71,7 @@ export const AuthenticationProvider: React.FC<{ children: ReactNode }> = ({ chil
     };
 
     const initParameters = async () => {
-        const response = await BaseApiAxios.get(SERVICE_PATHS.API_V1_PARAMETERS_FIND_ALL_FROM_CACHE);
+        const response = await BaseApiAxios.get(SERVICE_PATHS.API_V1_PARAMETER_FIND_ALL_FROM_CACHE);
         setParameters(response?.data?.data);
     }
 

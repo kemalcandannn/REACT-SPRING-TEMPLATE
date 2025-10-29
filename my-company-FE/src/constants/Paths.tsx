@@ -7,7 +7,7 @@ export const NAVIGATE_PATHS = {
 }
 
 export const SERVICE_PATHS = {
-    API_V1_PARAMETERS_FIND_ALL_FROM_CACHE: "/api/v1/parameters/find-all-from-cache",
+    API_V1_PARAMETER_FIND_ALL_FROM_CACHE: "/api/v1/parameter/find-all-from-cache",
     API_V1_AUTHENTICATION_LOGIN: "api/v1/authentication/login",
     API_V1_AUTHENTICATION_LOCAL_SIGN_UP: "api/v1/authentication/local-sign-up",
     API_V1_AUTHENTICATION_FORGOT_PASSWORD: "api/v1/authentication/forgot-password",

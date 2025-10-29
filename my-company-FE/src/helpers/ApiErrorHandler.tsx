@@ -1,6 +1,6 @@
 import { ERROR_CODE } from "../constants/ErrorCodes";
 import { isLabelKey } from "../constants/Labels";
-import { PARAMETERS_CODE } from "../constants/ParametersCodes";
+import { PARAMETER_CODE } from "../constants/ParameterCodes";
 import { useAuthentication } from "../contexts/authentication/AuthenticationContext";
 import { useLanguage } from "../contexts/language/LanguageContext";
 
@@ -34,7 +34,7 @@ export const useApiErrorHandler = () => {
             case ERROR_CODE.NEW_PASSWORD_DOES_NOT_CONFIRM:
                 return getLabel("newPasswordDoesNotConfirm");
             case ERROR_CODE.PASSWORD_AT_LEAST_CHARACTERS_LONG: {
-                const value = parameters?.find(item => item.code == PARAMETERS_CODE.PASSWORD_AT_LEAST_CHARACTER_LONG)?.value ?? "8";
+                const value = parameters?.find(item => item.code == PARAMETER_CODE.PASSWORD_AT_LEAST_CHARACTER_LONG)?.value ?? "8";
                 return getLabelFormatted("passwordAtLeastCharactersLong", value);
             }
             case ERROR_CODE.PASSWORD_AT_LEAST_ONE_UPPERCASE:
