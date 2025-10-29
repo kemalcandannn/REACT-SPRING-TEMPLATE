@@ -7,6 +7,7 @@ interface LanguageContextType {
     language: Language;
     setLanguage: (lang: Language) => void;
     getLabel: (key: LabelKey) => string;
+    getLabelFormatted: (key: LabelKey, ...args: string[]) => string;
 }
 
 // Context oluştur
@@ -20,8 +21,15 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
         return (labelsData[language as Language][key]) ?? ""
     };
 
+    function getLabelFormatted(key: LabelKey, ...args: string[]): string {
+        let text = labelsData[language as Language][key];
+        args.forEach(arg => {
+            text = text.replace("[%s]", arg);
+        });
+        return text;
+    }
     return (
-        <LanguageContext.Provider value={{ language, setLanguage, getLabel }}>
+        <LanguageContext.Provider value={{ language, setLanguage, getLabel, getLabelFormatted }}>
             {children}
         </LanguageContext.Provider>
     );
