@@ -216,6 +216,8 @@ public class AuthenticationService {
             throw new BadRequestException(ErrorCode.RESET_PASSWORD_TOKEN_NOT_FOUND, "Record not found from token in the request");
         }
 
+        User user = userService.findAuthenticationUserByUsername(userTokenDTO.getUsername());
+
         if (userTokenDTO.getExpiresAt() != null && userTokenDTO.getExpiresAt().isBefore(LocalDateTime.now())) {
             userTokenDTO.setStatus(TokenStatus.EXPIRED);
             userTokenDTO = userTokenService.saveOrUpdate(userTokenDTO);
@@ -232,10 +234,9 @@ public class AuthenticationService {
                     : null;
             userTokenDTO.setExpiresAt(userTokenMapper.getExpiresAt(tokenExpirationMinutes));
             userTokenService.saveOrUpdate(userTokenDTO);
+            emailService.sendPasswordResetMail(user.getUsername(), userTokenDTO.getToken());
             throw new UserAuthenticationException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
         }
-
-        User user = userService.findAuthenticationUserByUsername(userTokenDTO.getUsername());
 
         if (!request.getNewPassword().equals(request.getConfirmPassword())) {
             throw new InternalServerException(ErrorCode.NEW_PASSWORD_DOES_NOT_CONFIRM, "New Password does not confirm.");
