@@ -4,10 +4,16 @@ import BaseApiAxios from "../../helpers/BaseApiAxios";
 import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
 import { useNavigate } from "react-router-dom";
 import "./style/Authorization.css";
-import { SERVICE_PATHS } from "../../constants/Paths";
+import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
+import { useAuthentication } from "../../contexts/authentication/AuthenticationContext";
 
-const ChangePassword: React.FC = () => {
+interface ChangePasswordProps {
+    setClickChangePassword?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickChangePassword }) => {
     const { getLabel } = useLanguage();
+    const { initSessionUser } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
     const navigate = useNavigate();
 
@@ -16,12 +22,10 @@ const ChangePassword: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        setSuccess("");
         setLoading(true);
 
         try {
@@ -31,10 +35,16 @@ const ChangePassword: React.FC = () => {
                 confirmPassword
             });
 
-            setSuccess(getLabel("passwordChangedSuccessfully"));
             setOldPassword("");
             setNewPassword("");
             setConfirmPassword("");
+            initSessionUser();
+
+            if (setClickChangePassword) {
+                setClickChangePassword?.((prev: boolean) => !prev);
+            } else {
+                navigate(NAVIGATE_PATHS.DASHBOARD);
+            }
         } catch (err: any) {
             setError(handleApiError(err));
         }
@@ -85,17 +95,25 @@ const ChangePassword: React.FC = () => {
                     </div>
 
                     {error && <div className="error-text">{error}</div>}
-                    {success && <div className="success-text">{success}</div>}
                 </form>
 
                 <p style={{ marginTop: "20px" }}>
-                    <a href="#"
-                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                            e.preventDefault();
-                            navigate(-1);
-                        }}>
-                        {getLabel("back")}
-                    </a>
+                    {setClickChangePassword ?
+                        <a href="#"
+                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                                setClickChangePassword?.((prev: boolean) => !prev);
+                            }}>
+                            {getLabel("back")}
+                        </a>
+                        :
+                        <a href="#"
+                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                                e.preventDefault();
+                                navigate(NAVIGATE_PATHS.LOGOUT);
+                            }}>
+                            {getLabel("logout")}
+                        </a>
+                    }
                 </p>
             </div>
         </div>

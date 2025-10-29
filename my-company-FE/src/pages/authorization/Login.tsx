@@ -32,7 +32,7 @@ const Login: React.FC = () => {
             });
 
             const token = response.data.data.token;
-            processLogin(token);
+            fillToken(token);
         } catch (err: any) {
             setError(handleApiError(err));
         }
@@ -47,17 +47,13 @@ const Login: React.FC = () => {
         try {
             console.log(`${provider} ile giriş yapılıyor`);
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            processLogin("TEST");
+            fillToken("TEST");
         } catch {
             setError(`${provider} ile giriş yapılamadı.`);
         }
 
         setLoading(false);
     };
-
-    const processLogin = (token: string) => {
-        fillToken(token);
-    }
 
     return (
         <>

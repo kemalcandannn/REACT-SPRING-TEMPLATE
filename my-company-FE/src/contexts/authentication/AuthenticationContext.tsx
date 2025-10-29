@@ -9,6 +9,7 @@ interface AuthenticationContextType {
     fillToken: (token: string) => void;
     clearToken: () => void;
     sessionUser: User | null;
+    initSessionUser: () => void;
     parameters: Parameter[];
 }
 
@@ -76,7 +77,7 @@ export const AuthenticationProvider: React.FC<{ children: ReactNode }> = ({ chil
     }
 
     return (
-        <AuthenticationContext.Provider value={{ jwtToken, fillToken, clearToken, sessionUser, parameters }}>
+        <AuthenticationContext.Provider value={{ jwtToken, fillToken, clearToken, sessionUser, initSessionUser, parameters }}>
             {children}
         </AuthenticationContext.Provider>
     );

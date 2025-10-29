@@ -1,5 +1,6 @@
 export const NAVIGATE_PATHS = {
     LOGIN: "/login",
+    LOGOUT: "/logout",
     DASHBOARD: "/dashboard",
     SIGN_UP: "/signUp",
     FORGOT_PASSWORD: "/forgotPassword",
