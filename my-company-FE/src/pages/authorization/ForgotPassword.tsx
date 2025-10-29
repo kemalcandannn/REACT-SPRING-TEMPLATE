@@ -43,7 +43,7 @@ const ForgotPassword: React.FC = () => {
                 <form onSubmit={handleSubmit}>
                     <div>
                         <input
-                            type="email"
+                            type="text"
                             placeholder={getLabel("email")}
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}

@@ -5,6 +5,7 @@ public class TextConstants {
         throw new UnsupportedOperationException(ApplicationConstants.UTILITY_CLASS);
     }
 
+    public static final String INCORRECT_USERNAME_MESSAGE = "The username is not found in the system.";
     public static final String INCORRECT_USERNAME_OR_PASSWORD_MESSAGE = "Incorrect username or password, please check the information you entered.";
     public static final String INCORRECT_OLD_PASSWORD_MESSAGE = "Incorrect old password.";
     public static final String TOKEN_EXPIRED_MESSAGE = "Token has expired. Please log out/log in and try again.";

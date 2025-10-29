@@ -5,11 +5,13 @@ import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParameterCode;
+import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.authentication.UserDTO;
+import com.my_company.domain.dto.authentication.UserTokenDTO;
 import com.my_company.domain.entity.authentication.User;
 import com.my_company.domain.request.authentication.ChangePasswordRequest;
-import com.my_company.domain.request.authentication.ForgotPasswordRequest;
 import com.my_company.domain.request.authentication.LoginRequest;
+import com.my_company.domain.request.authentication.SendPasswordResetLinkRequest;
 import com.my_company.domain.request.authentication.SignUpRequest;
 import com.my_company.domain.response.authentication.LoginResponse;
 import com.my_company.domain.response.authentication.UserResponse;
@@ -17,6 +19,8 @@ import com.my_company.exception.BadRequestException;
 import com.my_company.exception.InternalServerException;
 import com.my_company.exception.UserAuthenticationException;
 import com.my_company.mapper.authentication.UserMapper;
+import com.my_company.mapper.authentication.UserTokenMapper;
+import com.my_company.service.email.EmailService;
 import com.my_company.utils.JwtUtils;
 import com.my_company.utils.PasswordUtils;
 import com.my_company.utils.SecurityUtils;
@@ -25,8 +29,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -34,6 +40,9 @@ import java.util.Objects;
 public class AuthenticationService {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final UserTokenService userTokenService;
+    private final UserTokenMapper userTokenMapper;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponse localSignUp(SignUpRequest request) {
@@ -56,7 +65,10 @@ public class AuthenticationService {
             throw new UserAuthenticationException(ErrorCode.USERNAME_ALREADY_REGISTERED, TextConstants.USERNAME_ALREADY_REGISTERED_MESSAGE);
         }
 
-        int passwordExpirationDays = ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS);
+        Integer passwordExpirationDays = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_EXPIRATION_CONTROL)) ?
+                ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS)
+                : null;
+
         userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
@@ -94,16 +106,29 @@ public class AuthenticationService {
                 .build();
     }
 
-    public void forgotPassword(ForgotPasswordRequest request) {
+    @Transactional
+    public void sendPasswordResetLink(SendPasswordResetLinkRequest request) {
         if (Objects.isNull(request)) {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
         }
 
         if (StringUtils.isNullOrBlank(request.getUsername())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ForgotPasswordRequest.Fields.username));
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, SendPasswordResetLinkRequest.Fields.username));
         }
 
-        log.info("{}", request);
+        UserDTO userDTO = userService.findById(request.getUsername(), true);
+        String token = UUID.randomUUID().toString();
+        while (userTokenService.findByToken(token) != null) {
+            token = UUID.randomUUID().toString();
+        }
+
+        Integer tokenExpirationMinutes = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.TOKEN_EXPIRATION_CONTROL)) ?
+                ParameterCache.getParamValueAsInteger(ParameterCode.TOKEN_EXPIRATION_MINUTES)
+                : null;
+
+        UserTokenDTO userTokenDTO = userTokenMapper.extraxtUserTokenDTO(userDTO, token, tokenExpirationMinutes);
+        userTokenService.saveOrUpdate(userTokenDTO);
+        emailService.sendPasswordResetMail(userDTO.getUsername(), token);
     }
 
     public void changePassword(ChangePasswordRequest request) {

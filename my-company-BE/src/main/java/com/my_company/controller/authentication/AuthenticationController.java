@@ -3,8 +3,8 @@ package com.my_company.controller.authentication;
 import com.my_company.constants.PathConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.domain.request.authentication.ChangePasswordRequest;
-import com.my_company.domain.request.authentication.ForgotPasswordRequest;
 import com.my_company.domain.request.authentication.LoginRequest;
+import com.my_company.domain.request.authentication.SendPasswordResetLinkRequest;
 import com.my_company.domain.request.authentication.SignUpRequest;
 import com.my_company.domain.response.ServiceResponse;
 import com.my_company.domain.response.authentication.LoginResponse;
@@ -50,8 +50,8 @@ public class AuthenticationController {
 
     @PostMapping(PathConstants.SEND_PASSWORD_RESET_LINK_URL)
     @Operation(summary = "Send Password Reset Link", description = "Send Password Reset Link Operation")
-    public ResponseEntity<ServiceResponse<Void>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
-        authenticationService.forgotPassword(request);
+    public ResponseEntity<ServiceResponse<Void>> sendPasswordResetLink(@Valid @RequestBody SendPasswordResetLinkRequest request) {
+        authenticationService.sendPasswordResetLink(request);
         return ResponseEntity.ok(
                 ServiceResponse
                         .<Void>builder()

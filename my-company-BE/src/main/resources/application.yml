@@ -30,5 +30,23 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+  #http://localhost:8025
+  mail:
+    host: localhost
+    port: 1025
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
 springdoc:
   swagger-ui.path: /swagger-ui.html
+
+app:
+  frontend:
+    url: http://localhost:8080
+

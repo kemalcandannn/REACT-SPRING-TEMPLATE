@@ -4,6 +4,7 @@ import com.my_company.cache.ParameterCache;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParameterCode;
+import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
 import com.my_company.domain.request.authentication.ChangePasswordRequest;
@@ -15,17 +16,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 @Slf4j
 public class UserService extends BaseService<User, UserDTO, String> {
     private final UserRepository repository;
+    private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository repository, UserMapper mapper, PasswordEncoder passwordEncoder) {
         super(repository, mapper);
         this.repository = repository;
+        this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -37,13 +38,11 @@ public class UserService extends BaseService<User, UserDTO, String> {
     }
 
     public void changePassword(User user, ChangePasswordRequest request) {
-        user.setPassword3(user.getPassword2());
-        user.setPassword2(user.getPassword());
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        Integer passwordExpirationDays = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_EXPIRATION_CONTROL)) ?
+                ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS)
+                : null;
 
-        int passwordExpirationDays = ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS);
-        user.setPasswordValidUntil(LocalDateTime.now().plusDays(passwordExpirationDays));
-
+        mapper.passwordChanged(passwordEncoder, user, request, passwordExpirationDays);
         repository.save(user);
     }
 }
