@@ -1,9 +1,9 @@
 package com.my_company.service.authentication;
 
-import com.my_company.cache.ParametersCache;
+import com.my_company.cache.ParameterCache;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
-import com.my_company.constants.enums.ParametersCode;
+import com.my_company.constants.enums.ParameterCode;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
 import com.my_company.domain.request.authentication.ChangePasswordRequest;
@@ -41,7 +41,7 @@ public class UserService extends BaseService<User, UserDTO, String> {
         user.setPassword2(user.getPassword());
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 
-        int passwordExpirationDays = ParametersCache.getParamValueAsInteger(ParametersCode.PASSWORD_EXPIRATION_DAYS);
+        int passwordExpirationDays = ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS);
         user.setPasswordValidUntil(LocalDateTime.now().plusDays(passwordExpirationDays));
 
         repository.save(user);

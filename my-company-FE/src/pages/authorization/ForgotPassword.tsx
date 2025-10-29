@@ -4,7 +4,7 @@ import { useLanguage } from "../../contexts/language/LanguageContext";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import "./style/Authorization.css";
 import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
-import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
+import { SERVICE_PATHS } from "../../constants/Paths";
 
 const ForgotPassword: React.FC = () => {
     const { getLabel } = useLanguage();
@@ -65,9 +65,9 @@ const ForgotPassword: React.FC = () => {
                     <a href="#"
                         onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                             e.preventDefault();
-                            navigate(NAVIGATE_PATHS.LOGIN);
+                            navigate(-1);
                         }}>
-                        {getLabel("backToLogin")}
+                        {getLabel("back")}
                     </a>
                 </p>
             </div>

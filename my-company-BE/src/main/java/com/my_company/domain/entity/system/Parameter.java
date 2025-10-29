@@ -2,7 +2,7 @@ package com.my_company.domain.entity.system;
 
 import com.my_company.constants.SchemaConstants;
 import com.my_company.constants.TableConstants;
-import com.my_company.constants.enums.ParametersType;
+import com.my_company.constants.enums.ParameterType;
 import com.my_company.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,15 +15,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(schema = SchemaConstants.SYSTEM, name = TableConstants.PARAMETERS)
-public class Parameters implements BaseEntity<String> {
+@Table(schema = SchemaConstants.SYSTEM, name = TableConstants.PARAMETER)
+public class Parameter implements BaseEntity<String> {
     @Id
     @Column(name = "CODE", nullable = false)
     private String code;
 
     @Column(name = "TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ParametersType type;
+    private ParameterType type;
 
     @Column(name = "VALUE", nullable = false)
     private String value;

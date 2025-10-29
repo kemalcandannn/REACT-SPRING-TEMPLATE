@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ParametersType {
+public enum ParameterType {
     TEXT,
     NUMERIC,
     STATUS

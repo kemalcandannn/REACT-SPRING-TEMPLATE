@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ParametersCode {
+public enum ParameterCode {
     PASSWORD_AT_LEAST_CHARACTER_LONG_CONTROL,
     PASSWORD_AT_LEAST_CHARACTER_LONG,
     PASSWORD_AT_LEAST_ONE_UPPERCASE_CONTROL,

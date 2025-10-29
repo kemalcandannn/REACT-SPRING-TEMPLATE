@@ -1,18 +1,18 @@
 package com.my_company.service.authentication;
 
-import com.my_company.cache.ParametersCache;
+import com.my_company.cache.ParameterCache;
 import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
-import com.my_company.constants.enums.ParametersCode;
+import com.my_company.constants.enums.ParameterCode;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
 import com.my_company.domain.request.authentication.ChangePasswordRequest;
 import com.my_company.domain.request.authentication.ForgotPasswordRequest;
 import com.my_company.domain.request.authentication.LoginRequest;
 import com.my_company.domain.request.authentication.SignUpRequest;
-import com.my_company.domain.response.authentication.UserResponse;
 import com.my_company.domain.response.authentication.LoginResponse;
+import com.my_company.domain.response.authentication.UserResponse;
 import com.my_company.exception.BadRequestException;
 import com.my_company.exception.InternalServerException;
 import com.my_company.exception.UserAuthenticationException;
@@ -56,7 +56,7 @@ public class AuthenticationService {
             throw new UserAuthenticationException(ErrorCode.USERNAME_ALREADY_REGISTERED, TextConstants.USERNAME_ALREADY_REGISTERED_MESSAGE);
         }
 
-        int passwordExpirationDays = ParametersCache.getParamValueAsInteger(ParametersCode.PASSWORD_EXPIRATION_DAYS);
+        int passwordExpirationDays = ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS);
         userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 

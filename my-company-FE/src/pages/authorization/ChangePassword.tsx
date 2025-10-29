@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { useLanguage } from "../../contexts/language/LanguageContext";
-import { useAuthentication } from "../../contexts/authentication/AuthenticationContext";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
 import { useNavigate } from "react-router-dom";
 import "./style/Authorization.css";
-import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
+import { SERVICE_PATHS } from "../../constants/Paths";
 
 const ChangePassword: React.FC = () => {
     const { getLabel } = useLanguage();
-    const { clearToken } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
     const navigate = useNavigate();
 

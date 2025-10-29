@@ -49,7 +49,7 @@ public class SwaggerConfig {
                 buildApi(TextConstants.MENU, PathConstants.API_V1_MENU_ALL_URL),
                 buildApi(TextConstants.USER_ROLE, PathConstants.API_V1_USER_ROLE_ALL_URL),
                 buildApi(TextConstants.ROLE_MENU, PathConstants.API_V1_ROLE_MENU_ALL_URL),
-                buildApi(TextConstants.PARAMETERS, PathConstants.API_V1_PARAMETERS_ALL_URL)
+                buildApi(TextConstants.PARAMETER, PathConstants.API_V1_PARAMETER_ALL_URL)
         );
     }
 

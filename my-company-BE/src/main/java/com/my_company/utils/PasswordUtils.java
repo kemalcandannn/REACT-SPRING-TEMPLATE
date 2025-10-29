@@ -1,10 +1,10 @@
 package com.my_company.utils;
 
-import com.my_company.cache.ParametersCache;
+import com.my_company.cache.ParameterCache;
 import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
-import com.my_company.constants.enums.ParametersCode;
+import com.my_company.constants.enums.ParameterCode;
 import com.my_company.constants.enums.Status;
 import com.my_company.domain.entity.authentication.User;
 import com.my_company.exception.BadRequestException;
@@ -40,8 +40,8 @@ public class PasswordUtils {
     }
 
     private static void validateLength(String password) {
-        if (isActive(ParametersCode.PASSWORD_AT_LEAST_CHARACTER_LONG_CONTROL)) {
-            int minLength = ParametersCache.getParamValueAsInteger(ParametersCode.PASSWORD_AT_LEAST_CHARACTER_LONG);
+        if (isActive(ParameterCode.PASSWORD_AT_LEAST_CHARACTER_LONG_CONTROL)) {
+            int minLength = ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_AT_LEAST_CHARACTER_LONG);
             if (password.length() < minLength) {
                 throw new InternalServerException(
                         ErrorCode.PASSWORD_AT_LEAST_CHARACTERS_LONG,
@@ -53,7 +53,7 @@ public class PasswordUtils {
 
     private static void validateUppercase(String password) {
         validatePattern(password,
-                ParametersCode.PASSWORD_AT_LEAST_ONE_UPPERCASE_CONTROL,
+                ParameterCode.PASSWORD_AT_LEAST_ONE_UPPERCASE_CONTROL,
                 ".*[A-Z].*",
                 ErrorCode.PASSWORD_AT_LEAST_ONE_UPPERCASE,
                 TextConstants.PASSWORD_AT_LEAST_ONE_UPPERCASE_MESSAGE);
@@ -61,7 +61,7 @@ public class PasswordUtils {
 
     private static void validateLowercase(String password) {
         validatePattern(password,
-                ParametersCode.PASSWORD_AT_LEAST_ONE_LOWERCASE_CONTROL,
+                ParameterCode.PASSWORD_AT_LEAST_ONE_LOWERCASE_CONTROL,
                 ".*[a-z].*",
                 ErrorCode.PASSWORD_AT_LEAST_ONE_LOWERCASE,
                 TextConstants.PASSWORD_AT_LEAST_ONE_LOWERCASE_MESSAGE);
@@ -69,7 +69,7 @@ public class PasswordUtils {
 
     private static void validateDigit(String password) {
         validatePattern(password,
-                ParametersCode.PASSWORD_AT_LEAST_ONE_DIGIT_CONTROL,
+                ParameterCode.PASSWORD_AT_LEAST_ONE_DIGIT_CONTROL,
                 ".*\\d.*",
                 ErrorCode.PASSWORD_AT_LEAST_ONE_DIGIT,
                 TextConstants.PASSWORD_AT_LEAST_ONE_DIGIT_MESSAGE);
@@ -77,20 +77,20 @@ public class PasswordUtils {
 
     private static void validateSpecialCharacter(String password) {
         validatePattern(password,
-                ParametersCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_CONTROL,
+                ParameterCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_CONTROL,
                 ".*[!@#$%^&*(),.?\":{}|<>].*",
                 ErrorCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
                 TextConstants.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_MESSAGE);
     }
 
-    private static void validatePattern(String password, ParametersCode paramCode, String regex, ErrorCode errorCode, String message) {
+    private static void validatePattern(String password, ParameterCode paramCode, String regex, ErrorCode errorCode, String message) {
         if (isActive(paramCode) && !password.matches(regex)) {
             throw new InternalServerException(errorCode, message);
         }
     }
 
     private static void validatePreviousPasswords(PasswordEncoder passwordEncoder, User user, String password) {
-        if (!isActive(ParametersCode.LAST_3_PREVIOUS_PASSWORD_DIFFERENT_CONTROL) || Objects.isNull(user)) return;
+        if (!isActive(ParameterCode.LAST_3_PREVIOUS_PASSWORD_DIFFERENT_CONTROL) || Objects.isNull(user)) return;
 
         boolean reused = Stream.of(user.getPassword(), user.getPassword2(), user.getPassword3())
                 .filter(Objects::nonNull)
@@ -104,7 +104,7 @@ public class PasswordUtils {
         }
     }
 
-    private static boolean isActive(ParametersCode code) {
-        return Status.ACTIVE.equals(ParametersCache.getParamValueAsStatus(code));
+    private static boolean isActive(ParameterCode code) {
+        return Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(code));
     }
 }

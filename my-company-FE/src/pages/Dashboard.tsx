@@ -30,7 +30,7 @@ const Dashboard: React.FC = ({ }) => {
                                 console.log(`GO TO ${NAVIGATE_PATHS.CHANGE_PASSWORD}`);
                                 navigate(NAVIGATE_PATHS.CHANGE_PASSWORD);
                             }}>
-                            <BiLogOut className="logo" /> {"PAROLA DEĞİŞTİR"}
+                            <BiLogOut className="logo" /> {getLabel("changePassword")}
                         </button>
                     </div>
 
