@@ -40,7 +40,7 @@ export interface Labels {
     passwordAtLeastOneUppercase: string;
     passwordChangedSuccessfully: string;
     passwordResetEmailSent: string;
-    resetPassword: string;
+    sendResetPasswordLink: string;
     requiredField: string;
     signUp: string;
     signUpTitle: string;
@@ -93,7 +93,7 @@ export const labelsData: Record<Language, Labels> = {
         passwordAtLeastOneUppercase: "Parola en az 1 büyük harf içermelidir.",
         passwordChangedSuccessfully: "Parolanız başarıyla güncellendi.",
         passwordResetEmailSent: "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.",
-        resetPassword: "Şifre Sıfırlama Bağlantısı Gönder",
+        sendResetPasswordLink: "Şifre Sıfırlama Bağlantısı Gönder",
         requiredField: "[[%s]] zorunlu alandır, lütfen kontrol ediniz.",
         signUp: "Kaydol",
         signUpTitle: "Kaydol",

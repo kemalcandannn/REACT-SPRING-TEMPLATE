@@ -48,8 +48,8 @@ public class AuthenticationController {
                         .build());
     }
 
-    @PostMapping(PathConstants.FORGOT_PASSWORD_URL)
-    @Operation(summary = "Forgot Password", description = "Forgot Password Operation")
+    @PostMapping(PathConstants.SEND_PASSWORD_RESET_LINK_URL)
+    @Operation(summary = "Send Password Reset Link", description = "Send Password Reset Link Operation")
     public ResponseEntity<ServiceResponse<Void>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         authenticationService.forgotPassword(request);
         return ResponseEntity.ok(

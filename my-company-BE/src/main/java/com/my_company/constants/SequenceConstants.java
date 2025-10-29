@@ -6,4 +6,5 @@ public class SequenceConstants {
     }
 
     public static final String DEFAULT_SEQ_ALIAS = "_SEQ";
+    public static final String USER_TOKEN_SEQ = TableConstants.USER_TOKEN + DEFAULT_SEQ_ALIAS;
 }

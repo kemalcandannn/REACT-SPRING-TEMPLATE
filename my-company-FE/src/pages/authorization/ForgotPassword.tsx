@@ -23,7 +23,7 @@ const ForgotPassword: React.FC = () => {
         setError("");
 
         try {
-            await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_FORGOT_PASSWORD, {
+            await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_SEND_PASSWORD_RESET_LINK, {
                 username: username
             });
 
@@ -53,7 +53,7 @@ const ForgotPassword: React.FC = () => {
 
                     <div>
                         <button type="submit" disabled={loading}>
-                            {loading ? getLabel("loading") : getLabel("resetPassword")}
+                            {loading ? getLabel("loading") : getLabel("sendResetPasswordLink")}
                         </button>
                     </div>
 

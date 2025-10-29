@@ -95,6 +95,14 @@ public class AuthenticationService {
     }
 
     public void forgotPassword(ForgotPasswordRequest request) {
+        if (Objects.isNull(request)) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        }
+
+        if (StringUtils.isNullOrBlank(request.getUsername())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ForgotPasswordRequest.Fields.username));
+        }
+
         log.info("{}", request);
     }
 
