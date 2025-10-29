@@ -8,10 +8,10 @@ import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
 import { useAuthentication } from "../../contexts/authentication/AuthenticationContext";
 
 interface ChangePasswordProps {
-    setClickChangePassword?: React.Dispatch<React.SetStateAction<boolean>>;
+    setClickedChangePassword?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickChangePassword }) => {
+const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePassword }) => {
     const { getLabel } = useLanguage();
     const { initSessionUser } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
@@ -40,8 +40,8 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickChangePassword 
             setConfirmPassword("");
             initSessionUser();
 
-            if (setClickChangePassword) {
-                setClickChangePassword?.((prev: boolean) => !prev);
+            if (setClickedChangePassword) {
+                setClickedChangePassword?.((prev: boolean) => !prev);
             } else {
                 navigate(NAVIGATE_PATHS.DASHBOARD);
             }
@@ -98,10 +98,10 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickChangePassword 
                 </form>
 
                 <p style={{ marginTop: "20px" }}>
-                    {setClickChangePassword ?
+                    {setClickedChangePassword ?
                         <a href="#"
                             onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                                setClickChangePassword?.((prev: boolean) => !prev);
+                                setClickedChangePassword?.((prev: boolean) => !prev);
                             }}>
                             {getLabel("back")}
                         </a>

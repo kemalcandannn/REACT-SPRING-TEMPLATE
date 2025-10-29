@@ -46,6 +46,6 @@ public class UserToken {
     @Column(name = "IP_ADDRESS")
     private String ipAddress;
 
-    @Column(name = "CREATED_AT", nullable = false)
+    @Column(name = "CREATED_AT", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 }

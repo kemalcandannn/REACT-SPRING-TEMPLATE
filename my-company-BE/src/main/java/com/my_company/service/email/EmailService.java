@@ -46,17 +46,20 @@ public class EmailService {
     public void sendAccountVerificationMail(String to, String token) {
         String verificationLink = frontendBaseUrl + "/verifyAccount?token=" + token;
         String subject = "✅ Hesabınızı Doğrulayın";
+
+        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_CONTROL, ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_MINUTES);
+
         String body = """
                 Merhaba,
                 
                 Hesabınızı aktifleştirmek için aşağıdaki bağlantıya tıklayın:
                 %s
                 
-                Bu bağlantı 24 saat içinde geçersiz olacaktır.
+                %s
                 
                 Teşekkürler,
                 MyCompany Ekibi
-                """.formatted(verificationLink);
+                """.formatted(verificationLink, (tokenExpirationMinutes == null ? "" : String.format("Bu bağlantı %s dakika içinde geçersiz olacaktır.", tokenExpirationMinutes)));
 
         sendEmail(to, subject, body);
     }

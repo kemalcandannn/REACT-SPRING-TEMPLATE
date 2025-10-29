@@ -10,6 +10,7 @@ import ChangePassword from "./pages/authorization/ChangePassword";
 import { NAVIGATE_PATHS } from "./constants/Paths";
 import Logout from "./pages/authorization/Logout";
 import ResetPassword from "./pages/authorization/ResetPassword";
+import VerifyAccount from "./pages/authorization/VerifyAccount";
 
 const AppRouter: React.FC = () => {
     const { jwtToken } = useAuthentication(); // JWT token varsa kullanıcı giriş yapmış demektir
@@ -48,6 +49,11 @@ const AppRouter: React.FC = () => {
                 <Route
                     path={NAVIGATE_PATHS.RESET_PASSWORD}
                     element={<ResetPassword />}
+                />
+
+                <Route
+                    path={NAVIGATE_PATHS.VERIFY_ACCOUNT}
+                    element={<VerifyAccount />}
                 />
 
                 <Route

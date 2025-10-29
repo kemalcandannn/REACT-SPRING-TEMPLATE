@@ -22,7 +22,6 @@ import com.my_company.mapper.authentication.UserMapper;
 import com.my_company.mapper.authentication.UserTokenMapper;
 import com.my_company.service.email.EmailService;
 import com.my_company.utils.*;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -72,7 +71,7 @@ public class AuthenticationService {
         userDTO = userService.saveOrUpdate(userDTO);
 
         String token = userTokenService.getRandomToken();
-        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_CONTROL, ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES);
+        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_CONTROL, ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_MINUTES);
 
         UserTokenDTO userTokenDTO = userTokenMapper.extraxtAccountVerificationUserTokenDTO(userDTO, token, tokenExpirationMinutes);
         userTokenService.saveOrUpdate(userTokenDTO);
@@ -245,7 +244,7 @@ public class AuthenticationService {
         userTokenService.saveOrUpdate(userTokenDTO);
     }
 
-    public void verifyAccount(@Valid VerifyAccountRequest request) {
+    public void verifyAccount(VerifyAccountRequest request) {
         if (Objects.isNull(request)) {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
         }

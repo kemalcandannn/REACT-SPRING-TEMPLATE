@@ -5,7 +5,8 @@ export const NAVIGATE_PATHS = {
     SIGN_UP: "/signUp",
     FORGOT_PASSWORD: "/forgotPassword",
     CHANGE_PASSWORD: "/changePassword",
-    RESET_PASSWORD: "/resetPassword"
+    RESET_PASSWORD: "/resetPassword",
+    VERIFY_ACCOUNT: "/verifyAccount"
 }
 
 export const SERVICE_PATHS = {

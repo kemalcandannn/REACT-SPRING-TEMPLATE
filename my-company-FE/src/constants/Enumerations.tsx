@@ -1,5 +1,13 @@
-const STATUS_VALUE = ["ACTIVE", "PASSIVE"] as const;
-export type STATUS = typeof STATUS_VALUE[number];
+export const STATUS = {
+    ACTIVE: "ACTIVE",
+    PASSIVE: "PASSIVE",
+} as const;
+type STATUS = typeof STATUS[keyof typeof STATUS];
 
-const PROVIDER_VALUE = ["LOCAL", "GOOGLE", "FACEBOOK", "APPLE"] as const;
-export type PROVIDER = typeof PROVIDER_VALUE[number];
+export const PROVIDER = {
+    LOCAL: "LOCAL",
+    GOOGLE: "GOOGLE",
+    FACEBOOK: "FACEBOOK",
+    APPLE: "APPLE"
+} as const;
+type PROVIDER = typeof PROVIDER[keyof typeof PROVIDER];
