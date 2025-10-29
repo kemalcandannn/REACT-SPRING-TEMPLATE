@@ -1,4 +1,4 @@
-import type { PROVIDER, STATUS } from "../../../constants/Enumerations";
+import { STATUS, PROVIDER } from "../../../constants/Enumerations";
 
 export interface User {
     username: string;
@@ -8,5 +8,6 @@ export interface User {
     status: STATUS;
     createdAt: Date;
 
-    authorities: string[]
+    roleList: string[]
+    menuList: string[]
 }
