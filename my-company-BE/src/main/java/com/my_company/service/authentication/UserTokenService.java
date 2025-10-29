@@ -3,6 +3,7 @@ package com.my_company.service.authentication;
 import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
+import com.my_company.constants.enums.TokenStatus;
 import com.my_company.domain.dto.authentication.UserTokenDTO;
 import com.my_company.domain.entity.authentication.UserToken;
 import com.my_company.exception.BadRequestException;
@@ -63,6 +64,11 @@ public class UserTokenService {
 
     public UserTokenDTO findByToken(String token) {
         List<UserToken> userTokenList = repository.findByToken(token);
+        return CollectionUtils.isNotEmpty(userTokenList) ? mapper.entityToDto(userTokenList.get(0)) : null;
+    }
+
+    public UserTokenDTO findByTokenAndStatus(String token, TokenStatus status) {
+        List<UserToken> userTokenList = repository.findByTokenAndStatus(token, status);
         return CollectionUtils.isNotEmpty(userTokenList) ? mapper.entityToDto(userTokenList.get(0)) : null;
     }
 

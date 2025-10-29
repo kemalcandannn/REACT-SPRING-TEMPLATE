@@ -6,15 +6,13 @@ import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParameterCode;
 import com.my_company.constants.enums.Status;
+import com.my_company.constants.enums.TokenStatus;
 import com.my_company.domain.dto.authentication.RoleMenuDTO;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.dto.authentication.UserMenuDTO;
 import com.my_company.domain.dto.authentication.UserTokenDTO;
 import com.my_company.domain.entity.authentication.User;
-import com.my_company.domain.request.authentication.ChangePasswordRequest;
-import com.my_company.domain.request.authentication.LoginRequest;
-import com.my_company.domain.request.authentication.SendPasswordResetLinkRequest;
-import com.my_company.domain.request.authentication.SignUpRequest;
+import com.my_company.domain.request.authentication.*;
 import com.my_company.domain.response.authentication.LoginResponse;
 import com.my_company.domain.response.authentication.UserResponse;
 import com.my_company.exception.BadRequestException;
@@ -31,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -63,7 +62,7 @@ public class AuthenticationService {
 
         UserDTO userDTO = userService.findById(request.getUsername(), false);
         if (Objects.nonNull(userDTO)) {
-            throw new UserAuthenticationException(ErrorCode.USERNAME_ALREADY_REGISTERED, TextConstants.USERNAME_ALREADY_REGISTERED_MESSAGE);
+            throw new UserAuthenticationException(ErrorCode.USERNAME_ALREADY_REGISTERED, "The username is already registered in the system.");
         }
 
         Integer passwordExpirationDays = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_EXPIRATION_CONTROL)) ?
@@ -152,16 +151,16 @@ public class AuthenticationService {
         User user = userService.findAuthenticationUserByUsername(SecurityUtils.getCurrentUsername());
 
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new UserAuthenticationException(ErrorCode.INCORRECT_OLD_PASSWORD, TextConstants.INCORRECT_OLD_PASSWORD_MESSAGE);
+            throw new UserAuthenticationException(ErrorCode.INCORRECT_OLD_PASSWORD, "Incorrect old password.");
         }
 
         if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-            throw new InternalServerException(ErrorCode.NEW_PASSWORD_DOES_NOT_CONFIRM, TextConstants.NEW_PASSWORD_DOES_NOT_CONFIRM_MESSAGE);
+            throw new InternalServerException(ErrorCode.NEW_PASSWORD_DOES_NOT_CONFIRM, "New Password does not confirm.");
         }
 
         PasswordUtils.passwordValidation(passwordEncoder, user, request.getNewPassword());
 
-        userService.changePassword(user, request);
+        userService.changePassword(user, request.getNewPassword());
     }
 
     public UserResponse extractAuthenticationFromToken() {
@@ -193,5 +192,54 @@ public class AuthenticationService {
         }
 
         return userMapper.entityToResponse(user, roleList, new ArrayList<>(menuSet));
+    }
+
+    public void resetPassword(ResetPasswordRequest request) {
+        if (Objects.isNull(request)) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        }
+
+        if (StringUtils.isNullOrBlank(request.getToken())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ResetPasswordRequest.Fields.token));
+        }
+
+        if (StringUtils.isNullOrBlank(request.getNewPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ResetPasswordRequest.Fields.newPassword));
+        }
+
+        if (StringUtils.isNullOrBlank(request.getConfirmPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ResetPasswordRequest.Fields.confirmPassword));
+        }
+
+        UserTokenDTO userTokenDTO = userTokenService.findByTokenAndStatus(request.getToken(), TokenStatus.ACTIVE);
+        if (userTokenDTO == null) {
+            throw new BadRequestException(ErrorCode.RESET_PASSWORD_TOKEN_NOT_FOUND, "Record not found from token in the request");
+        }
+
+        if (userTokenDTO.getExpiresAt() != null && userTokenDTO.getExpiresAt().isBefore(LocalDateTime.now())) {
+            userTokenDTO.setStatus(TokenStatus.EXPIRED);
+            userTokenDTO = userTokenService.saveOrUpdate(userTokenDTO);
+            userTokenDTO.setId(null);
+            userTokenDTO.setStatus(TokenStatus.ACTIVE);
+
+            Integer tokenExpirationMinutes = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.TOKEN_EXPIRATION_CONTROL)) ?
+                    ParameterCache.getParamValueAsInteger(ParameterCode.TOKEN_EXPIRATION_MINUTES)
+                    : null;
+            userTokenDTO.setExpiresAt(userTokenMapper.getExpiresAt(tokenExpirationMinutes));
+            userTokenService.saveOrUpdate(userTokenDTO);
+            throw new UserAuthenticationException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
+        }
+
+        User user = userService.findAuthenticationUserByUsername(userTokenDTO.getUsername());
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new InternalServerException(ErrorCode.NEW_PASSWORD_DOES_NOT_CONFIRM, "New Password does not confirm.");
+        }
+
+        PasswordUtils.passwordValidation(passwordEncoder, user, request.getNewPassword());
+        userService.changePassword(user, request.getNewPassword());
+        userTokenDTO.setUsedAt(LocalDateTime.now());
+        userTokenDTO.setStatus(TokenStatus.USED);
+        userTokenService.saveOrUpdate(userTokenDTO);
     }
 }

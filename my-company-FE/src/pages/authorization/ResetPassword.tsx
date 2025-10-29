@@ -3,9 +3,12 @@ import { useLanguage } from "../../contexts/language/LanguageContext";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import "./style/Authorization.css";
+import { NAVIGATE_PATHS } from "../../constants/Paths";
+import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
 
 const ResetPassword: React.FC = () => {
     const { getLabel } = useLanguage();
+    const { handleApiError } = useApiErrorHandler();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token"); // URL'den token alıyoruz
@@ -39,15 +42,9 @@ const ResetPassword: React.FC = () => {
             setNewPassword("");
             setConfirmPassword("");
 
-            setTimeout(() => navigate("/login"), 2500);
+            setTimeout(() => navigate(NAVIGATE_PATHS.LOGIN), 2500);
         } catch (err: any) {
-            if (err?.response?.data?.errorCode === "TOKEN_EXPIRED") {
-                setError(getLabel("tokenHasExpired"));
-            } else if (err?.response?.data?.errorCode === "INVALID_TOKEN") {
-                setError(getLabel("tokenHasExpired"));
-            } else {
-                setError(err?.response?.data?.errorMessage ?? getLabel("unknownErrorOccured"));
-            }
+            setError(handleApiError(err));
         }
 
         setLoading(false);
@@ -56,7 +53,7 @@ const ResetPassword: React.FC = () => {
     return (
         <div className="login-body">
             <div className="login-root">
-                <h2>{getLabel("tokenHasExpired")}</h2>
+                <h2>{getLabel("resetPasswordTitle")}</h2>
 
                 <form onSubmit={handleSubmit}>
                     <div>
@@ -90,13 +87,11 @@ const ResetPassword: React.FC = () => {
                 </form>
 
                 <p>
-                    <a
-                        href="#"
-                        onClick={(e) => {
+                    <a href="#"
+                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                             e.preventDefault();
-                            navigate("/login");
-                        }}
-                    >
+                            navigate(NAVIGATE_PATHS.LOGIN);
+                        }}>
                         {getLabel("backToLogin")}
                     </a>
                 </p>

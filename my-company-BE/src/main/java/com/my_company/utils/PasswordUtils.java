@@ -45,7 +45,7 @@ public class PasswordUtils {
             if (password.length() < minLength) {
                 throw new InternalServerException(
                         ErrorCode.PASSWORD_AT_LEAST_CHARACTERS_LONG,
-                        String.format(TextConstants.PASSWORD_AT_LEAST_CHARACTERS_LONG_MESSAGE, minLength)
+                        String.format("Password must be at least [%d] characters long.", minLength)
                 );
             }
         }
@@ -56,7 +56,7 @@ public class PasswordUtils {
                 ParameterCode.PASSWORD_AT_LEAST_ONE_UPPERCASE_CONTROL,
                 ".*[A-Z].*",
                 ErrorCode.PASSWORD_AT_LEAST_ONE_UPPERCASE,
-                TextConstants.PASSWORD_AT_LEAST_ONE_UPPERCASE_MESSAGE);
+                "Password must contain at least one uppercase letter.");
     }
 
     private static void validateLowercase(String password) {
@@ -64,7 +64,7 @@ public class PasswordUtils {
                 ParameterCode.PASSWORD_AT_LEAST_ONE_LOWERCASE_CONTROL,
                 ".*[a-z].*",
                 ErrorCode.PASSWORD_AT_LEAST_ONE_LOWERCASE,
-                TextConstants.PASSWORD_AT_LEAST_ONE_LOWERCASE_MESSAGE);
+                "Password must contain at least one lowercase letter.");
     }
 
     private static void validateDigit(String password) {
@@ -72,7 +72,7 @@ public class PasswordUtils {
                 ParameterCode.PASSWORD_AT_LEAST_ONE_DIGIT_CONTROL,
                 ".*\\d.*",
                 ErrorCode.PASSWORD_AT_LEAST_ONE_DIGIT,
-                TextConstants.PASSWORD_AT_LEAST_ONE_DIGIT_MESSAGE);
+                "Password must contain at least one digit.");
     }
 
     private static void validateSpecialCharacter(String password) {
@@ -80,7 +80,7 @@ public class PasswordUtils {
                 ParameterCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_CONTROL,
                 ".*[!@#$%^&*(),.?\":{}|<>].*",
                 ErrorCode.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
-                TextConstants.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER_MESSAGE);
+                "Password must contain at least one special character.");
     }
 
     private static void validatePattern(String password, ParameterCode paramCode, String regex, ErrorCode errorCode, String message) {
@@ -99,7 +99,7 @@ public class PasswordUtils {
         if (reused) {
             throw new InternalServerException(
                     ErrorCode.LAST_3_PREVIOUS_PASSWORD_DIFFERENT,
-                    TextConstants.LAST_3_PREVIOUS_PASSWORD_DIFFERENT_MESSAGE
+                    "Your new password must be different from your last 3 passwords."
             );
         }
     }

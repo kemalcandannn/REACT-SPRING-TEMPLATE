@@ -2,10 +2,7 @@ package com.my_company.controller.authentication;
 
 import com.my_company.constants.PathConstants;
 import com.my_company.constants.TextConstants;
-import com.my_company.domain.request.authentication.ChangePasswordRequest;
-import com.my_company.domain.request.authentication.LoginRequest;
-import com.my_company.domain.request.authentication.SendPasswordResetLinkRequest;
-import com.my_company.domain.request.authentication.SignUpRequest;
+import com.my_company.domain.request.authentication.*;
 import com.my_company.domain.response.ServiceResponse;
 import com.my_company.domain.response.authentication.LoginResponse;
 import com.my_company.domain.response.authentication.UserResponse;
@@ -45,6 +42,17 @@ public class AuthenticationController {
                 ServiceResponse
                         .<LoginResponse>builder()
                         .data(loginResponse)
+                        .build());
+    }
+
+    @PostMapping(PathConstants.RESET_PASSWORD_URL)
+    @Operation(summary = "Reset Password", description = "Reset Password Operation")
+    public ResponseEntity<ServiceResponse<Void>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        authenticationService.resetPassword(request);
+        return ResponseEntity.ok(
+                ServiceResponse
+                        .<Void>builder()
+                        .data(null)
                         .build());
     }
 

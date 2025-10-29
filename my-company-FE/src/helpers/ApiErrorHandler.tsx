@@ -18,6 +18,10 @@ export const useApiErrorHandler = () => {
         switch (errorCode) {
             case ERROR_CODE.TOKEN_EXPIRED:
                 return getLabel("tokenHasExpired");
+            case ERROR_CODE.RESET_PASSWORD_TOKEN_EXPIRED:
+                return getLabel("resetPasswordTokenHasExpired");
+            case ERROR_CODE.RESET_PASSWORD_TOKEN_NOT_FOUND:
+                return getLabel("resetPasswordTokenNotFound");
             case ERROR_CODE.TOKEN_VALIDATION_ERROR:
                 return getLabel("tokenValidationError");
             case ERROR_CODE.REQUIRED_FIELD: {

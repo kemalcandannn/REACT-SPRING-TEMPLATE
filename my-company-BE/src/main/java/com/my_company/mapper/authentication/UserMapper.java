@@ -3,7 +3,6 @@ package com.my_company.mapper.authentication;
 
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
-import com.my_company.domain.request.authentication.ChangePasswordRequest;
 import com.my_company.domain.request.authentication.SignUpRequest;
 import com.my_company.domain.response.authentication.UserResponse;
 import com.my_company.mapper.BaseMapper;
@@ -11,7 +10,6 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -27,9 +25,9 @@ public interface UserMapper extends BaseMapper<User, UserDTO, String> {
 
     @Mapping(target = "password3", expression = "java(user.getPassword2())")
     @Mapping(target = "password2", expression = "java(user.getPassword())")
-    @Mapping(target = "password", expression = "java(passwordEncoder.encode(request.getNewPassword()))")
+    @Mapping(target = "password", expression = "java(passwordEncoder.encode(password))")
     @Mapping(target = "passwordValidUntil", expression = "java(passwordExpirationDays == null ? null : getLocalDateTimeNow().plusDays(passwordExpirationDays))")
-    void passwordChanged(@Context PasswordEncoder passwordEncoder, @MappingTarget User user, ChangePasswordRequest request, Integer passwordExpirationDays);
+    void passwordChanged(@Context PasswordEncoder passwordEncoder, @MappingTarget User user, String password, Integer passwordExpirationDays);
 
     UserResponse entityToResponse(User user, List<String> roleList, List<String> menuList);
 }

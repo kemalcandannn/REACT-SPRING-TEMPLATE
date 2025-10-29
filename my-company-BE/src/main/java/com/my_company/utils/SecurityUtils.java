@@ -1,7 +1,6 @@
 package com.my_company.utils;
 
 import com.my_company.constants.ApplicationConstants;
-import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.RoleCode;
 import com.my_company.exception.UserAuthenticationException;
@@ -26,7 +25,7 @@ public class SecurityUtils {
                 !(authentication.getPrincipal() instanceof User user)) {
             throw new UserAuthenticationException(
                     ErrorCode.TOKEN_VALIDATION_ERROR,
-                    TextConstants.TOKEN_VALIDATION_ERROR_MESSAGE);
+                    "Token Validation Error");
         }
 
         return user.getUsername();

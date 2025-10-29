@@ -42,6 +42,9 @@ export interface Labels {
     passwordResetEmailSent: string;
     sendResetPasswordLink: string;
     requiredField: string;
+    resetPasswordTitle: string;
+    resetPasswordTokenHasExpired: string;
+    resetPasswordTokenNotFound: string;
     signUp: string;
     signUpTitle: string;
     signUpWithApple: string;
@@ -95,6 +98,9 @@ export const labelsData: Record<Language, Labels> = {
         passwordResetEmailSent: "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.",
         sendResetPasswordLink: "Şifre Sıfırlama Bağlantısı Gönder",
         requiredField: "[[%s]] zorunlu alandır, lütfen kontrol ediniz.",
+        resetPasswordTitle: "Parola Sıfırla",
+        resetPasswordTokenHasExpired: "Parola Sıfırla Token geçerlilik süresi dolmuştur. Yeni parola sıfırlama isteği mailinize tekrardan gönderilmiştir.",
+        resetPasswordTokenNotFound: "Parola Sıfırla Token ile kayıt bulunamadı.",
         signUp: "Kaydol",
         signUpTitle: "Kaydol",
         signUpWithApple: "Apple ile Kaydol",

@@ -7,7 +7,6 @@ import com.my_company.constants.enums.ParameterCode;
 import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
-import com.my_company.domain.request.authentication.ChangePasswordRequest;
 import com.my_company.exception.UserAuthenticationException;
 import com.my_company.mapper.authentication.UserMapper;
 import com.my_company.repository.authentication.UserRepository;
@@ -37,12 +36,12 @@ public class UserService extends BaseService<User, UserDTO, String> {
                         TextConstants.INCORRECT_USERNAME_OR_PASSWORD_MESSAGE));
     }
 
-    public void changePassword(User user, ChangePasswordRequest request) {
+    public void changePassword(User user, String password) {
         Integer passwordExpirationDays = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_EXPIRATION_CONTROL)) ?
                 ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS)
                 : null;
 
-        mapper.passwordChanged(passwordEncoder, user, request, passwordExpirationDays);
+        mapper.passwordChanged(passwordEncoder, user, password, passwordExpirationDays);
         repository.save(user);
     }
 }
