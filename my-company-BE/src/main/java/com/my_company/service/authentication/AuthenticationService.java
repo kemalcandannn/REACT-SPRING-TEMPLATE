@@ -169,12 +169,18 @@ public class AuthenticationService {
 
         List<UserMenuDTO> userMenuDTOList = userMenuService.findByUsername(user.getUsername());
 
+        List<String> roleList = new ArrayList<>();
         Set<String> menuSet = new HashSet<>(userMenuDTOList
                 .stream()
                 .map(UserMenuDTO::getMenuCode)
                 .toList());
 
         if (CollectionUtils.isNotEmpty(SecurityUtils.getAuthorities())) {
+            roleList = SecurityUtils.getAuthorities()
+                    .stream()
+                    .map(SimpleGrantedAuthority::getAuthority)
+                    .toList();
+
             List<RoleMenuDTO> roleMenuDTOList = roleMenuService.findByRoleCodeIn(SecurityUtils.getAuthorities()
                     .stream()
                     .map(SimpleGrantedAuthority::getAuthority)
@@ -186,6 +192,6 @@ public class AuthenticationService {
                     .toList());
         }
 
-        return userMapper.entityToResponse(user, SecurityUtils.getAuthorities(), new ArrayList<>(menuSet));
+        return userMapper.entityToResponse(user, roleList, new ArrayList<>(menuSet));
     }
 }

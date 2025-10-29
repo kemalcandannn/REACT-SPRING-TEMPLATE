@@ -5,7 +5,6 @@ import com.my_company.constants.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +19,6 @@ public class UserResponse {
     private String providerId;
     private Status status;
     private LocalDateTime createdAt;
-    private List<SimpleGrantedAuthority> authorities;
+    private List<String> roleList;
     private List<String> menuList;
 }
