@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useLanguage } from "../../contexts/language/LanguageContext";
 import { useAuthentication } from "../../contexts/authentication/AuthenticationContext";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
+import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
+
 import "./style/Authorization.css";
-import { ERROR_CODE } from "../../constants/Utils";
 
 const ChangePassword: React.FC = () => {
     const { getLabel } = useLanguage();
     const { logout } = useAuthentication();
+    const { handleApiError } = useApiErrorHandler();
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -34,13 +36,7 @@ const ChangePassword: React.FC = () => {
             setNewPassword("");
             setConfirmPassword("");
         } catch (err: any) {
-            if (err?.response?.data?.errorCode === ERROR_CODE.INCORRECT_OLD_PASSWORD) {
-                setError(getLabel("incorrectOldPassword"));
-            } else if (err?.response?.data?.errorCode === ERROR_CODE.NEW_PASSWORD_DOES_NOT_CONFIRM) {
-                setError(getLabel("incorrectOldPassword"));
-            } else {
-                setError(err?.response?.data?.errorMessage ?? getLabel("unknownErrorOccured"));
-            }
+            setError(handleApiError(err));
         }
 
         setLoading(false);

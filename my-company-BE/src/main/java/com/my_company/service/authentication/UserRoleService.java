@@ -10,6 +10,7 @@ import com.my_company.exception.BadRequestException;
 import com.my_company.exception.ResourceNotFoundException;
 import com.my_company.mapper.authentication.UserRoleMapper;
 import com.my_company.repository.authentication.UserRoleRepository;
+import com.my_company.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,7 +38,7 @@ public class UserRoleService {
     }
 
     public UserRoleDTO findByUsernameAndRoleCode(String username, String roleCode, boolean throwException) {
-        if (Objects.isNull(username) || Objects.isNull(roleCode)) {
+        if (StringUtils.isNullOrBlank(username) || StringUtils.isNullOrBlank(roleCode)) {
             if (throwException) {
                 throw new ResourceNotFoundException(ErrorCode.REQUIRED_FIELD,
                         String.format(TextConstants.REQUIRED_FIELD_MESSAGE,

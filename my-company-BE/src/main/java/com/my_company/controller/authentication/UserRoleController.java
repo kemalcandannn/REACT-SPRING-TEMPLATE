@@ -13,11 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -35,10 +33,7 @@ public class UserRoleController {
         return ResponseEntity.ok(
                 ServiceResponse
                         .<List<UserRoleDTO>>builder()
-                        .success(true)
-                        .statusCode(HttpStatus.OK.value())
                         .data(userRoleDTOList)
-                        .timestamp(LocalDateTime.now())
                         .build());
     }
 
@@ -49,10 +44,7 @@ public class UserRoleController {
         return ResponseEntity.ok(
                 ServiceResponse
                         .<Page<UserRoleDTO>>builder()
-                        .success(true)
-                        .statusCode(HttpStatus.OK.value())
                         .data(userRoleDTOPage)
-                        .timestamp(LocalDateTime.now())
                         .build());
     }
 
@@ -63,10 +55,7 @@ public class UserRoleController {
         return ResponseEntity.ok(
                 ServiceResponse
                         .<UserRoleDTO>builder()
-                        .success(true)
-                        .statusCode(HttpStatus.OK.value())
                         .data(userRoleDTO)
-                        .timestamp(LocalDateTime.now())
                         .build());
     }
 
@@ -77,10 +66,7 @@ public class UserRoleController {
         return ResponseEntity.ok(
                 ServiceResponse
                         .<UserRoleDTO>builder()
-                        .success(true)
-                        .statusCode(HttpStatus.OK.value())
                         .data(userRoleDTO)
-                        .timestamp(LocalDateTime.now())
                         .build());
     }
 
@@ -91,10 +77,7 @@ public class UserRoleController {
         return ResponseEntity.ok(
                 ServiceResponse
                         .<Boolean>builder()
-                        .success(true)
-                        .statusCode(HttpStatus.OK.value())
                         .data(true)
-                        .timestamp(LocalDateTime.now())
                         .build());
     }
 }

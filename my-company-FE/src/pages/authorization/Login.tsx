@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import "./style/Authorization.css";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import { useParameters } from "../../contexts/parameters/ParametersContext";
+import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
 
 const Login: React.FC = () => {
     const { getLabel } = useLanguage();
     const { login } = useAuthentication();
     const { initParameters } = useParameters();
+    const { handleApiError } = useApiErrorHandler();
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
@@ -33,13 +35,7 @@ const Login: React.FC = () => {
             const token = response.data.data.token;
             processLogin(token);
         } catch (err: any) {
-            if (err?.response?.data?.errorCode == "TOKEN_EXPIRED") {
-                setError(getLabel("tokenHasExpired"));
-            } else if (err?.response?.data?.errorCode == "INCORRECT_USERNAME_OR_PASSWORD") {
-                setError(getLabel("incorrectUsernameOrPassword"));
-            } else {
-                setError(err?.response?.data?.errorMessage ?? getLabel("loginFailedCheckYourCredentials"));
-            }
+            setError(handleApiError(err));
         }
 
         setLoading(false);

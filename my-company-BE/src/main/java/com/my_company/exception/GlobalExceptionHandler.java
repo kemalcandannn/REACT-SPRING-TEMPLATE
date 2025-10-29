@@ -1,5 +1,6 @@
 package com.my_company.exception;
 
+import com.my_company.constants.enums.ErrorCode;
 import com.my_company.domain.response.ServiceResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -7,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @ControllerAdvice
@@ -18,11 +17,9 @@ public class GlobalExceptionHandler {
         log.error("Unexpected error: ", e);
 
         ServiceResponse<Object> response = ServiceResponse.builder()
-                .success(false)
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .errorCode(ErrorCode.GENERAL)
                 .errorMessage(e.getMessage())
                 .data(null)
-                .timestamp(LocalDateTime.now())
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -30,16 +27,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ServiceResponse<Object>> handleResourceNotFound(ResourceNotFoundException e) {
-        String errorMessage = getErrorMessage(e);
-        log.error(errorMessage);
-
+        logErrorMessage(e);
         ServiceResponse<Object> response = ServiceResponse.builder()
-                .success(false)
-                .statusCode(HttpStatus.NOT_FOUND.value())
                 .errorCode(e.getErrorCode())
                 .errorMessage(e.getMessage())
                 .data(null)
-                .timestamp(LocalDateTime.now())
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
@@ -47,32 +39,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ServiceResponse<Object>> handleBadRequest(BadRequestException e) {
-        String errorMessage = getErrorMessage(e);
-
-        log.error(errorMessage);
+        logErrorMessage(e);
         ServiceResponse<Object> response = ServiceResponse.builder()
-                .success(false)
                 .errorCode(e.getErrorCode())
-                .errorMessage(errorMessage)
+                .errorMessage(e.getMessage())
                 .data(null)
-                .timestamp(LocalDateTime.now())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(InternalServerException.class)
     public ResponseEntity<ServiceResponse<Object>> handleInternalServer(InternalServerException e) {
-        String errorMessage = getErrorMessage(e);
-
-        log.error(errorMessage);
+        logErrorMessage(e);
         ServiceResponse<Object> response = ServiceResponse.builder()
-                .success(false)
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .errorCode(e.getErrorCode())
-                .errorMessage(errorMessage)
+                .errorMessage(e.getMessage())
                 .data(null)
-                .timestamp(LocalDateTime.now())
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -80,22 +63,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserAuthenticationException.class)
     public ResponseEntity<ServiceResponse<Object>> handleUserValidationException(UserAuthenticationException e) {
-        String errorMessage = getErrorMessage(e);
-        log.error(errorMessage);
-
+        logErrorMessage(e);
         ServiceResponse<Object> response = ServiceResponse.builder()
-                .success(false)
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .errorCode(e.getErrorCode())
                 .errorMessage(e.getMessage())
                 .data(null)
-                .timestamp(LocalDateTime.now())
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
-    private static String getErrorMessage(Exception e) {
+    private static void logErrorMessage(Exception e) {
         String errorMessage;
 
         StackTraceElement[] stack = e.getStackTrace();
@@ -113,7 +91,7 @@ public class GlobalExceptionHandler {
         } else {
             errorMessage = String.format("%s: { Message: %s }", e.getClass().getSimpleName(), e.getMessage());
         }
-        return errorMessage;
+        log.error(errorMessage);
     }
 
     // Örnek: validation hataları
@@ -126,11 +104,9 @@ public class GlobalExceptionHandler {
                 .orElse("Validation error");
 
         ServiceResponse<Object> response = ServiceResponse.builder()
-                .success(false)
-                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .errorCode(ErrorCode.VALIDATION)
                 .errorMessage(errorMessage)
                 .data(null)
-                .timestamp(LocalDateTime.now())
                 .build();
 
         return ResponseEntity.badRequest().body(response);

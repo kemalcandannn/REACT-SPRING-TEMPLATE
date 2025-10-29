@@ -19,6 +19,7 @@ import com.my_company.mapper.authentication.UserMapper;
 import com.my_company.utils.JwtUtils;
 import com.my_company.utils.PasswordUtils;
 import com.my_company.utils.SecurityUtils;
+import com.my_company.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,7 +40,7 @@ public class AuthenticationService {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
         }
 
-        if (Objects.isNull(request.getUsername())) {
+        if (StringUtils.isNullOrBlank(request.getUsername())) {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
         }
 
@@ -89,15 +90,15 @@ public class AuthenticationService {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
         }
 
-        if (Objects.isNull(request.getOldPassword())) {
+        if (StringUtils.isNullOrBlank(request.getOldPassword())) {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.oldPassword));
         }
 
-        if (Objects.isNull(request.getNewPassword())) {
+        if (StringUtils.isNullOrBlank(request.getNewPassword())) {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.newPassword));
         }
 
-        if (Objects.isNull(request.getConfirmPassword())) {
+        if (StringUtils.isNullOrBlank(request.getConfirmPassword())) {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.confirmPassword));
         }
 

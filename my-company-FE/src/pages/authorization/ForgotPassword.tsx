@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../../contexts/language/LanguageContext";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import "./style/Authorization.css";
+import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
 
 const ForgotPassword: React.FC = () => {
     const { getLabel } = useLanguage();
+    const { handleApiError } = useApiErrorHandler();
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
@@ -26,7 +28,7 @@ const ForgotPassword: React.FC = () => {
 
             setMessage(getLabel("passwordResetEmailSent"));
         } catch (err: any) {
-            setError(getLabel("unknownErrorOccured"));
+            setError(handleApiError(err));
         }
 
         setLoading(false);

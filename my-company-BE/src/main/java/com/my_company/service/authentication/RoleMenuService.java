@@ -10,6 +10,7 @@ import com.my_company.exception.BadRequestException;
 import com.my_company.exception.ResourceNotFoundException;
 import com.my_company.mapper.authentication.RoleMenuMapper;
 import com.my_company.repository.authentication.RoleMenuRepository;
+import com.my_company.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,7 +38,7 @@ public class RoleMenuService {
     }
 
     public RoleMenuDTO findByRoleCodeAndMenuCode(String roleCode, String menuCode, boolean throwException) {
-        if (Objects.isNull(roleCode) || Objects.isNull(menuCode)) {
+        if (StringUtils.isNullOrBlank(roleCode) || StringUtils.isNullOrBlank(menuCode)) {
             if (throwException) {
                 throw new ResourceNotFoundException(ErrorCode.REQUIRED_FIELD,
                         String.format(TextConstants.REQUIRED_FIELD_MESSAGE,

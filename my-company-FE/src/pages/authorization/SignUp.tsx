@@ -7,10 +7,12 @@ import { useNavigate } from "react-router-dom";
 import "./style/Authorization.css";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import { ERROR_CODE } from "../../constants/Utils";
+import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
 
 const SignUp: React.FC = () => {
     const { getLabel } = useLanguage();
     const { login } = useAuthentication();
+    const { handleApiError } = useApiErrorHandler();
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
@@ -32,13 +34,7 @@ const SignUp: React.FC = () => {
             const token = response.data.data.token;
             login(token);
         } catch (err: any) {
-            if (err?.response?.data?.errorCode == ERROR_CODE.TOKEN_EXPIRED) {
-                setError(getLabel("tokenHasExpired"));
-            } else if (err?.response?.data?.errorCode == ERROR_CODE.INCORRECT_USERNAME_OR_PASSWORD) {
-                setError(getLabel("incorrectUsernameOrPassword"));
-            } else {
-                setError(err?.response?.data?.errorMessage ?? getLabel("unknownErrorOccured"));
-            }
+            setError(handleApiError(err));
         }
 
         setLoading(false);

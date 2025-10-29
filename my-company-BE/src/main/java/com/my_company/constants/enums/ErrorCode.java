@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
+    VALIDATION,
+    GENERAL,
     TOKEN_EXPIRED,
     INCORRECT_USERNAME_OR_PASSWORD,
-    UNAUTHORIZED_ACESS,
+    DO_NOT_HAVE_PERMISSION,
     REQUIRED_FIELD,
     INCORRECT_OLD_PASSWORD,
     NEW_PASSWORD_DOES_NOT_CONFIRM,

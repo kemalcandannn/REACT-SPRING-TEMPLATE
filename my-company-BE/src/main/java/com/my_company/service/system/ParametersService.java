@@ -28,7 +28,7 @@ public class ParametersService extends BaseService<Parameters, ParametersDTO, St
     @Override
     public ParametersDTO saveOrUpdate(ParametersDTO dto) {
         if (!SecurityUtils.hasRole(RoleCode.SYSTEM_ADMINISTRATOR)) {
-            throw new UserAuthenticationException(ErrorCode.UNAUTHORIZED_ACESS, TextConstants.UNAUTHORIZED_ACESS_MESSAGE);
+            throw new UserAuthenticationException(ErrorCode.DO_NOT_HAVE_PERMISSION, TextConstants.DO_NOT_HAVE_PERMISSION_MESSAGE);
         }
 
         ParametersDTO parametersDTO = super.saveOrUpdate(dto);
@@ -39,7 +39,7 @@ public class ParametersService extends BaseService<Parameters, ParametersDTO, St
     @Override
     public void deleteById(String code) {
         if (!SecurityUtils.hasRole(RoleCode.SYSTEM_ADMINISTRATOR)) {
-            throw new UserAuthenticationException(ErrorCode.UNAUTHORIZED_ACESS, TextConstants.UNAUTHORIZED_ACESS_MESSAGE);
+            throw new UserAuthenticationException(ErrorCode.DO_NOT_HAVE_PERMISSION, TextConstants.DO_NOT_HAVE_PERMISSION_MESSAGE);
         }
 
         if (Arrays

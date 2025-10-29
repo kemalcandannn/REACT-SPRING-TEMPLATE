@@ -10,11 +10,9 @@ import com.my_company.service.system.ParametersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -32,10 +30,7 @@ public class ParametersController extends BaseController<ParametersDTO, String> 
         return ResponseEntity.ok(
                 ServiceResponse
                         .<List<ParametersDTO>>builder()
-                        .success(true)
-                        .statusCode(HttpStatus.OK.value())
                         .data(ParametersCache.getParameters())
-                        .timestamp(LocalDateTime.now())
                         .build());
     }
 

@@ -20,7 +20,7 @@ public class PasswordUtils {
     }
 
     public static void passwordValidation(PasswordEncoder passwordEncoder, User user, String password) {
-        if (Objects.isNull(password)) {
+        if (StringUtils.isNullOrBlank(password)) {
             throwRequiredFieldException();
         }
 
