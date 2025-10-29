@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(schema = SchemaConstants.SYSTEM, name = TableConstants.PARAMETER)
+@Table(schema = SchemaConstants.SYSTEM, name = TableConstants.PARAMETERS)
 public class Parameters implements BaseEntity<String> {
     @Id
     @Column(name = "CODE", nullable = false)

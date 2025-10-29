@@ -10,7 +10,7 @@ import ChangePassword from "./pages/authorization/ChangePassword";
 import { NAVIGATE_PATHS } from "./constants/Paths";
 
 const AppRouter: React.FC = () => {
-    const { token } = useAuthentication(); // JWT token varsa kullanıcı giriş yapmış demektir
+    const { jwtToken, sessionUser } = useAuthentication(); // JWT token varsa kullanıcı giriş yapmış demektir
 
     return (
         <Router>
@@ -20,23 +20,29 @@ const AppRouter: React.FC = () => {
             <Routes>
                 <Route
                     path={NAVIGATE_PATHS.LOGIN}
-                    element={token ? <Navigate to={NAVIGATE_PATHS.DASHBOARD} /> : <Login />}
+                    element={jwtToken != null ? <Navigate to={NAVIGATE_PATHS.DASHBOARD} /> : <Login />}
                 />
+
                 <Route
                     path={NAVIGATE_PATHS.SIGN_UP}
-                    element={token ? <Navigate to={NAVIGATE_PATHS.DASHBOARD} /> : <SignUp />}
+                    element={jwtToken != null ? <Navigate to={NAVIGATE_PATHS.DASHBOARD} /> : <SignUp />}
                 />
+
                 <Route
                     path={NAVIGATE_PATHS.FORGOT_PASSWORD}
-                    element={token ? <Navigate to={NAVIGATE_PATHS.DASHBOARD} /> : <ForgotPassword />} />
+                    element={jwtToken != null ? <Navigate to={NAVIGATE_PATHS.DASHBOARD} /> : <ForgotPassword />}
+                />
 
                 <Route
                     path={NAVIGATE_PATHS.CHANGE_PASSWORD}
-                    element={<ChangePassword />} />
+                    element={jwtToken == null ? <Navigate to={NAVIGATE_PATHS.LOGIN} /> : <ChangePassword />}
+                />
 
                 <Route
                     path={NAVIGATE_PATHS.DASHBOARD}
-                    element={token ? <Dashboard /> : <Navigate to={NAVIGATE_PATHS.LOGIN} />}
+                    element={jwtToken == null ? <Navigate to={NAVIGATE_PATHS.LOGIN} /> :
+                        sessionUser?.passwordValidUntil != null &&
+                            sessionUser?.passwordValidUntil < new Date() ? <Navigate to={NAVIGATE_PATHS.CHANGE_PASSWORD} /> : <Dashboard />}
                 />
 
 

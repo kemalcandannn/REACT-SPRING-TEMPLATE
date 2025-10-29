@@ -5,6 +5,7 @@ export type Language = typeof LANGUGAGES[number];
 
 export interface Labels {
     alreadyHaveAnAccount: string;
+    back: string;
     backToLogin: string;
     changePassword: string;
     changePasswordTitle: string;
@@ -47,6 +48,7 @@ export interface Labels {
     signUpWithFacebook: string;
     signUpWithGoogle: string;
     tokenHasExpired: string;
+    tokenValidationError: string;
     unknownErrorOccured: string;
     username: string;
     usernameAlreadyRegistered: string;
@@ -56,6 +58,7 @@ export interface Labels {
 export const labelsData: Record<Language, Labels> = {
     tr: {
         alreadyHaveAnAccount: "Zaten bir hesabınız var mı? ",
+        back: "Geri",
         backToLogin: "Giriş ekranına dön",
         changePassword: "Parolayı Güncelle",
         changePasswordTitle: "Parolayı Güncelle",
@@ -98,6 +101,7 @@ export const labelsData: Record<Language, Labels> = {
         signUpWithFacebook: "Facebook ile Kaydol",
         signUpWithGoogle: "Google ile Kaydol",
         tokenHasExpired: "Token'ın süresi dolmuş. Lütfen Çıkış/Giriş yapıp, tekrar deneyiniz.",
+        tokenValidationError: "Token doğrulanırken bir hata oluştu.",
         unknownErrorOccured: "Bilinmeyen bir hata oluştu, sistem yönetinizle iletişime geçiniz.",
         username: "Kullanıcı Adı",
         usernameAlreadyRegistered: "Kullanıcı sistemde zaten kayıtlı.",

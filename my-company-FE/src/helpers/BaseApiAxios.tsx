@@ -10,9 +10,9 @@ const BaseApiAxios = axios.create({
 // 🔒 Request interceptor — her isteğe JWT token'ı ekle
 BaseApiAxios.interceptors.request.use(
     (config) => {
-        const token = sessionStorage.getItem("token");
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        const jwtToken = sessionStorage.getItem("jwtToken");
+        if (jwtToken) {
+            config.headers.Authorization = `Bearer ${jwtToken}`;
         }
         return config;
     },
@@ -26,6 +26,7 @@ BaseApiAxios.interceptors.response.use(
         if (error.response?.status === 401 ||
             error.response?.status === 403
         ) {
+            debugger;
             console.warn("Yetkisiz erişim — token süresi dolmuş olabilir.");
             sessionStorage.clear();
             window.location.href = NAVIGATE_PATHS.LOGIN;

@@ -9,7 +9,7 @@ import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
 
 const ChangePassword: React.FC = () => {
     const { getLabel } = useLanguage();
-    const { logout } = useAuthentication();
+    const { clearToken } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
     const navigate = useNavigate();
 
@@ -91,15 +91,12 @@ const ChangePassword: React.FC = () => {
                 </form>
 
                 <p style={{ marginTop: "20px" }}>
-                    <a
+                    <a href="#"
                         onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                             e.preventDefault();
-                            logout();
-                            navigate(NAVIGATE_PATHS.LOGIN);
-                        }}
-                        href="#"
-                    >
-                        {getLabel("logout")}
+                            navigate(-1);
+                        }}>
+                        {getLabel("back")}
                     </a>
                 </p>
             </div>

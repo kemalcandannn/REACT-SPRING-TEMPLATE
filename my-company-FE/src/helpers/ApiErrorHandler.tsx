@@ -1,12 +1,12 @@
 import { ERROR_CODE } from "../constants/ErrorCodes";
 import { isLabelKey } from "../constants/Labels";
 import { PARAMETERS_CODE } from "../constants/ParametersCodes";
+import { useAuthentication } from "../contexts/authentication/AuthenticationContext";
 import { useLanguage } from "../contexts/language/LanguageContext";
-import { useParameters } from "../contexts/parameters/ParametersContext";
 
 export const useApiErrorHandler = () => {
     const { getLabel, getLabelFormatted } = useLanguage();
-    const { parameters } = useParameters();
+    const { parameters } = useAuthentication();
 
     const handleApiError = (err: any): string => {
         if (!err?.response?.data) {
@@ -18,6 +18,8 @@ export const useApiErrorHandler = () => {
         switch (errorCode) {
             case ERROR_CODE.TOKEN_EXPIRED:
                 return getLabel("tokenHasExpired");
+            case ERROR_CODE.TOKEN_VALIDATION_ERROR:
+                return getLabel("tokenValidationError");
             case ERROR_CODE.REQUIRED_FIELD: {
                 const match = errorMessage?.match(/\[(.*?)\]/);
                 const value = match ? (isLabelKey(match[1]) ? getLabel(match[1]) : match[1]) : null;
@@ -25,7 +27,6 @@ export const useApiErrorHandler = () => {
                     ? getLabelFormatted("requiredField", value)
                     : getLabel("checkRequiredField");
             }
-
             case ERROR_CODE.INCORRECT_USERNAME_OR_PASSWORD:
                 return getLabel("incorrectUsernameOrPassword");
             case ERROR_CODE.INCORRECT_OLD_PASSWORD:
@@ -42,16 +43,12 @@ export const useApiErrorHandler = () => {
                 return getLabel("passwordAtLeastOneLowercase");
             case ERROR_CODE.PASSWORD_AT_LEAST_ONE_DIGIT:
                 return getLabel("passwordAtLeastOneDigit");
-
             case ERROR_CODE.PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER:
                 return getLabel("passwordAtLeastOneSpecialCharacter");
-
             case ERROR_CODE.LAST_3_PREVIOUS_PASSWORD_DIFFERENT:
                 return getLabel("last3PreviousPasswordDifferent");
-
             case ERROR_CODE.DO_NOT_HAVE_PERMISSION:
                 return getLabel("dontHavePermission");
-
             case ERROR_CODE.USERNAME_ALREADY_REGISTERED:
                 return getLabel("usernameAlreadyRegistered");
             case ERROR_CODE.USED_BY_THE_SYSTEM: {

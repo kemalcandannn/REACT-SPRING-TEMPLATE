@@ -7,7 +7,7 @@ import { NAVIGATE_PATHS } from "../constants/Paths";
 
 const Dashboard: React.FC = ({ }) => {
     const { getLabel } = useLanguage();
-    const { logout } = useAuthentication();
+    const { clearToken } = useAuthentication();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,7 +26,10 @@ const Dashboard: React.FC = ({ }) => {
 
                     <div>
                         <button
-                            onClick={() => navigate(NAVIGATE_PATHS.CHANGE_PASSWORD)}>
+                            onClick={() => {
+                                console.log(`GO TO ${NAVIGATE_PATHS.CHANGE_PASSWORD}`);
+                                navigate(NAVIGATE_PATHS.CHANGE_PASSWORD);
+                            }}>
                             <BiLogOut className="logo" /> {"PAROLA DEĞİŞTİR"}
                         </button>
                     </div>
@@ -40,7 +43,7 @@ const Dashboard: React.FC = ({ }) => {
 
                     <div>
                         <button
-                            onClick={logout}>
+                            onClick={clearToken}>
                             <BiLogOut className="logo" /> {getLabel("logout")}
                         </button>
                     </div>

@@ -11,6 +11,7 @@ import com.my_company.domain.request.authentication.ChangePasswordRequest;
 import com.my_company.domain.request.authentication.ForgotPasswordRequest;
 import com.my_company.domain.request.authentication.LoginRequest;
 import com.my_company.domain.request.authentication.SignUpRequest;
+import com.my_company.domain.response.authentication.UserResponse;
 import com.my_company.domain.response.authentication.LoginResponse;
 import com.my_company.exception.BadRequestException;
 import com.my_company.exception.InternalServerException;
@@ -41,7 +42,11 @@ public class AuthenticationService {
         }
 
         if (StringUtils.isNullOrBlank(request.getUsername())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, SignUpRequest.Fields.username));
+        }
+
+        if (StringUtils.isNullOrBlank(request.getPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, SignUpRequest.Fields.password));
         }
 
         PasswordUtils.passwordValidation(passwordEncoder, null, request.getPassword());
@@ -67,6 +72,14 @@ public class AuthenticationService {
     public LoginResponse login(LoginRequest request) {
         if (Objects.isNull(request)) {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        }
+
+        if (StringUtils.isNullOrBlank(request.getUsername())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, LoginRequest.Fields.username));
+        }
+
+        if (StringUtils.isNullOrBlank(request.getPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, LoginRequest.Fields.password));
         }
 
         User user = userService.findAuthenticationUserByUsername(request.getUsername());
@@ -102,8 +115,7 @@ public class AuthenticationService {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.confirmPassword));
         }
 
-        User user = SecurityUtils.getCurrentUser();
-        assert user != null;
+        User user = userService.findAuthenticationUserByUsername(SecurityUtils.getCurrentUsername());
 
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
             throw new UserAuthenticationException(ErrorCode.INCORRECT_OLD_PASSWORD, TextConstants.INCORRECT_OLD_PASSWORD_MESSAGE);
@@ -116,5 +128,10 @@ public class AuthenticationService {
         PasswordUtils.passwordValidation(passwordEncoder, user, request.getNewPassword());
 
         userService.changePassword(user, request);
+    }
+
+    public UserResponse extractAuthenticationFromToken() {
+        User user = userService.findAuthenticationUserByUsername(SecurityUtils.getCurrentUsername());
+        return userMapper.entityToResponse(user, SecurityUtils.getAuthorities());
     }
 }

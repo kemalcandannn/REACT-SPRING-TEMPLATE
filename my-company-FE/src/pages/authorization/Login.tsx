@@ -6,14 +6,12 @@ import { useAuthentication } from "../../contexts/authentication/AuthenticationC
 import { useNavigate } from "react-router-dom";
 import "./style/Authorization.css";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
-import { useParameters } from "../../contexts/parameters/ParametersContext";
 import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
 import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
 
 const Login: React.FC = () => {
     const { getLabel } = useLanguage();
-    const { login } = useAuthentication();
-    const { initParameters } = useParameters();
+    const { fillToken } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
     const navigate = useNavigate();
 
@@ -58,8 +56,7 @@ const Login: React.FC = () => {
     };
 
     const processLogin = (token: string) => {
-        login(token);
-        initParameters();
+        fillToken(token);
     }
 
     return (
@@ -100,13 +97,11 @@ const Login: React.FC = () => {
 
                         {/* 🔹 Parolanızı mı unuttunuz bağlantısı */}
                         <div className="forgot-password">
-                            <a
+                            <a href="#"
                                 onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                                     e.preventDefault();
                                     navigate(NAVIGATE_PATHS.FORGOT_PASSWORD); // veya istediğin route
-                                }}
-                                href="#"
-                            >
+                                }}>
                                 {getLabel("forgotPassword")}
                             </a>
                         </div>
@@ -143,10 +138,11 @@ const Login: React.FC = () => {
 
                     <p>
                         {getLabel("dontHaveAnAccount")}
-                        <a onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                            e.preventDefault();
-                            navigate(NAVIGATE_PATHS.SIGN_UP);
-                        }}>
+                        <a href="#"
+                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                                e.preventDefault();
+                                navigate(NAVIGATE_PATHS.SIGN_UP);
+                            }}>
                             {getLabel("signUp")}
                         </a>
                     </p>

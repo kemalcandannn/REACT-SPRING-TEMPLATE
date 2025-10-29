@@ -7,6 +7,7 @@ import com.my_company.domain.request.authentication.ForgotPasswordRequest;
 import com.my_company.domain.request.authentication.LoginRequest;
 import com.my_company.domain.request.authentication.SignUpRequest;
 import com.my_company.domain.response.ServiceResponse;
+import com.my_company.domain.response.authentication.UserResponse;
 import com.my_company.domain.response.authentication.LoginResponse;
 import com.my_company.service.authentication.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,10 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -69,6 +67,17 @@ public class AuthenticationController {
                 ServiceResponse
                         .<Void>builder()
                         .data(null)
+                        .build());
+    }
+
+    @GetMapping("/user")
+    @Operation(summary = "Change Password", description = "Change Password Operation")
+    public ResponseEntity<ServiceResponse<UserResponse>> extractAuthenticationFromToken() {
+        UserResponse userResponse = authenticationService.extractAuthenticationFromToken();
+        return ResponseEntity.ok(
+                ServiceResponse
+                        .<UserResponse>builder()
+                        .data(userResponse)
                         .build());
     }
 }

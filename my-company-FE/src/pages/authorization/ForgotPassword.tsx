@@ -62,13 +62,11 @@ const ForgotPassword: React.FC = () => {
                 </form>
 
                 <p>
-                    <a
-                        href="#"
-                        onClick={(e) => {
+                    <a href="#"
+                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                             e.preventDefault();
                             navigate(NAVIGATE_PATHS.LOGIN);
-                        }}
-                    >
+                        }}>
                         {getLabel("backToLogin")}
                     </a>
                 </p>

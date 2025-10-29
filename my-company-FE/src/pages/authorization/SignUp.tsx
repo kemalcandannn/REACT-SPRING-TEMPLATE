@@ -11,7 +11,7 @@ import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
 
 const SignUp: React.FC = () => {
     const { getLabel } = useLanguage();
-    const { login } = useAuthentication();
+    const { fillToken } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
     const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
             });
 
             const token = response.data.data.token;
-            login(token);
+            fillToken(token);
         } catch (err: any) {
             setError(handleApiError(err));
         }
@@ -47,7 +47,7 @@ const SignUp: React.FC = () => {
         try {
             console.log(`${provider} ile kayıt olunuyor`);
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            login("TEST");
+            fillToken("TEST");
             alert(`${provider} ile kayıt olundu!`);
         } catch {
             setError(`${provider} ile kayıt olunamadı.`);
@@ -124,10 +124,11 @@ const SignUp: React.FC = () => {
 
                     <p>
                         {getLabel("alreadyHaveAnAccount")}
-                        <a onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                            e.preventDefault();
-                            navigate(NAVIGATE_PATHS.LOGIN);
-                        }}>
+                        <a href="#"
+                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                                e.preventDefault();
+                                navigate(NAVIGATE_PATHS.LOGIN);
+                            }}>
                             {getLabel("login")}
                         </a>
                     </p>
