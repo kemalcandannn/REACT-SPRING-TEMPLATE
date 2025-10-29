@@ -6,7 +6,9 @@ import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParameterCode;
 import com.my_company.constants.enums.Status;
+import com.my_company.domain.dto.authentication.RoleMenuDTO;
 import com.my_company.domain.dto.authentication.UserDTO;
+import com.my_company.domain.dto.authentication.UserMenuDTO;
 import com.my_company.domain.dto.authentication.UserTokenDTO;
 import com.my_company.domain.entity.authentication.User;
 import com.my_company.domain.request.authentication.ChangePasswordRequest;
@@ -21,18 +23,15 @@ import com.my_company.exception.UserAuthenticationException;
 import com.my_company.mapper.authentication.UserMapper;
 import com.my_company.mapper.authentication.UserTokenMapper;
 import com.my_company.service.email.EmailService;
-import com.my_company.utils.JwtUtils;
-import com.my_company.utils.PasswordUtils;
-import com.my_company.utils.SecurityUtils;
-import com.my_company.utils.StringUtils;
+import com.my_company.utils.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -43,6 +42,8 @@ public class AuthenticationService {
     private final UserTokenService userTokenService;
     private final UserTokenMapper userTokenMapper;
     private final EmailService emailService;
+    private final UserMenuService userMenuService;
+    private final RoleMenuService roleMenuService;
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponse localSignUp(SignUpRequest request) {
@@ -165,6 +166,26 @@ public class AuthenticationService {
 
     public UserResponse extractAuthenticationFromToken() {
         User user = userService.findAuthenticationUserByUsername(SecurityUtils.getCurrentUsername());
-        return userMapper.entityToResponse(user, SecurityUtils.getAuthorities());
+
+        List<UserMenuDTO> userMenuDTOList = userMenuService.findByUsername(user.getUsername());
+
+        Set<String> menuSet = new HashSet<>(userMenuDTOList
+                .stream()
+                .map(UserMenuDTO::getMenuCode)
+                .toList());
+
+        if (CollectionUtils.isNotEmpty(SecurityUtils.getAuthorities())) {
+            List<RoleMenuDTO> roleMenuDTOList = roleMenuService.findByRoleCodeIn(SecurityUtils.getAuthorities()
+                    .stream()
+                    .map(SimpleGrantedAuthority::getAuthority)
+                    .toList());
+
+            menuSet.addAll(roleMenuDTOList
+                    .stream()
+                    .map(RoleMenuDTO::getMenuCode)
+                    .toList());
+        }
+
+        return userMapper.entityToResponse(user, SecurityUtils.getAuthorities(), new ArrayList<>(menuSet));
     }
 }

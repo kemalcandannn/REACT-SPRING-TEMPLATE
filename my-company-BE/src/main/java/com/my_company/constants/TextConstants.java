@@ -29,6 +29,7 @@ public class TextConstants {
     public static final String ROLE = "Role";
     public static final String MENU = "Menu";
     public static final String USER_ROLE = "User-Role";
+    public static final String USER_MENU = "User-Menu";
     public static final String ROLE_MENU = "Role-Menu";
     public static final String PARAMETER = "Parameter";
 }

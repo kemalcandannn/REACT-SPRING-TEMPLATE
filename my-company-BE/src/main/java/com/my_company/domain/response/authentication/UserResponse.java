@@ -21,4 +21,5 @@ public class UserResponse {
     private Status status;
     private LocalDateTime createdAt;
     private List<SimpleGrantedAuthority> authorities;
+    private List<String> menuList;
 }

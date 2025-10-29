@@ -23,6 +23,8 @@ public class PathConstants {
     public static final String API_V1_MENU_ALL_URL = "/api/v1/menu/**";
     public static final String API_V1_USER_ROLE_URL = "/api/v1/user-role";
     public static final String API_V1_USER_ROLE_ALL_URL = "/api/v1/user-role/**";
+    public static final String API_V1_USER_MENU_URL = "/api/v1/user-menu";
+    public static final String API_V1_USER_MENU_ALL_URL = "/api/v1/user-menu/**";
     public static final String API_V1_ROLE_MENU_URL = "/api/v1/role-menu";
     public static final String API_V1_ROLE_MENU_ALL_URL = "/api/v1/role-menu/**";
     public static final String API_V1_PARAMETER_URL = "/api/v1/parameter";

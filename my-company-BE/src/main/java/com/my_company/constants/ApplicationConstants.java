@@ -9,6 +9,7 @@ public class ApplicationConstants {
     public static final String REQUEST_BODY = "Request Body";
     public static final String USERNAME = "Username";
     public static final String ROLE_CODE = "RoleCode";
+    public static final Object ROLE_CODE_LIST = "RoleCodeList";
     public static final String MENU_CODE = "MenuCode";
     public static final String UTILITY_CLASS = "Utility class";
 

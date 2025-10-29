@@ -10,6 +10,7 @@ import com.my_company.exception.BadRequestException;
 import com.my_company.exception.ResourceNotFoundException;
 import com.my_company.mapper.authentication.RoleMenuMapper;
 import com.my_company.repository.authentication.RoleMenuRepository;
+import com.my_company.utils.CollectionUtils;
 import com.my_company.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -88,5 +89,15 @@ public class RoleMenuService {
     public void deleteByRoleCodeAndMenuCode(String roleCode, String menuCode) {
         RoleMenuDTO roleMenuDTO = findByRoleCodeAndMenuCode(roleCode, menuCode, true);
         repository.delete(mapper.dtoToEntity(roleMenuDTO));
+    }
+
+    public List<RoleMenuDTO> findByRoleCodeIn(List<String> roleCodeList) {
+        if (CollectionUtils.isEmpty(roleCodeList)) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD,
+                    String.format(TextConstants.REQUIRED_FIELD_MESSAGE,
+                            ApplicationConstants.ROLE_CODE_LIST));
+        }
+
+        return mapper.entityListToDtoList(repository.findByIdRoleCodeIn(roleCodeList));
     }
 }

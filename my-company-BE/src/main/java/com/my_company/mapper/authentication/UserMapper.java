@@ -31,5 +31,5 @@ public interface UserMapper extends BaseMapper<User, UserDTO, String> {
     @Mapping(target = "passwordValidUntil", expression = "java(passwordExpirationDays == null ? null : getLocalDateTimeNow().plusDays(passwordExpirationDays))")
     void passwordChanged(@Context PasswordEncoder passwordEncoder, @MappingTarget User user, ChangePasswordRequest request, Integer passwordExpirationDays);
 
-    UserResponse entityToResponse(User user, List<SimpleGrantedAuthority> authorities);
+    UserResponse entityToResponse(User user, List<SimpleGrantedAuthority> authorities, List<String> menuList);
 }
