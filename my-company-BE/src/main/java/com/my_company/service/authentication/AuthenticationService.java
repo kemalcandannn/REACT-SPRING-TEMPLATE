@@ -5,6 +5,7 @@ import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParameterCode;
+import com.my_company.constants.enums.Status;
 import com.my_company.constants.enums.TokenStatus;
 import com.my_company.domain.dto.authentication.RoleMenuDTO;
 import com.my_company.domain.dto.authentication.UserDTO;
@@ -21,6 +22,7 @@ import com.my_company.mapper.authentication.UserMapper;
 import com.my_company.mapper.authentication.UserTokenMapper;
 import com.my_company.service.email.EmailService;
 import com.my_company.utils.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -69,6 +71,13 @@ public class AuthenticationService {
         userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
+        String token = userTokenService.getRandomToken();
+        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_CONTROL, ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES);
+
+        UserTokenDTO userTokenDTO = userTokenMapper.extraxtAccountVerificationUserTokenDTO(userDTO, token, tokenExpirationMinutes);
+        userTokenService.saveOrUpdate(userTokenDTO);
+        emailService.sendAccountVerificationMail(userDTO.getUsername(), userTokenDTO.getToken());
+
         return login(
                 LoginRequest
                         .builder()
@@ -115,9 +124,9 @@ public class AuthenticationService {
 
         UserDTO userDTO = userService.findById(request.getUsername(), true);
         String token = userTokenService.getRandomToken();
-        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.TOKEN_EXPIRATION_CONTROL, ParameterCode.TOKEN_EXPIRATION_MINUTES);
+        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_CONTROL, ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES);
 
-        UserTokenDTO userTokenDTO = userTokenMapper.extraxtUserTokenDTO(userDTO, token, tokenExpirationMinutes);
+        UserTokenDTO userTokenDTO = userTokenMapper.extraxtPasswordResetUserTokenDTO(userDTO, token, tokenExpirationMinutes);
         userTokenService.saveOrUpdate(userTokenDTO);
         emailService.sendPasswordResetMail(userDTO.getUsername(), token);
     }
@@ -217,7 +226,7 @@ public class AuthenticationService {
 
             String token = userTokenService.getRandomToken();
             userTokenDTO.setToken(token);
-            Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.TOKEN_EXPIRATION_CONTROL, ParameterCode.TOKEN_EXPIRATION_MINUTES);
+            Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_CONTROL, ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES);
 
             userTokenDTO.setExpiresAt(userTokenMapper.getExpiresAt(tokenExpirationMinutes));
             userTokenService.saveOrUpdate(userTokenDTO);
@@ -231,6 +240,46 @@ public class AuthenticationService {
 
         PasswordUtils.passwordValidation(passwordEncoder, user, request.getNewPassword());
         userService.changePassword(user, request.getNewPassword());
+        userTokenDTO.setUsedAt(LocalDateTime.now());
+        userTokenDTO.setStatus(TokenStatus.USED);
+        userTokenService.saveOrUpdate(userTokenDTO);
+    }
+
+    public void verifyAccount(@Valid VerifyAccountRequest request) {
+        if (Objects.isNull(request)) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        }
+
+        if (StringUtils.isNullOrBlank(request.getToken())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, VerifyAccountRequest.Fields.token));
+        }
+
+        UserTokenDTO userTokenDTO = userTokenService.findByTokenAndStatus(request.getToken(), TokenStatus.ACTIVE);
+        if (userTokenDTO == null) {
+            throw new BadRequestException(ErrorCode.RESET_PASSWORD_TOKEN_NOT_FOUND, "Record not found from token in the request");
+        }
+
+        User user = userService.findAuthenticationUserByUsername(userTokenDTO.getUsername());
+
+        if (userTokenDTO.getExpiresAt() != null && userTokenDTO.getExpiresAt().isBefore(LocalDateTime.now())) {
+            userTokenDTO.setStatus(TokenStatus.EXPIRED);
+            userTokenDTO = userTokenService.saveOrUpdate(userTokenDTO);
+            userTokenDTO.setId(null);
+            userTokenDTO.setStatus(TokenStatus.ACTIVE);
+
+            String token = userTokenService.getRandomToken();
+            userTokenDTO.setToken(token);
+            Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_CONTROL, ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_MINUTES);
+
+            userTokenDTO.setExpiresAt(userTokenMapper.getExpiresAt(tokenExpirationMinutes));
+            userTokenService.saveOrUpdate(userTokenDTO);
+            emailService.sendAccountVerificationMail(user.getUsername(), userTokenDTO.getToken());
+            throw new InternalServerException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
+        }
+
+        UserDTO userDTO = userMapper.entityToDto(user);
+        userDTO.setStatus(Status.ACTIVE);
+        userService.saveOrUpdate(userDTO);
         userTokenDTO.setUsedAt(LocalDateTime.now());
         userTokenDTO.setStatus(TokenStatus.USED);
         userTokenService.saveOrUpdate(userTokenDTO);

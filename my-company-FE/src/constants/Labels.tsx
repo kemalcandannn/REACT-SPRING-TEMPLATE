@@ -4,6 +4,7 @@ export const LANGUGAGES = ["tr"] as const;
 export type Language = typeof LANGUGAGES[number];
 
 export interface Labels {
+    accountVerifiedSuccessfully: string;
     alreadyHaveAnAccount: string;
     back: string;
     backToLogin: string;
@@ -51,15 +52,18 @@ export interface Labels {
     signUpWithFacebook: string;
     signUpWithGoogle: string;
     tokenHasExpired: string;
+    tokenNotFound: string;
     tokenValidationError: string;
     unknownErrorOccured: string;
     username: string;
     usernameAlreadyRegistered: string;
+    verifyAccountTitle: string;
     welcomeToHomePage: string;
 }
 
 export const labelsData: Record<Language, Labels> = {
     tr: {
+        accountVerifiedSuccessfully: "Hesabınız başarıyla doğrulandı!",
         alreadyHaveAnAccount: "Zaten bir hesabınız var mı? ",
         back: "Geri",
         backToLogin: "Giriş ekranına dön",
@@ -107,10 +111,12 @@ export const labelsData: Record<Language, Labels> = {
         signUpWithFacebook: "Facebook ile Kaydol",
         signUpWithGoogle: "Google ile Kaydol",
         tokenHasExpired: "Token'ın süresi dolmuş. Lütfen Çıkış/Giriş yapıp, tekrar deneyiniz.",
+        tokenNotFound: "Doğrulama bağlantısı geçersiz veya eksik.",
         tokenValidationError: "Token doğrulanırken bir hata oluştu.",
         unknownErrorOccured: "Bilinmeyen bir hata oluştu, sistem yönetinizle iletişime geçiniz.",
         username: "Kullanıcı Adı",
         usernameAlreadyRegistered: "Kullanıcı sistemde zaten kayıtlı.",
+        verifyAccountTitle: "Hesap Doğrulama",
         welcomeToHomePage: "Anasayfa'ya Hoşgeldiniz",
     }
 };

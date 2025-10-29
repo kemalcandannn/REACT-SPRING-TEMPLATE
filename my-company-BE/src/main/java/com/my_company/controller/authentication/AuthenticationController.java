@@ -34,6 +34,12 @@ public class AuthenticationController {
                         .build());
     }
 
+    @PostMapping(PathConstants.VERIFY_ACCOUNT_URL)
+    public ResponseEntity<Void> verifyAccount(@Valid @RequestBody VerifyAccountRequest request) {
+        authenticationService.verifyAccount(request);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping(PathConstants.LOGIN_URL)
     @Operation(summary = "Login", description = "Login Operation")
     public ResponseEntity<ServiceResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {

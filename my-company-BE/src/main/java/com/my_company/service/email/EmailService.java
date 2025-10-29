@@ -24,7 +24,7 @@ public class EmailService {
         String resetLink = frontendBaseUrl + "/resetPassword?token=" + token;
         String subject = "🔐 Parola Sıfırlama Talebi";
 
-        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.TOKEN_EXPIRATION_CONTROL, ParameterCode.TOKEN_EXPIRATION_MINUTES);
+        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_CONTROL, ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES);
 
         String body = """
                 Merhaba,
@@ -44,7 +44,7 @@ public class EmailService {
     }
 
     public void sendAccountVerificationMail(String to, String token) {
-        String verificationLink = frontendBaseUrl + "/verify-account?token=" + token;
+        String verificationLink = frontendBaseUrl + "/verifyAccount?token=" + token;
         String subject = "✅ Hesabınızı Doğrulayın";
         String body = """
                 Merhaba,

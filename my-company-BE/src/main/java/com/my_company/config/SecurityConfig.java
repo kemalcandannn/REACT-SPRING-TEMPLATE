@@ -27,6 +27,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 PathConstants.API_V1_AUTHENTICATION_LOGIN_URL,
                                 PathConstants.API_V1_AUTHENTICATION_LOCAL_SIGN_UP_URL,
+                                PathConstants.API_V1_AUTHENTICATION_VERIFY_ACCOUNT_URL,
                                 PathConstants.API_V1_AUTHENTICATION_SEND_PASSWORD_RESET_LINK_URL,
                                 PathConstants.API_V1_AUTHENTICATION_RESET_PASSWORD_URL,
                                 PathConstants.SWAGGER_UI_ALL_URL,

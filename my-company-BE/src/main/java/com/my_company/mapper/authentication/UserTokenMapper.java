@@ -23,7 +23,14 @@ public interface UserTokenMapper {
     @Mapping(target = "expiresAt", expression = "java(getExpiresAt(tokenExpirationMinutes))")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    UserTokenDTO extraxtUserTokenDTO(UserDTO userDTO, String token, Integer tokenExpirationMinutes);
+    UserTokenDTO extraxtPasswordResetUserTokenDTO(UserDTO userDTO, String token, Integer tokenExpirationMinutes);
+
+    @Mapping(target = "type", constant = "ACCOUNT_VERIFICATION")
+    @Mapping(target = "status", constant = "ACTIVE")
+    @Mapping(target = "expiresAt", expression = "java(getExpiresAt(tokenExpirationMinutes))")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    UserTokenDTO extraxtAccountVerificationUserTokenDTO(UserDTO userDTO, String token, Integer tokenExpirationMinutes);
 
     default LocalDateTime getExpiresAt(Integer tokenExpirationMinutes) {
         return tokenExpirationMinutes == null ? null : LocalDateTime.now().plusMinutes(tokenExpirationMinutes);

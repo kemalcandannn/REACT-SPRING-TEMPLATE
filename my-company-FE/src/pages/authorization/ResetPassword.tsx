@@ -42,7 +42,7 @@ const ResetPassword: React.FC = () => {
             setNewPassword("");
             setConfirmPassword("");
 
-            setTimeout(() => navigate(NAVIGATE_PATHS.LOGIN), 2500);
+            setTimeout(() => navigate(NAVIGATE_PATHS.LOGIN), 1600);
         } catch (err: any) {
             setError(handleApiError(err));
         }
