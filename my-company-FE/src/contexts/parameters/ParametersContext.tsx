@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, type ReactNode } from "react";
 import type { Parameter } from "./model/Parameter";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
+import { SERVICE_PATHS } from "../../constants/Paths";
 
 interface ParametersContextType {
     parameters: Parameter[];
@@ -35,7 +36,7 @@ export const ParametersProvider: React.FC<{ children: ReactNode }> = ({ children
     }, [parameters]);
 
     const initParameters = async () => {
-        const response = await BaseApiAxios.get("/api/v1/parameter/get-parameters");
+        const response = await BaseApiAxios.get(SERVICE_PATHS.API_V1_PARAMETERS_FIND_ALL_FROM_CACHE);
         setParameters(response?.data?.data);
     }
 

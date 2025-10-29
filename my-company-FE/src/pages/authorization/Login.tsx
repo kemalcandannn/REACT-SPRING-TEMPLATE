@@ -8,6 +8,7 @@ import "./style/Authorization.css";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import { useParameters } from "../../contexts/parameters/ParametersContext";
 import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
+import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
 
 const Login: React.FC = () => {
     const { getLabel } = useLanguage();
@@ -27,7 +28,7 @@ const Login: React.FC = () => {
         setError("");
 
         try {
-            const response = await BaseApiAxios.post("api/v1/authentication/login", {
+            const response = await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_LOGIN, {
                 username: username,
                 password: password
             });
@@ -102,7 +103,7 @@ const Login: React.FC = () => {
                             <a
                                 onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                                     e.preventDefault();
-                                    navigate("/forgotPassword"); // veya istediğin route
+                                    navigate(NAVIGATE_PATHS.FORGOT_PASSWORD); // veya istediğin route
                                 }}
                                 href="#"
                             >
@@ -144,7 +145,7 @@ const Login: React.FC = () => {
                         {getLabel("dontHaveAnAccount")}
                         <a onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                             e.preventDefault();
-                            navigate("/signUp");
+                            navigate(NAVIGATE_PATHS.SIGN_UP);
                         }}>
                             {getLabel("signUp")}
                         </a>

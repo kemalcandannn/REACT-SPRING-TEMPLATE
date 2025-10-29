@@ -3,13 +3,15 @@ import { useLanguage } from "../../contexts/language/LanguageContext";
 import { useAuthentication } from "../../contexts/authentication/AuthenticationContext";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
-
+import { useNavigate } from "react-router-dom";
 import "./style/Authorization.css";
+import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
 
 const ChangePassword: React.FC = () => {
     const { getLabel } = useLanguage();
     const { logout } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
+    const navigate = useNavigate();
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -25,7 +27,7 @@ const ChangePassword: React.FC = () => {
         setLoading(true);
 
         try {
-            await BaseApiAxios.post("api/v1/authentication/change-password", {
+            await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_CHANGE_PASSWORD, {
                 oldPassword,
                 newPassword,
                 confirmPassword
@@ -93,6 +95,7 @@ const ChangePassword: React.FC = () => {
                         onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                             e.preventDefault();
                             logout();
+                            navigate(NAVIGATE_PATHS.LOGIN);
                         }}
                         href="#"
                     >

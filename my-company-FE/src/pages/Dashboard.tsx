@@ -2,10 +2,13 @@ import React, { useEffect } from "react";
 import { BiLogOut, BiTestTube } from "react-icons/bi";
 import { useLanguage } from "../contexts/language/LanguageContext";
 import { useAuthentication } from "../contexts/authentication/AuthenticationContext";
+import { useNavigate } from "react-router-dom";
+import { NAVIGATE_PATHS } from "../constants/Paths";
 
 const Dashboard: React.FC = ({ }) => {
     const { getLabel } = useLanguage();
     const { logout } = useAuthentication();
+    const navigate = useNavigate();
 
     useEffect(() => {
         test();
@@ -23,8 +26,8 @@ const Dashboard: React.FC = ({ }) => {
 
                     <div>
                         <button
-                            onClick={logout}>
-                            <BiLogOut className="logo" /> {getLabel("logout")}
+                            onClick={() => navigate(NAVIGATE_PATHS.CHANGE_PASSWORD)}>
+                            <BiLogOut className="logo" /> {"PAROLA DEĞİŞTİR"}
                         </button>
                     </div>
 
@@ -32,6 +35,13 @@ const Dashboard: React.FC = ({ }) => {
                         <button
                             onClick={test}>
                             <BiTestTube className="logo" /> {"TEST"}
+                        </button>
+                    </div>
+
+                    <div>
+                        <button
+                            onClick={logout}>
+                            <BiLogOut className="logo" /> {getLabel("logout")}
                         </button>
                     </div>
                 </div>

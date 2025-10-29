@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import SignUp from "./pages/authorization/SignUp";
 import ForgotPassword from "./pages/authorization/ForgotPassword";
 import ChangePassword from "./pages/authorization/ChangePassword";
+import { NAVIGATE_PATHS } from "./constants/Paths";
 
 const AppRouter: React.FC = () => {
     const { token } = useAuthentication(); // JWT token varsa kullanıcı giriş yapmış demektir
@@ -18,28 +19,28 @@ const AppRouter: React.FC = () => {
 
             <Routes>
                 <Route
-                    path="/login"
-                    element={token ? <Navigate to="/changePassword" /> : <Login />}
+                    path={NAVIGATE_PATHS.LOGIN}
+                    element={token ? <Navigate to={NAVIGATE_PATHS.DASHBOARD} /> : <Login />}
                 />
                 <Route
-                    path="/signUp"
-                    element={token ? <Navigate to="/dashboard" /> : <SignUp />}
+                    path={NAVIGATE_PATHS.SIGN_UP}
+                    element={token ? <Navigate to={NAVIGATE_PATHS.DASHBOARD} /> : <SignUp />}
                 />
                 <Route
-                    path="/dashboard"
-                    element={token ? <Dashboard /> : <Navigate to="/login" />}
-                />
+                    path={NAVIGATE_PATHS.FORGOT_PASSWORD}
+                    element={token ? <Navigate to={NAVIGATE_PATHS.DASHBOARD} /> : <ForgotPassword />} />
 
                 <Route
-                    path="/forgotPassword"
-                    element={<ForgotPassword />} />
-
-                <Route
-                    path="/changePassword"
+                    path={NAVIGATE_PATHS.CHANGE_PASSWORD}
                     element={<ChangePassword />} />
 
+                <Route
+                    path={NAVIGATE_PATHS.DASHBOARD}
+                    element={token ? <Dashboard /> : <Navigate to={NAVIGATE_PATHS.LOGIN} />}
+                />
 
-                <Route path="*" element={<Navigate to="/login" />} />
+
+                <Route path="*" element={<Navigate to={NAVIGATE_PATHS.LOGIN} />} />
             </Routes>
         </Router>
     );

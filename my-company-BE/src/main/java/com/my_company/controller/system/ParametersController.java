@@ -24,7 +24,7 @@ public class ParametersController extends BaseController<ParametersDTO, String> 
         super(service);
     }
 
-    @GetMapping(value = "/get-parameters")
+    @GetMapping(value = "/find-all-from-cache")
     @Operation(summary = "List All From Cache", description = "Find All Parameters From Cache")
     public ResponseEntity<ServiceResponse<List<ParametersDTO>>> findAllFromCache() {
         return ResponseEntity.ok(

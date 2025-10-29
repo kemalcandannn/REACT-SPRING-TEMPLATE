@@ -1,5 +1,6 @@
 // src/api/api.ts
 import axios from "axios";
+import { NAVIGATE_PATHS } from "../constants/Paths";
 
 const BaseApiAxios = axios.create({
     baseURL: "/my-company", // BE base URL'in
@@ -27,7 +28,7 @@ BaseApiAxios.interceptors.response.use(
         ) {
             console.warn("Yetkisiz erişim — token süresi dolmuş olabilir.");
             sessionStorage.clear();
-            window.location.href = "/login";
+            window.location.href = NAVIGATE_PATHS.LOGIN;
         }
         return Promise.reject(error);
     }

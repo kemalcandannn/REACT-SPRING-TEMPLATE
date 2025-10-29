@@ -4,6 +4,7 @@ import { useLanguage } from "../../contexts/language/LanguageContext";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
 import "./style/Authorization.css";
 import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
+import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
 
 const ForgotPassword: React.FC = () => {
     const { getLabel } = useLanguage();
@@ -22,7 +23,7 @@ const ForgotPassword: React.FC = () => {
         setError("");
 
         try {
-            await BaseApiAxios.post("api/v1/authentication/forgot-password", {
+            await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_FORGOT_PASSWORD, {
                 username: username
             });
 
@@ -65,7 +66,7 @@ const ForgotPassword: React.FC = () => {
                         href="#"
                         onClick={(e) => {
                             e.preventDefault();
-                            navigate("/login");
+                            navigate(NAVIGATE_PATHS.LOGIN);
                         }}
                     >
                         {getLabel("backToLogin")}

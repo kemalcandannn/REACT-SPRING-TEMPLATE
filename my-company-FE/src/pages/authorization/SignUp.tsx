@@ -6,8 +6,8 @@ import { useAuthentication } from "../../contexts/authentication/AuthenticationC
 import { useNavigate } from "react-router-dom";
 import "./style/Authorization.css";
 import BaseApiAxios from "../../helpers/BaseApiAxios";
-import { ERROR_CODE } from "../../constants/Utils";
 import { useApiErrorHandler } from "../../helpers/ApiErrorHandler";
+import { NAVIGATE_PATHS, SERVICE_PATHS } from "../../constants/Paths";
 
 const SignUp: React.FC = () => {
     const { getLabel } = useLanguage();
@@ -26,7 +26,7 @@ const SignUp: React.FC = () => {
         setError("");
 
         try {
-            const response = await BaseApiAxios.post("api/v1/authentication/local-sign-up", {
+            const response = await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_LOCAL_SIGN_UP, {
                 username: username,
                 password: password
             });
@@ -126,7 +126,7 @@ const SignUp: React.FC = () => {
                         {getLabel("alreadyHaveAnAccount")}
                         <a onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                             e.preventDefault();
-                            navigate("/login");
+                            navigate(NAVIGATE_PATHS.LOGIN);
                         }}>
                             {getLabel("login")}
                         </a>

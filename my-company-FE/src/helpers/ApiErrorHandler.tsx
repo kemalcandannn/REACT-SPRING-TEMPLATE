@@ -1,5 +1,6 @@
+import { ERROR_CODE } from "../constants/ErrorCodes";
 import { isLabelKey } from "../constants/Labels";
-import { ERROR_CODE, PARAMETERS_CODE } from "../constants/Utils";
+import { PARAMETERS_CODE } from "../constants/ParametersCodes";
 import { useLanguage } from "../contexts/language/LanguageContext";
 import { useParameters } from "../contexts/parameters/ParametersContext";
 
@@ -15,8 +16,6 @@ export const useApiErrorHandler = () => {
         const { errorCode, errorMessage } = err.response.data;
 
         switch (errorCode) {
-
-
             case ERROR_CODE.TOKEN_EXPIRED:
                 return getLabel("tokenHasExpired");
             case ERROR_CODE.REQUIRED_FIELD: {
@@ -39,10 +38,8 @@ export const useApiErrorHandler = () => {
             }
             case ERROR_CODE.PASSWORD_AT_LEAST_ONE_UPPERCASE:
                 return getLabel("passwordAtLeastOneUppercase");
-
             case ERROR_CODE.PASSWORD_AT_LEAST_ONE_LOWERCASE:
                 return getLabel("passwordAtLeastOneLowercase");
-
             case ERROR_CODE.PASSWORD_AT_LEAST_ONE_DIGIT:
                 return getLabel("passwordAtLeastOneDigit");
 
