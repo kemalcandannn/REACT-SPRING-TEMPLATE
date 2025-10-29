@@ -222,6 +222,11 @@ public class AuthenticationService {
             userTokenDTO.setId(null);
             userTokenDTO.setStatus(TokenStatus.ACTIVE);
 
+            String token = UUID.randomUUID().toString();
+            while (userTokenService.findByToken(token) != null) {
+                token = UUID.randomUUID().toString();
+            }
+            userTokenDTO.setToken(token);
             Integer tokenExpirationMinutes = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.TOKEN_EXPIRATION_CONTROL)) ?
                     ParameterCache.getParamValueAsInteger(ParameterCode.TOKEN_EXPIRATION_MINUTES)
                     : null;
