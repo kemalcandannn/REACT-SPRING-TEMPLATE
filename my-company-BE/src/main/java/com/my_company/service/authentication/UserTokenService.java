@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -72,4 +73,12 @@ public class UserTokenService {
         return CollectionUtils.isNotEmpty(userTokenList) ? mapper.entityToDto(userTokenList.get(0)) : null;
     }
 
+    public String getRandomToken() {
+        String token = UUID.randomUUID().toString();
+        while (findByToken(token) != null) {
+            token = UUID.randomUUID().toString();
+        }
+
+        return token;
+    }
 }

@@ -7,7 +7,6 @@ import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.system.ParameterDTO;
 import com.my_company.utils.StringUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,18 +58,10 @@ public final class ParameterCache {
         }
     }
 
-    public static String getParamValueAsString(ParameterCode parameterCode) {
-        if (parameterCode == null) {
-            return null;
-        }
-
-        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
-
-        if (parameterDTO == null) {
-            return null;
-        }
-
-        return parameterDTO.getValue();
+    public static Integer getParamValueAsIntegerWithControl(ParameterCode parameterCodeControl, ParameterCode parameterCodeValue) {
+        return Status.ACTIVE.equals(getParamValueAsStatus(parameterCodeControl)) ?
+                getParamValueAsInteger(parameterCodeValue)
+                : null;
     }
 
     public static Integer getParamValueAsInteger(ParameterCode parameterCode) {
@@ -85,20 +76,6 @@ public final class ParameterCache {
         }
 
         return Integer.valueOf(parameterDTO.getValue());
-    }
-
-    public static BigDecimal getParamValueAsBigDecimal(ParameterCode parameterCode) {
-        if (parameterCode == null) {
-            return null;
-        }
-
-        ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
-
-        if (parameterDTO == null || !ParameterType.NUMERIC.equals(parameterDTO.getType())) {
-            return null;
-        }
-
-        return new BigDecimal(parameterDTO.getValue());
     }
 
     public static Status getParamValueAsStatus(ParameterCode parameterCode) {

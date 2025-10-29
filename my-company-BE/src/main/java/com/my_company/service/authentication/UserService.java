@@ -4,7 +4,6 @@ import com.my_company.cache.ParameterCache;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParameterCode;
-import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
 import com.my_company.exception.UserAuthenticationException;
@@ -37,9 +36,7 @@ public class UserService extends BaseService<User, UserDTO, String> {
     }
 
     public void changePassword(User user, String password) {
-        Integer passwordExpirationDays = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_EXPIRATION_CONTROL)) ?
-                ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS)
-                : null;
+        Integer passwordExpirationDays = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.PASSWORD_EXPIRATION_CONTROL, ParameterCode.PASSWORD_EXPIRATION_DAYS);
 
         mapper.passwordChanged(passwordEncoder, user, password, passwordExpirationDays);
         repository.save(user);

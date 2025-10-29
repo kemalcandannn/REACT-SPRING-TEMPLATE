@@ -2,7 +2,6 @@ package com.my_company.service.email;
 
 import com.my_company.cache.ParameterCache;
 import com.my_company.constants.enums.ParameterCode;
-import com.my_company.constants.enums.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -25,9 +24,7 @@ public class EmailService {
         String resetLink = frontendBaseUrl + "/resetPassword?token=" + token;
         String subject = "🔐 Parola Sıfırlama Talebi";
 
-        Integer tokenExpirationMinutes = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.TOKEN_EXPIRATION_CONTROL)) ?
-                ParameterCache.getParamValueAsInteger(ParameterCode.TOKEN_EXPIRATION_MINUTES)
-                : null;
+        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.TOKEN_EXPIRATION_CONTROL, ParameterCode.TOKEN_EXPIRATION_MINUTES);
 
         String body = """
                 Merhaba,

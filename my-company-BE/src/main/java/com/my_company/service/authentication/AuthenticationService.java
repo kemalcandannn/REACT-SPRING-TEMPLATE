@@ -5,7 +5,6 @@ import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.constants.enums.ParameterCode;
-import com.my_company.constants.enums.Status;
 import com.my_company.constants.enums.TokenStatus;
 import com.my_company.domain.dto.authentication.RoleMenuDTO;
 import com.my_company.domain.dto.authentication.UserDTO;
@@ -65,9 +64,7 @@ public class AuthenticationService {
             throw new UserAuthenticationException(ErrorCode.USERNAME_ALREADY_REGISTERED, "The username is already registered in the system.");
         }
 
-        Integer passwordExpirationDays = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.PASSWORD_EXPIRATION_CONTROL)) ?
-                ParameterCache.getParamValueAsInteger(ParameterCode.PASSWORD_EXPIRATION_DAYS)
-                : null;
+        Integer passwordExpirationDays = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.PASSWORD_EXPIRATION_CONTROL, ParameterCode.PASSWORD_EXPIRATION_DAYS);
 
         userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
@@ -117,14 +114,8 @@ public class AuthenticationService {
         }
 
         UserDTO userDTO = userService.findById(request.getUsername(), true);
-        String token = UUID.randomUUID().toString();
-        while (userTokenService.findByToken(token) != null) {
-            token = UUID.randomUUID().toString();
-        }
-
-        Integer tokenExpirationMinutes = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.TOKEN_EXPIRATION_CONTROL)) ?
-                ParameterCache.getParamValueAsInteger(ParameterCode.TOKEN_EXPIRATION_MINUTES)
-                : null;
+        String token = userTokenService.getRandomToken();
+        Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.TOKEN_EXPIRATION_CONTROL, ParameterCode.TOKEN_EXPIRATION_MINUTES);
 
         UserTokenDTO userTokenDTO = userTokenMapper.extraxtUserTokenDTO(userDTO, token, tokenExpirationMinutes);
         userTokenService.saveOrUpdate(userTokenDTO);
@@ -224,18 +215,14 @@ public class AuthenticationService {
             userTokenDTO.setId(null);
             userTokenDTO.setStatus(TokenStatus.ACTIVE);
 
-            String token = UUID.randomUUID().toString();
-            while (userTokenService.findByToken(token) != null) {
-                token = UUID.randomUUID().toString();
-            }
+            String token = userTokenService.getRandomToken();
             userTokenDTO.setToken(token);
-            Integer tokenExpirationMinutes = Status.ACTIVE.equals(ParameterCache.getParamValueAsStatus(ParameterCode.TOKEN_EXPIRATION_CONTROL)) ?
-                    ParameterCache.getParamValueAsInteger(ParameterCode.TOKEN_EXPIRATION_MINUTES)
-                    : null;
+            Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.TOKEN_EXPIRATION_CONTROL, ParameterCode.TOKEN_EXPIRATION_MINUTES);
+
             userTokenDTO.setExpiresAt(userTokenMapper.getExpiresAt(tokenExpirationMinutes));
             userTokenService.saveOrUpdate(userTokenDTO);
             emailService.sendPasswordResetMail(user.getUsername(), userTokenDTO.getToken());
-            throw new UserAuthenticationException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
+            throw new InternalServerException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
         }
 
         if (!request.getNewPassword().equals(request.getConfirmPassword())) {
