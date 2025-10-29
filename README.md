@@ -19,7 +19,8 @@ my-company-BE
 6. Execute first line [CREATE DATABASE]
 7. Open new Database/Query Tool
 8. Run all the remaining scripts in [execute.sql] File.
-9. Open Maven Panel
-10. mvn clean install
-11. Run/Debug Project
+9. Define the system parameters that need to be configured in the application.yml file.
+10. Open Maven Panel
+11. mvn clean install
+12. Run/Debug Project
 #################################

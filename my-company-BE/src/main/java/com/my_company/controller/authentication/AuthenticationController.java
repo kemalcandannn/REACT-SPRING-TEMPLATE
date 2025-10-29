@@ -71,7 +71,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/user")
-    @Operation(summary = "Change Password", description = "Change Password Operation")
+    @Operation(summary = "User Details", description = "Find User Details From JWT Token")
     public ResponseEntity<ServiceResponse<UserResponse>> extractAuthenticationFromToken() {
         UserResponse userResponse = authenticationService.extractAuthenticationFromToken();
         return ResponseEntity.ok(
