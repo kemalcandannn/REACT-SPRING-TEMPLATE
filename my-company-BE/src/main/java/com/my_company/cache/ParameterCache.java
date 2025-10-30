@@ -7,10 +7,7 @@ import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.system.ParameterDTO;
 import com.my_company.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class ParameterCache {
@@ -34,13 +31,13 @@ public final class ParameterCache {
 
     // Get a parameter by its enum
     public static ParameterDTO getParameter(ParameterCode parameterCode) {
-        if (parameterCode == null) return null;
+        if (Objects.isNull(parameterCode)) return null;
         return getParameter(parameterCode.name());
     }
 
     // Add a parameter (update if it already exists)
     public static void addParameter(ParameterDTO parameterDTO) {
-        if (parameterDTO == null || StringUtils.isNullOrBlank(parameterDTO.getCode())) return;
+        if (Objects.isNull(parameterDTO) || StringUtils.isNullOrBlank(parameterDTO.getCode())) return;
         PARAMETERS_MAP.put(parameterDTO.getCode(), parameterDTO);
     }
 
@@ -53,9 +50,7 @@ public final class ParameterCache {
     // Completely refresh all parameters
     public static void refreshParameters(List<ParameterDTO> parameterList) {
         PARAMETERS_MAP.clear();
-        if (parameterList != null) {
-            parameterList.forEach(p -> PARAMETERS_MAP.put(p.getCode(), p));
-        }
+        if (Objects.nonNull(parameterList)) parameterList.forEach(p -> PARAMETERS_MAP.put(p.getCode(), p));
     }
 
     public static Integer getParamValueAsIntegerWithControl(ParameterCode parameterCodeControl, ParameterCode parameterCodeValue) {
@@ -65,13 +60,11 @@ public final class ParameterCache {
     }
 
     public static Integer getParamValueAsInteger(ParameterCode parameterCode) {
-        if (parameterCode == null) {
-            return null;
-        }
+        if (Objects.isNull(parameterCode)) return null;
 
         ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
 
-        if (parameterDTO == null || !ParameterType.NUMERIC.equals(parameterDTO.getType())) {
+        if (Objects.isNull(parameterDTO) || !ParameterType.NUMERIC.equals(parameterDTO.getType())) {
             return null;
         }
 
@@ -79,13 +72,11 @@ public final class ParameterCache {
     }
 
     public static Status getParamValueAsStatus(ParameterCode parameterCode) {
-        if (parameterCode == null) {
-            return null;
-        }
+        if (Objects.isNull(parameterCode)) return null;
 
         ParameterDTO parameterDTO = ParameterCache.getParameter(parameterCode);
 
-        if (parameterDTO == null || !ParameterType.STATUS.equals(parameterDTO.getType())) {
+        if (Objects.isNull(parameterDTO) || !ParameterType.STATUS.equals(parameterDTO.getType())) {
             return null;
         }
 

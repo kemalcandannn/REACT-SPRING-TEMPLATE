@@ -8,6 +8,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -38,7 +40,7 @@ public class EmailService {
                 
                 Saygılarımızla,
                 MyCompany Destek Ekibi
-                """.formatted(resetLink, (tokenExpirationMinutes == null ? "" : String.format("Bu bağlantı %d dakika içinde geçersiz olacaktır.", tokenExpirationMinutes)));
+                """.formatted(resetLink, (Objects.isNull(tokenExpirationMinutes) ? "" : String.format("Bu bağlantı %d dakika içinde geçersiz olacaktır.", tokenExpirationMinutes)));
 
         sendEmail(to, subject, body);
     }
@@ -59,7 +61,7 @@ public class EmailService {
                 
                 Teşekkürler,
                 MyCompany Ekibi
-                """.formatted(verificationLink, (tokenExpirationMinutes == null ? "" : String.format("Bu bağlantı %s dakika içinde geçersiz olacaktır.", tokenExpirationMinutes)));
+                """.formatted(verificationLink, (Objects.isNull(tokenExpirationMinutes) ? "" : String.format("Bu bağlantı %s dakika içinde geçersiz olacaktır.", tokenExpirationMinutes)));
 
         sendEmail(to, subject, body);
     }

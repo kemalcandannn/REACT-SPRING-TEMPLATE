@@ -9,6 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface UserTokenMapper extends BaseMapper<UserToken, UserTokenDTO, Long> {
@@ -28,6 +29,6 @@ public interface UserTokenMapper extends BaseMapper<UserToken, UserTokenDTO, Lon
     UserTokenDTO extraxtAccountVerificationUserTokenDTO(UserDTO userDTO, String token, Integer tokenExpirationMinutes);
 
     default LocalDateTime getExpiresAt(Integer tokenExpirationMinutes) {
-        return tokenExpirationMinutes == null ? null : LocalDateTime.now().plusMinutes(tokenExpirationMinutes);
+        return Objects.isNull(tokenExpirationMinutes) ? null : LocalDateTime.now().plusMinutes(tokenExpirationMinutes);
     }
 }

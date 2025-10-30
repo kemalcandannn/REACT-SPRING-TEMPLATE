@@ -33,7 +33,7 @@ public class SecurityUtils {
 
     public static List<SimpleGrantedAuthority> getAuthorities() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getAuthorities() == null) {
+        if (Objects.isNull(authentication.getAuthorities())) {
             return List.of();
         }
         return authentication.getAuthorities().stream()
@@ -46,7 +46,7 @@ public class SecurityUtils {
      */
     public static boolean hasRole(RoleCode roleCode) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getAuthorities() == null) {
+        if (Objects.isNull(authentication) || Objects.isNull(authentication.getAuthorities())) {
             return false;
         }
 

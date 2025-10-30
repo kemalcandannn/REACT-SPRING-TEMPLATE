@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -31,7 +32,7 @@ public class UserTokenService extends BaseService<UserToken, UserTokenDTO, Long>
 
     public String getRandomToken() {
         String token = UUID.randomUUID().toString();
-        while (findByToken(token) != null) {
+        while (Objects.nonNull(findByToken(token))) {
             token = UUID.randomUUID().toString();
         }
 

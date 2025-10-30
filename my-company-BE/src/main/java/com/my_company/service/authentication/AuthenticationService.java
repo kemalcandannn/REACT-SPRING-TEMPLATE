@@ -219,13 +219,13 @@ public class AuthenticationService {
         }
 
         UserTokenDTO userTokenDTO = userTokenService.findByToken(request.getToken());
-        if (userTokenDTO == null || !TokenStatus.ACTIVE.equals(userTokenDTO.getStatus())) {
+        if (Objects.isNull(userTokenDTO) || !TokenStatus.ACTIVE.equals(userTokenDTO.getStatus())) {
             throw new BadRequestException(ErrorCode.RESET_PASSWORD_TOKEN_NOT_FOUND, "Record not found from token in the request");
         }
 
         User user = userService.findAuthenticationUserByUsername(userTokenDTO.getUsername());
 
-        if (userTokenDTO.getExpiresAt() != null && userTokenDTO.getExpiresAt().isBefore(LocalDateTime.now())) {
+        if (Objects.nonNull(userTokenDTO.getExpiresAt()) && userTokenDTO.getExpiresAt().isBefore(LocalDateTime.now())) {
             userTokenDTO.setStatus(TokenStatus.EXPIRED);
             userTokenDTO = userTokenService.saveOrUpdate(userTokenDTO);
             userTokenDTO.setId(null);
@@ -262,13 +262,13 @@ public class AuthenticationService {
         }
 
         UserTokenDTO userTokenDTO = userTokenService.findByToken(request.getToken());
-        if (userTokenDTO == null || !TokenStatus.ACTIVE.equals(userTokenDTO.getStatus())) {
+        if (Objects.isNull(userTokenDTO) || !TokenStatus.ACTIVE.equals(userTokenDTO.getStatus())) {
             throw new BadRequestException(ErrorCode.RESET_PASSWORD_TOKEN_NOT_FOUND, "Record not found from token in the request");
         }
 
         User user = userService.findAuthenticationUserByUsername(userTokenDTO.getUsername());
 
-        if (userTokenDTO.getExpiresAt() != null && userTokenDTO.getExpiresAt().isBefore(LocalDateTime.now())) {
+        if (Objects.nonNull(userTokenDTO.getExpiresAt()) && userTokenDTO.getExpiresAt().isBefore(LocalDateTime.now())) {
             userTokenDTO.setStatus(TokenStatus.EXPIRED);
             userTokenDTO = userTokenService.saveOrUpdate(userTokenDTO);
             userTokenDTO.setId(null);
