@@ -4,19 +4,14 @@ package com.my_company.mapper.authentication;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.dto.authentication.UserTokenDTO;
 import com.my_company.domain.entity.authentication.UserToken;
+import com.my_company.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface UserTokenMapper {
-    UserTokenDTO entityToDto(UserToken userToken);
-
-    UserToken dtoToEntity(UserTokenDTO userTokenDTO);
-
-    List<UserTokenDTO> entityListToDtoList(List<UserToken> userTokenList);
+public interface UserTokenMapper extends BaseMapper<UserToken, UserTokenDTO, Long> {
 
     @Mapping(target = "type", constant = "PASSWORD_RESET")
     @Mapping(target = "status", constant = "ACTIVE")

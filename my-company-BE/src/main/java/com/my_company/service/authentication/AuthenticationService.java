@@ -218,8 +218,8 @@ public class AuthenticationService {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ResetPasswordRequest.Fields.confirmPassword));
         }
 
-        UserTokenDTO userTokenDTO = userTokenService.findByTokenAndStatus(request.getToken(), TokenStatus.ACTIVE);
-        if (userTokenDTO == null) {
+        UserTokenDTO userTokenDTO = userTokenService.findByToken(request.getToken());
+        if (userTokenDTO == null || !TokenStatus.ACTIVE.equals(userTokenDTO.getStatus())) {
             throw new BadRequestException(ErrorCode.RESET_PASSWORD_TOKEN_NOT_FOUND, "Record not found from token in the request");
         }
 
@@ -261,8 +261,8 @@ public class AuthenticationService {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, VerifyAccountRequest.Fields.token));
         }
 
-        UserTokenDTO userTokenDTO = userTokenService.findByTokenAndStatus(request.getToken(), TokenStatus.ACTIVE);
-        if (userTokenDTO == null) {
+        UserTokenDTO userTokenDTO = userTokenService.findByToken(request.getToken());
+        if (userTokenDTO == null || !TokenStatus.ACTIVE.equals(userTokenDTO.getStatus())) {
             throw new BadRequestException(ErrorCode.RESET_PASSWORD_TOKEN_NOT_FOUND, "Record not found from token in the request");
         }
 

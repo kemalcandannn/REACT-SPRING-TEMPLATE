@@ -5,6 +5,7 @@ import com.my_company.constants.SequenceConstants;
 import com.my_company.constants.TableConstants;
 import com.my_company.constants.enums.TokenStatus;
 import com.my_company.constants.enums.TokenType;
+import com.my_company.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(schema = SchemaConstants.AUTHENTICATION, name = TableConstants.USER_TOKEN)
-public class UserToken {
+public class UserToken implements BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TableConstants.USER_TOKEN)
     @SequenceGenerator(sequenceName = SequenceConstants.USER_TOKEN_SEQ, name = TableConstants.USER_TOKEN, allocationSize = 1)
