@@ -1,0 +1,22 @@
+export const NAVIGATE_PATHS = {
+    LOGIN: "/login",
+    LOGOUT: "/logout",
+    DASHBOARD: "/dashboard",
+    REGISTER: "/register",
+    FORGOT_PASSWORD: "/forgotPassword",
+    CHANGE_PASSWORD: "/changePassword",
+    RESET_PASSWORD: "/resetPassword",
+    VERIFY_ACCOUNT: "/verifyAccount",
+    PARAMETER_MANAGEMENT: "/parameterManagement"
+}
+
+export const SERVICE_PATHS = {
+    API_V1_PARAMETER_FIND_ALL_FROM_CACHE: "/api/v1/parameter/find-all-from-cache",
+    API_V1_AUTHENTICATION_LOGIN: "api/v1/authentication/login",
+    API_V1_AUTHENTICATION_REGISTER: "api/v1/authentication/register",
+    API_V1_AUTHENTICATION_SEND_PASSWORD_RESET_LINK: "api/v1/authentication/send-password-reset-link",
+    API_V1_AUTHENTICATION_CHANGE_PASSWORD: "api/v1/authentication/change-password",
+    API_V1_AUTHENTICATION_RESET_PASSWORD: "api/v1/authentication/reset-password",
+    API_V1_AUTHENTICATION_USER: "api/v1/authentication/user",
+    API_V1_AUTHENTICATION_VERIFY_ACCOUNT: "api/v1/authentication/verify-account"
+}

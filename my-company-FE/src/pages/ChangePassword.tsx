@@ -1,0 +1,201 @@
+import React, { useState } from 'react';
+import {
+    Container,
+    Box,
+    TextField,
+    Button,
+    Typography,
+    Paper,
+    Alert,
+    Link,
+    CircularProgress,
+} from '@mui/material';
+import { NAVIGATE_PATHS, SERVICE_PATHS } from '../constants/Paths';
+import BaseApiAxios from '../helpers/BaseApiAxios';
+import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
+import { useNavigate } from 'react-router-dom';
+import { useApiErrorHandler } from '../helpers/ApiErrorHandler';
+
+interface ChangePasswordProps {
+    setClickedChangePassword?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePassword }) => {
+    const { initSessionUser } = useAuthentication();
+    const { handleApiError } = useApiErrorHandler();
+    const navigate = useNavigate();
+
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [errors, setErrors] = useState<{ oldPassword?: string; newPassword?: string; confirmPassword?: string }>({});
+    const [success, setSuccess] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const validate = () => {
+        const newErrors: typeof errors = {};
+
+        if (!oldPassword) newErrors.oldPassword = 'Eski parola boş olamaz';
+        if (!newPassword) newErrors.newPassword = 'Yeni parola boş olamaz';
+        if (!confirmPassword) newErrors.confirmPassword = 'Parola doğrulama boş olamaz';
+        else if (confirmPassword !== newPassword) newErrors.confirmPassword = 'Parolalar eşleşmiyor';
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleChangePassword = async () => {
+        setSuccess('');
+        setErrorMessage('');
+
+        if (!validate()) return;
+
+        setLoading(true);
+        try {
+            await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_CHANGE_PASSWORD, {
+                oldPassword,
+                password: newPassword,
+                confirmPassword,
+            });
+
+            setOldPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            initSessionUser();
+            setSuccess('Parolanız başarıyla değiştirildi!');
+            setTimeout(() => setSuccess(''), 3000);
+
+            setTimeout(() => {
+                if (setClickedChangePassword) {
+                    setClickedChangePassword((prev) => !prev);
+                } else {
+                    navigate(NAVIGATE_PATHS.DASHBOARD);
+                }
+            }, 3000);
+        } catch (err: any) {
+            setErrorMessage(handleApiError(err));
+            setTimeout(() => setErrorMessage(''), 3000);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <Container
+            maxWidth="sm"
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+            }}
+        >
+            <Paper
+                elevation={6}
+                sx={{
+                    p: 4,
+                    width: '100%',
+                    maxWidth: 400,
+                    borderRadius: 3,
+                }}
+            >
+                <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
+                    <Typography variant="h5" fontWeight="bold" gutterBottom>
+                        Parola Değiştir
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" align="center">
+                        Eski parolanızı girin ve yeni parolanızı oluşturun
+                    </Typography>
+                </Box>
+
+                {/* Başarı & Hata Mesajları */}
+                {success && (
+                    <Alert severity="success" sx={{ mb: 2, width: '100%' }}>
+                        {success}
+                    </Alert>
+                )}
+                {errorMessage && (
+                    <Alert severity="error" sx={{ mb: 2, width: '100%' }}>
+                        {errorMessage}
+                    </Alert>
+                )}
+
+                <TextField
+                    label="Eski Parola"
+                    type="password"
+                    fullWidth
+                    margin="normal"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    error={!!errors.oldPassword}
+                    helperText={errors.oldPassword}
+                    disabled={loading}
+                />
+
+                <TextField
+                    label="Yeni Parola"
+                    type="password"
+                    fullWidth
+                    margin="normal"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    error={!!errors.newPassword}
+                    helperText={errors.newPassword}
+                    disabled={loading}
+                />
+
+                <TextField
+                    label="Parola Doğrulama"
+                    type="password"
+                    fullWidth
+                    margin="normal"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    error={!!errors.confirmPassword}
+                    helperText={errors.confirmPassword}
+                    disabled={loading}
+                />
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={handleChangePassword}
+                    disabled={loading}
+                    sx={{
+                        py: 1.5,
+                        mt: 2,
+                        fontWeight: 'bold',
+                        borderRadius: 2,
+                        textTransform: 'none',
+                    }}
+                >
+                    {loading ? <CircularProgress size={24} color="inherit" /> : 'Parolayı Değiştir'}
+                </Button>
+
+                <Box width="100%" textAlign="right" mt={1}>
+                    {setClickedChangePassword ? (
+                        <Link
+                            href="#"
+                            underline="hover"
+                            variant="body2"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (!loading) setClickedChangePassword((prev) => !prev);
+                            }}
+                        >
+                            Geri
+                        </Link>
+                    ) : (
+                        <Link href={NAVIGATE_PATHS.LOGOUT} underline="hover" variant="body2">
+                            Çıkış
+                        </Link>
+                    )}
+                </Box>
+            </Paper>
+        </Container>
+    );
+};
+
+export default ChangePassword;
