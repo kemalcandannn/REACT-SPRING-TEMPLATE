@@ -2,7 +2,7 @@ package com.my_company.controller.authentication;
 
 import com.my_company.constants.PathConstants;
 import com.my_company.constants.TextConstants;
-import com.my_company.domain.request.authentication.*;
+import com.my_company.domain.request.authentication.AuthenticationRequest;
 import com.my_company.domain.response.ServiceResponse;
 import com.my_company.domain.response.authentication.LoginResponse;
 import com.my_company.domain.response.authentication.UserResponse;
@@ -25,7 +25,7 @@ public class AuthenticationController {
 
     @PostMapping(PathConstants.LOCAL_SIGN_UP_URL)
     @Operation(summary = "Sign Up", description = "Local Sign Up Operation")
-    public ResponseEntity<ServiceResponse<LoginResponse>> localSignUp(@Valid @RequestBody SignUpRequest request) {
+    public ResponseEntity<ServiceResponse<LoginResponse>> localSignUp(@Valid @RequestBody AuthenticationRequest request) {
         LoginResponse loginResponse = authenticationService.localSignUp(request);
         return ResponseEntity.ok(
                 ServiceResponse
@@ -35,14 +35,14 @@ public class AuthenticationController {
     }
 
     @PostMapping(PathConstants.VERIFY_ACCOUNT_URL)
-    public ResponseEntity<Void> verifyAccount(@Valid @RequestBody VerifyAccountRequest request) {
+    public ResponseEntity<Void> verifyAccount(@Valid @RequestBody AuthenticationRequest request) {
         authenticationService.verifyAccount(request);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(PathConstants.LOGIN_URL)
     @Operation(summary = "Login", description = "Login Operation")
-    public ResponseEntity<ServiceResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<ServiceResponse<LoginResponse>> login(@Valid @RequestBody AuthenticationRequest request) {
         LoginResponse loginResponse = authenticationService.login(request);
         return ResponseEntity.ok(
                 ServiceResponse
@@ -53,7 +53,7 @@ public class AuthenticationController {
 
     @PostMapping(PathConstants.RESET_PASSWORD_URL)
     @Operation(summary = "Reset Password", description = "Reset Password Operation")
-    public ResponseEntity<ServiceResponse<Void>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+    public ResponseEntity<ServiceResponse<Void>> resetPassword(@Valid @RequestBody AuthenticationRequest request) {
         authenticationService.resetPassword(request);
         return ResponseEntity.ok(
                 ServiceResponse
@@ -64,7 +64,7 @@ public class AuthenticationController {
 
     @PostMapping(PathConstants.SEND_PASSWORD_RESET_LINK_URL)
     @Operation(summary = "Send Password Reset Link", description = "Send Password Reset Link Operation")
-    public ResponseEntity<ServiceResponse<Void>> sendPasswordResetLink(@Valid @RequestBody SendPasswordResetLinkRequest request) {
+    public ResponseEntity<ServiceResponse<Void>> sendPasswordResetLink(@Valid @RequestBody AuthenticationRequest request) {
         authenticationService.sendPasswordResetLink(request);
         return ResponseEntity.ok(
                 ServiceResponse
@@ -75,7 +75,7 @@ public class AuthenticationController {
 
     @PostMapping("/change-password")
     @Operation(summary = "Change Password", description = "Change Password Operation")
-    public ResponseEntity<ServiceResponse<Void>> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+    public ResponseEntity<ServiceResponse<Void>> changePassword(@Valid @RequestBody AuthenticationRequest request) {
         authenticationService.changePassword(request);
         return ResponseEntity.ok(
                 ServiceResponse

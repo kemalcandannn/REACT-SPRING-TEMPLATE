@@ -35,8 +35,8 @@ export const useApiErrorHandler = () => {
                 return getLabel("incorrectUsernameOrPassword");
             case ERROR_CODE.INCORRECT_OLD_PASSWORD:
                 return getLabel("incorrectOldPassword");
-            case ERROR_CODE.NEW_PASSWORD_DOES_NOT_CONFIRM:
-                return getLabel("newPasswordDoesNotConfirm");
+            case ERROR_CODE.PASSWORD_DOES_NOT_CONFIRM:
+                return getLabel("passwordDoesNotConfirm");
             case ERROR_CODE.PASSWORD_AT_LEAST_CHARACTERS_LONG: {
                 const value = parameters?.find(item => item.code == PARAMETER_CODE.PASSWORD_AT_LEAST_CHARACTER_LONG)?.value ?? "8";
                 return getLabelFormatted("passwordAtLeastCharactersLong", value);

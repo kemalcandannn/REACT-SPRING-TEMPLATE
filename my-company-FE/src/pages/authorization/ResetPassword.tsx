@@ -13,7 +13,7 @@ const ResetPassword: React.FC = () => {
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token"); // URL'den token alıyoruz
 
-    const [newPassword, setNewPassword] = useState("");
+    const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -25,8 +25,8 @@ const ResetPassword: React.FC = () => {
         setError("");
         setSuccess("");
 
-        if (newPassword !== confirmPassword) {
-            setError(getLabel("newPasswordDoesNotConfirm"));
+        if (password !== confirmPassword) {
+            setError(getLabel("passwordDoesNotConfirm"));
             setLoading(false);
             return;
         }
@@ -34,12 +34,12 @@ const ResetPassword: React.FC = () => {
         try {
             await BaseApiAxios.post("api/v1/authentication/reset-password", {
                 token,
-                newPassword,
+                password,
                 confirmPassword
             });
 
             setSuccess(getLabel("passwordChangedSuccessfully"));
-            setNewPassword("");
+            setPassword("");
             setConfirmPassword("");
 
             setTimeout(() => navigate(NAVIGATE_PATHS.LOGIN), 1600);
@@ -59,9 +59,9 @@ const ResetPassword: React.FC = () => {
                     <div>
                         <input
                             type="password"
-                            placeholder={getLabel("newPassword")}
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder={getLabel("password")}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
@@ -69,7 +69,7 @@ const ResetPassword: React.FC = () => {
                     <div>
                         <input
                             type="password"
-                            placeholder={getLabel("confirmNewPassword")}
+                            placeholder={getLabel("confirmPassword")}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required

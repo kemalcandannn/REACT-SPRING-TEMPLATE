@@ -11,6 +11,7 @@ import { NAVIGATE_PATHS } from "./constants/Paths";
 import Logout from "./pages/authorization/Logout";
 import ResetPassword from "./pages/authorization/ResetPassword";
 import VerifyAccount from "./pages/authorization/VerifyAccount";
+import ParameterManagement from "./pages/authorization/parameters/ParameterManagement";
 
 const AppRouter: React.FC = () => {
     const { jwtToken } = useAuthentication(); // JWT token varsa kullanıcı giriş yapmış demektir
@@ -44,6 +45,11 @@ const AppRouter: React.FC = () => {
                 <Route
                     path={NAVIGATE_PATHS.DASHBOARD}
                     element={jwtToken == null ? <Navigate to={NAVIGATE_PATHS.LOGIN} /> : <Dashboard />}
+                />
+
+                <Route
+                    path={NAVIGATE_PATHS.PARAMETER_MANAGEMENT}
+                    element={jwtToken == null ? <Navigate to={NAVIGATE_PATHS.LOGIN} /> : <ParameterManagement />}
                 />
 
                 <Route

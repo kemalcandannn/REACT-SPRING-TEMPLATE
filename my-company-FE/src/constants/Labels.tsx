@@ -11,7 +11,7 @@ export interface Labels {
     changePassword: string;
     changePasswordTitle: string;
     checkRequiredField: string;
-    confirmNewPassword: string;
+    confirmPassword: string;
     continueWithApple: string;
     continueWithFacebook: string;
     continueWithGoogle: string;
@@ -29,8 +29,6 @@ export interface Labels {
     loginFailedCheckYourCredentials: string;
     loginTitle: string;
     logout: string;
-    newPassword: string;
-    newPasswordDoesNotConfirm: string;
     oldPassword: string;
     or: string;
     password: string;
@@ -40,6 +38,7 @@ export interface Labels {
     passwordAtLeastOneSpecialCharacter: string;
     passwordAtLeastOneUppercase: string;
     passwordChangedSuccessfully: string;
+    passwordDoesNotConfirm: string;
     passwordResetEmailSent: string;
     sendResetPasswordLink: string;
     requiredField: string;
@@ -70,7 +69,7 @@ export const labelsData: Record<Language, Labels> = {
         changePassword: "Parolayı Güncelle",
         changePasswordTitle: "Parolayı Güncelle",
         checkRequiredField: "Zorunlu alanları kontrol ediniz.",
-        confirmNewPassword: "Yeni Parola Doğrula",
+        confirmPassword: "Parola Doğrula",
         continueWithApple: "Apple ile Devam Et",
         continueWithFacebook: "Facebook ile Devam Et",
         continueWithGoogle: "Google ile Devam Et",
@@ -88,8 +87,6 @@ export const labelsData: Record<Language, Labels> = {
         loginFailedCheckYourCredentials: "Giriş yapılamadı. Bilgilerinizi kontrol edin.",
         loginTitle: "Giriş Yap",
         logout: "Çıkış Yap",
-        newPassword: "Yeni Parola",
-        newPasswordDoesNotConfirm: "Yeni parola doğrulanamadı.",
         oldPassword: "Eski Parola",
         or: "veya",
         password: "Parola",
@@ -99,6 +96,7 @@ export const labelsData: Record<Language, Labels> = {
         passwordAtLeastOneSpecialCharacter: "Parola en az 1 özel karakter içermelidir",
         passwordAtLeastOneUppercase: "Parola en az 1 büyük harf içermelidir.",
         passwordChangedSuccessfully: "Parolanız başarıyla güncellendi.",
+        passwordDoesNotConfirm: "Parola doğrulanamadı.",
         passwordResetEmailSent: "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.",
         sendResetPasswordLink: "Şifre Sıfırlama Bağlantısı Gönder",
         requiredField: "[[%s]] zorunlu alandır, lütfen kontrol ediniz.",

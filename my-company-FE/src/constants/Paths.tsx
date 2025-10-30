@@ -6,7 +6,8 @@ export const NAVIGATE_PATHS = {
     FORGOT_PASSWORD: "/forgotPassword",
     CHANGE_PASSWORD: "/changePassword",
     RESET_PASSWORD: "/resetPassword",
-    VERIFY_ACCOUNT: "/verifyAccount"
+    VERIFY_ACCOUNT: "/verifyAccount",
+    PARAMETER_MANAGEMENT: "/parameterManagement"
 }
 
 export const SERVICE_PATHS = {

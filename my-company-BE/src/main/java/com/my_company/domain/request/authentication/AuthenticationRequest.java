@@ -1,6 +1,7 @@
 package com.my_company.domain.request.authentication;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -9,7 +10,11 @@ import lombok.experimental.FieldNameConstants;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldNameConstants
-public class SignUpRequest {
+@Builder
+public class AuthenticationRequest {
+    private String token;
     private String username;
+    private String oldPassword;
     private String password;
+    private String confirmPassword;
 }

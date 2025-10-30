@@ -17,6 +17,7 @@ const SignUp: React.FC = () => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -28,7 +29,8 @@ const SignUp: React.FC = () => {
         try {
             const response = await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_LOCAL_SIGN_UP, {
                 username: username,
-                password: password
+                password: password,
+                confirmPassword: confirmPassword
             });
 
             const token = response.data.data.token;
@@ -80,6 +82,15 @@ const SignUp: React.FC = () => {
                                 placeholder={getLabel("password")}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="password"
+                                placeholder={getLabel("confirmPassword")}
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                             />
                         </div>

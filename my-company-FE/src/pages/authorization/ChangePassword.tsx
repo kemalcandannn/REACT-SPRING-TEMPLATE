@@ -18,7 +18,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
     const navigate = useNavigate();
 
     const [oldPassword, setOldPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
+    const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -31,12 +31,12 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
         try {
             await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_CHANGE_PASSWORD, {
                 oldPassword,
-                newPassword,
+                password,
                 confirmPassword
             });
 
             setOldPassword("");
-            setNewPassword("");
+            setPassword("");
             setConfirmPassword("");
             initSessionUser();
 
@@ -71,9 +71,9 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
                     <div>
                         <input
                             type="password"
-                            placeholder={getLabel("newPassword")}
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder={getLabel("password")}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
@@ -81,7 +81,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
                     <div>
                         <input
                             type="password"
-                            placeholder={getLabel("confirmNewPassword")}
+                            placeholder={getLabel("confirmPassword")}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required

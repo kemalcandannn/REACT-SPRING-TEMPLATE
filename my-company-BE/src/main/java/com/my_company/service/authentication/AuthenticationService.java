@@ -12,7 +12,7 @@ import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.dto.authentication.UserMenuDTO;
 import com.my_company.domain.dto.authentication.UserTokenDTO;
 import com.my_company.domain.entity.authentication.User;
-import com.my_company.domain.request.authentication.*;
+import com.my_company.domain.request.authentication.AuthenticationRequest;
 import com.my_company.domain.response.authentication.LoginResponse;
 import com.my_company.domain.response.authentication.UserResponse;
 import com.my_company.exception.BadRequestException;
@@ -45,17 +45,11 @@ public class AuthenticationService {
     private final RoleMenuService roleMenuService;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginResponse localSignUp(SignUpRequest request) {
-        if (Objects.isNull(request)) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
-        }
+    public LoginResponse localSignUp(AuthenticationRequest request) {
+        validateAuthenticationRequest(request, false, true, false, true, true);
 
-        if (StringUtils.isNullOrBlank(request.getUsername())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, SignUpRequest.Fields.username));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getPassword())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, SignUpRequest.Fields.password));
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new InternalServerException(ErrorCode.PASSWORD_DOES_NOT_CONFIRM, "Password does not confirm.");
         }
 
         PasswordUtils.passwordValidation(passwordEncoder, null, request.getPassword());
@@ -67,7 +61,7 @@ public class AuthenticationService {
 
         Integer passwordExpirationDays = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.PASSWORD_EXPIRATION_CONTROL, ParameterCode.PASSWORD_EXPIRATION_DAYS);
 
-        userDTO = userMapper.signUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
+        userDTO = userMapper.authenticationRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
         String token = userTokenService.getRandomToken();
@@ -78,7 +72,7 @@ public class AuthenticationService {
         emailService.sendAccountVerificationMail(userDTO.getUsername(), userTokenDTO.getToken());
 
         return login(
-                LoginRequest
+                AuthenticationRequest
                         .builder()
                         .username(userDTO.getUsername())
                         .password(request.getPassword())
@@ -86,18 +80,8 @@ public class AuthenticationService {
         );
     }
 
-    public LoginResponse login(LoginRequest request) {
-        if (Objects.isNull(request)) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getUsername())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, LoginRequest.Fields.username));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getPassword())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, LoginRequest.Fields.password));
-        }
+    public LoginResponse login(AuthenticationRequest request) {
+        validateAuthenticationRequest(request, false, true, false, true, false);
 
         User user = userService.findAuthenticationUserByUsername(request.getUsername());
 
@@ -112,14 +96,8 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public void sendPasswordResetLink(SendPasswordResetLinkRequest request) {
-        if (Objects.isNull(request)) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getUsername())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, SendPasswordResetLinkRequest.Fields.username));
-        }
+    public void sendPasswordResetLink(AuthenticationRequest request) {
+        validateAuthenticationRequest(request, false, true, false, false, false);
 
         UserDTO userDTO = userService.findById(request.getUsername(), true);
         String token = userTokenService.getRandomToken();
@@ -130,22 +108,8 @@ public class AuthenticationService {
         emailService.sendPasswordResetMail(userDTO.getUsername(), token);
     }
 
-    public void changePassword(ChangePasswordRequest request) {
-        if (Objects.isNull(request)) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getOldPassword())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.oldPassword));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getNewPassword())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.newPassword));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getConfirmPassword())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ChangePasswordRequest.Fields.confirmPassword));
-        }
+    public void changePassword(AuthenticationRequest request) {
+        validateAuthenticationRequest(request, false, false, true, true, true);
 
         User user = userService.findAuthenticationUserByUsername(SecurityUtils.getCurrentUsername());
 
@@ -153,13 +117,39 @@ public class AuthenticationService {
             throw new UserAuthenticationException(ErrorCode.INCORRECT_OLD_PASSWORD, "Incorrect old password.");
         }
 
-        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-            throw new InternalServerException(ErrorCode.NEW_PASSWORD_DOES_NOT_CONFIRM, "New Password does not confirm.");
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new InternalServerException(ErrorCode.PASSWORD_DOES_NOT_CONFIRM, "Password does not confirm.");
         }
 
-        PasswordUtils.passwordValidation(passwordEncoder, user, request.getNewPassword());
+        PasswordUtils.passwordValidation(passwordEncoder, user, request.getPassword());
 
-        userService.changePassword(user, request.getNewPassword());
+        userService.changePassword(user, request.getPassword());
+    }
+
+    private void validateAuthenticationRequest(AuthenticationRequest request, boolean tokenControl, boolean usernameControl, boolean oldPasswordControl, boolean passwordControl, boolean confirmPasswordControl) {
+        if (Objects.isNull(request)) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
+        }
+
+        if (tokenControl && StringUtils.isNullOrBlank(request.getToken())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, AuthenticationRequest.Fields.token));
+        }
+
+        if (usernameControl && StringUtils.isNullOrBlank(request.getUsername())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, AuthenticationRequest.Fields.username));
+        }
+
+        if (oldPasswordControl && StringUtils.isNullOrBlank(request.getOldPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, AuthenticationRequest.Fields.oldPassword));
+        }
+
+        if (passwordControl && StringUtils.isNullOrBlank(request.getPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, AuthenticationRequest.Fields.password));
+        }
+
+        if (confirmPasswordControl && StringUtils.isNullOrBlank(request.getConfirmPassword())) {
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, AuthenticationRequest.Fields.confirmPassword));
+        }
     }
 
     public UserResponse extractAuthenticationFromToken() {
@@ -193,22 +183,8 @@ public class AuthenticationService {
         return userMapper.entityToResponse(user, roleList, new ArrayList<>(menuSet));
     }
 
-    public void resetPassword(ResetPasswordRequest request) {
-        if (Objects.isNull(request)) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getToken())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ResetPasswordRequest.Fields.token));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getNewPassword())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ResetPasswordRequest.Fields.newPassword));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getConfirmPassword())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ResetPasswordRequest.Fields.confirmPassword));
-        }
+    public void resetPassword(AuthenticationRequest request) {
+        validateAuthenticationRequest(request, true, false, false, true, true);
 
         UserTokenDTO userTokenDTO = userTokenService.findByTokenAndStatus(request.getToken(), TokenStatus.ACTIVE);
         if (userTokenDTO == null) {
@@ -233,25 +209,19 @@ public class AuthenticationService {
             throw new InternalServerException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
         }
 
-        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-            throw new InternalServerException(ErrorCode.NEW_PASSWORD_DOES_NOT_CONFIRM, "New Password does not confirm.");
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new InternalServerException(ErrorCode.PASSWORD_DOES_NOT_CONFIRM, "Password does not confirm.");
         }
 
-        PasswordUtils.passwordValidation(passwordEncoder, user, request.getNewPassword());
-        userService.changePassword(user, request.getNewPassword());
+        PasswordUtils.passwordValidation(passwordEncoder, user, request.getPassword());
+        userService.changePassword(user, request.getPassword());
         userTokenDTO.setUsedAt(LocalDateTime.now());
         userTokenDTO.setStatus(TokenStatus.USED);
         userTokenService.saveOrUpdate(userTokenDTO);
     }
 
-    public void verifyAccount(VerifyAccountRequest request) {
-        if (Objects.isNull(request)) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
-        }
-
-        if (StringUtils.isNullOrBlank(request.getToken())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, VerifyAccountRequest.Fields.token));
-        }
+    public void verifyAccount(AuthenticationRequest request) {
+        validateAuthenticationRequest(request, true, false, false, false, false);
 
         UserTokenDTO userTokenDTO = userTokenService.findByTokenAndStatus(request.getToken(), TokenStatus.ACTIVE);
         if (userTokenDTO == null) {
