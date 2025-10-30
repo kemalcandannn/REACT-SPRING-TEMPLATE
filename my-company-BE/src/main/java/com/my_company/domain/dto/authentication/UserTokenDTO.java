@@ -21,6 +21,5 @@ public class UserTokenDTO extends BaseDto<Long> {
     private String token;
     private LocalDateTime expiresAt;
     private LocalDateTime usedAt;
-    private String ipAddress;
     private LocalDateTime createdAt;
 }

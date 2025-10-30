@@ -44,9 +44,6 @@ public class UserToken implements BaseEntity<Long> {
     @Column(name = "USED_AT")
     private LocalDateTime usedAt;
 
-    @Column(name = "IP_ADDRESS")
-    private String ipAddress;
-
     @Column(name = "CREATED_AT", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 }
