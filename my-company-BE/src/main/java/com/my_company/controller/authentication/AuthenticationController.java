@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
-    @PostMapping(PathConstants.LOCAL_SIGN_UP_URL)
-    @Operation(summary = "Sign Up", description = "Local Sign Up Operation")
-    public ResponseEntity<ServiceResponse<LoginResponse>> localSignUp(@Valid @RequestBody LocalSignUpRequest request) {
-        LoginResponse loginResponse = authenticationService.localSignUp(request);
+    @PostMapping(PathConstants.REGISTER_URL)
+    @Operation(summary = "Register", description = "Register Operation")
+    public ResponseEntity<ServiceResponse<LoginResponse>> register(@Valid @RequestBody RegisterRequest request) {
+        LoginResponse loginResponse = authenticationService.register(request);
         return ResponseEntity.ok(
                 ServiceResponse
                         .<LoginResponse>builder()

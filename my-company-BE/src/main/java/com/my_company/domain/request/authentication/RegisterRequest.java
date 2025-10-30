@@ -9,7 +9,7 @@ import lombok.experimental.FieldNameConstants;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldNameConstants
-public class LocalSignUpRequest {
+public class RegisterRequest {
     private String username;
     private String password;
     private String confirmPassword;

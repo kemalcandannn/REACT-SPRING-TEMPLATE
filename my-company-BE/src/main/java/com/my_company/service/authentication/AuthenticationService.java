@@ -45,21 +45,21 @@ public class AuthenticationService {
     private final RoleMenuService roleMenuService;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginResponse localSignUp(LocalSignUpRequest request) {
+    public LoginResponse register(RegisterRequest request) {
         if (Objects.isNull(request)) {
             throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, ApplicationConstants.REQUEST_BODY));
         }
 
         if (StringUtils.isNullOrBlank(request.getUsername())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, LocalSignUpRequest.Fields.username));
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, RegisterRequest.Fields.username));
         }
 
         if (StringUtils.isNullOrBlank(request.getPassword())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, LocalSignUpRequest.Fields.password));
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, RegisterRequest.Fields.password));
         }
 
         if (StringUtils.isNullOrBlank(request.getConfirmPassword())) {
-            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, LocalSignUpRequest.Fields.confirmPassword));
+            throw new BadRequestException(ErrorCode.REQUIRED_FIELD, String.format(TextConstants.REQUIRED_FIELD_MESSAGE, RegisterRequest.Fields.confirmPassword));
         }
 
         if (!request.getPassword().equals(request.getConfirmPassword())) {
@@ -75,7 +75,7 @@ public class AuthenticationService {
 
         Integer passwordExpirationDays = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.PASSWORD_EXPIRATION_CONTROL, ParameterCode.PASSWORD_EXPIRATION_DAYS);
 
-        userDTO = userMapper.localSignUpRequestToDTO(request, passwordEncoder, passwordExpirationDays);
+        userDTO = userMapper.registerRequestToDTO(request, passwordEncoder, passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
         String token = userTokenService.getRandomToken();
