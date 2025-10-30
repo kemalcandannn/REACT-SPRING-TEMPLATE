@@ -6,11 +6,11 @@ public class TableConstants {
     }
 
     public static final String USER = "USER";
-    public static final String USER_TOKEN = "USER_TOKEN";
     public static final String ROLE = "ROLE";
     public static final String MENU = "MENU";
     public static final String USER_ROLE = "USER_ROLE";
     public static final String USER_MENU = "USER_MENU";
     public static final String ROLE_MENU = "ROLE_MENU";
     public static final String PARAMETER = "PARAMETER";
+    public static final String USER_TOKEN = "USER_TOKEN";
 }

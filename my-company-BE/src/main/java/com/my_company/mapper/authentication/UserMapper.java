@@ -3,7 +3,7 @@ package com.my_company.mapper.authentication;
 
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
-import com.my_company.domain.request.authentication.AuthenticationRequest;
+import com.my_company.domain.request.authentication.LocalSignUpRequest;
 import com.my_company.domain.response.authentication.UserResponse;
 import com.my_company.mapper.BaseMapper;
 import org.mapstruct.Context;
@@ -21,7 +21,7 @@ public interface UserMapper extends BaseMapper<User, UserDTO, String> {
     @Mapping(target = "provider", constant = "LOCAL")
     @Mapping(target = "status", constant = "PASSIVE")
     @Mapping(target = "createdAt", expression = "java(getLocalDateTimeNow())")
-    UserDTO authenticationRequestToDTO(AuthenticationRequest request, @Context PasswordEncoder passwordEncoder, Integer passwordExpirationDays);
+    UserDTO localSignUpRequestToDTO(LocalSignUpRequest request, @Context PasswordEncoder passwordEncoder, Integer passwordExpirationDays);
 
     @Mapping(target = "password3", expression = "java(user.getPassword2())")
     @Mapping(target = "password2", expression = "java(user.getPassword())")

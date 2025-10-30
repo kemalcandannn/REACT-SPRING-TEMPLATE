@@ -1,6 +1,5 @@
 package com.my_company.config;
 
-import com.my_company.constants.TextConstants;
 import com.my_company.constants.enums.ErrorCode;
 import com.my_company.domain.dto.authentication.UserRoleDTO;
 import com.my_company.domain.entity.authentication.User;
@@ -54,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         token = authHeader.substring(7);
 
         if (JwtUtils.isTokenExpired(token)) {
-            throw new UserAuthenticationException(ErrorCode.TOKEN_EXPIRED, TextConstants.TOKEN_EXPIRED_MESSAGE);
+            throw new UserAuthenticationException(ErrorCode.TOKEN_EXPIRED, "Token has expired. Please logout/login and try again.");
         }
 
         username = JwtUtils.extractUsername(token);

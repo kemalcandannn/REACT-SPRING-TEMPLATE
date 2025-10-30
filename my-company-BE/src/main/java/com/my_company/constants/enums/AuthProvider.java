@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum AuthProvider {
-    LOCAL, GOOGLE, FACEBOOK, APPLE
+    LOCAL, GOOGLE
 }
