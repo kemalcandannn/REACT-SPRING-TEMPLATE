@@ -7,10 +7,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.my_company.cache.ParameterCache;
 import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
-import com.my_company.constants.enums.ErrorCode;
-import com.my_company.constants.enums.ParameterCode;
-import com.my_company.constants.enums.Status;
-import com.my_company.constants.enums.TokenStatus;
+import com.my_company.constants.enums.*;
 import com.my_company.domain.dto.authentication.RoleMenuDTO;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.dto.authentication.UserMenuDTO;
@@ -86,7 +83,7 @@ public class AuthenticationService {
 
         Integer passwordExpirationDays = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.PASSWORD_EXPIRATION_CONTROL, ParameterCode.PASSWORD_EXPIRATION_DAYS);
 
-        userDTO = userMapper.registerRequestToDTO(request.getUsername(), passwordEncoder.encode(request.getPassword()), passwordExpirationDays);
+        userDTO = userMapper.registerRequestToDTO(request.getUsername(), passwordEncoder.encode(request.getPassword()), passwordExpirationDays, Language.getLanguage(request.getLanguage()));
         userDTO = userService.saveOrUpdate(userDTO);
 
         String token = userTokenService.getRandomToken();
@@ -159,7 +156,7 @@ public class AuthenticationService {
 
         if (userDTO == null) {
             String password = new PasswordGenerator(8, true, true, true, true).generate();
-            userDTO = userMapper.createGoogleUserDTO(email, passwordEncoder.encode(password), providerId);
+            userDTO = userMapper.createGoogleUserDTO(email, passwordEncoder.encode(password), providerId, Language.getLanguage(request.getLanguage()));
 
             userService.saveOrUpdate(userDTO);
         }

@@ -1,6 +1,7 @@
 package com.my_company.mapper.authentication;
 
 
+import com.my_company.constants.enums.Language;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
 import com.my_company.domain.response.authentication.UserResponse;
@@ -19,12 +20,12 @@ public interface UserMapper extends BaseMapper<User, UserDTO, String> {
     @Mapping(target = "provider", constant = "LOCAL")
     @Mapping(target = "status", constant = "PASSIVE")
     @Mapping(target = "createdAt", expression = "java(getLocalDateTimeNow())")
-    UserDTO registerRequestToDTO(String username, String password, Integer passwordExpirationDays);
+    UserDTO registerRequestToDTO(String username, String password, Integer passwordExpirationDays, Language language);
 
     @Mapping(target = "provider", constant = "GOOGLE")
     @Mapping(target = "status", constant = "ACTIVE")
     @Mapping(target = "createdAt", expression = "java(getLocalDateTimeNow())")
-    UserDTO createGoogleUserDTO(String username, String password, String providerId);
+    UserDTO createGoogleUserDTO(String username, String password, String providerId, Language language);
 
     @Mapping(target = "password3", expression = "java(user.getPassword2())")
     @Mapping(target = "password2", expression = "java(user.getPassword())")

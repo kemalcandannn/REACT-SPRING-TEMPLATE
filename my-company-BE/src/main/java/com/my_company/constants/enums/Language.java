@@ -13,7 +13,7 @@ public enum Language {
     public static Language getLanguage(String value) {
         return Arrays
                 .stream(Language.values())
-                .filter(language -> language.name().equals(value))
+                .filter(language -> language.name().equalsIgnoreCase(value))
                 .findFirst()
                 .orElse(null);
     }
