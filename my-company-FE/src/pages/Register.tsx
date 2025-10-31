@@ -76,10 +76,6 @@ const Register: React.FC = () => {
         }
     };
 
-    const handleGoogleRegister = () => {
-        console.log('Register with Google');
-    };
-
     return (
         <Container
             maxWidth="sm"
