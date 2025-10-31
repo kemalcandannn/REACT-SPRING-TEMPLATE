@@ -144,7 +144,7 @@ const Register: React.FC = () => {
                     {loading ? <CircularProgress size={24} /> : 'Kaydol'}
                 </Button>
 
-                <Divider sx={{ width: '100%', my: 2 }}>YA DA</Divider>
+                <Divider sx={{ width: '100%', my: 2 }}>VEYA</Divider>
 
                 <Button
                     variant="outlined"

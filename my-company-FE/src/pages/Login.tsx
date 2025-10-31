@@ -166,7 +166,7 @@ const Login: React.FC = () => {
                 </Button>
 
                 {/* Divider */}
-                <Divider sx={{ width: '100%', my: 2 }}>YA DA</Divider>
+                <Divider sx={{ width: '100%', my: 2 }}>VEYA</Divider>
 
                 {/* Google ile Giriş */}
                 <Button
