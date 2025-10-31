@@ -1,6 +1,7 @@
 package com.my_company.service.email;
 
 import com.my_company.cache.ParameterCache;
+import com.my_company.constants.enums.Language;
 import com.my_company.constants.enums.ParameterCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,46 +23,30 @@ public class EmailService {
     @Value("${app.frontend.url}")
     private String frontendBaseUrl;
 
-    public void sendPasswordResetMail(String to, String token) {
+    public void sendPasswordResetMail(String to, String token, Language language) {
         String resetLink = frontendBaseUrl + "/resetPassword?token=" + token;
-        String subject = "🔐 Parola Sıfırlama Talebi";
+        String subject = Language.getPasswordResetMailSubject(language);
 
         Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_CONTROL, ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES);
 
-        String body = """
-                Merhaba,
-                
-                Parolanızı sıfırlamak için aşağıdaki bağlantıya tıklayın:
-                %s
-                
-                %s
-                
-                Eğer bu isteği siz yapmadıysanız, bu e-postayı yok sayabilirsiniz.
-                
-                Saygılarımızla,
-                MyCompany Destek Ekibi
-                """.formatted(resetLink, (Objects.isNull(tokenExpirationMinutes) ? "" : String.format("Bu bağlantı %d dakika içinde geçersiz olacaktır.", tokenExpirationMinutes)));
+        String body = Language.getPasswordResetMail(language)
+                .formatted(resetLink,
+                        (Objects.isNull(tokenExpirationMinutes) ? "" :
+                                String.format(Language.getLinkExpireText(language), tokenExpirationMinutes)));
 
         sendEmail(to, subject, body);
     }
 
-    public void sendAccountVerificationMail(String to, String token) {
+    public void sendAccountVerificationMail(String to, String token, Language language) {
         String verificationLink = frontendBaseUrl + "/verifyAccount?token=" + token;
-        String subject = "✅ Hesabınızı Doğrulayın";
+        String subject = Language.getAccountVerificationMailSubject(language);
 
         Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_CONTROL, ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_MINUTES);
 
-        String body = """
-                Merhaba,
-                
-                Hesabınızı aktifleştirmek için aşağıdaki bağlantıya tıklayın:
-                %s
-                
-                %s
-                
-                Teşekkürler,
-                MyCompany Ekibi
-                """.formatted(verificationLink, (Objects.isNull(tokenExpirationMinutes) ? "" : String.format("Bu bağlantı %s dakika içinde geçersiz olacaktır.", tokenExpirationMinutes)));
+        String body = Language.getAccountVerificationMail(language)
+                .formatted(verificationLink,
+                        (Objects.isNull(tokenExpirationMinutes) ? "" :
+                                String.format(Language.getLinkExpireText(language), tokenExpirationMinutes)));
 
         sendEmail(to, subject, body);
     }

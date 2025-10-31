@@ -11,18 +11,18 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(PathConstants.API_V1_USER_URL)
 @Slf4j
 @Tag(name = TextConstants.USER, description = TextConstants.CRUD_SERVICES_FOR + TextConstants.USER)
 public class UserController extends BaseController<UserDTO, String> {
+    private final UserService service;
+
     public UserController(UserService service) {
         super(service);
+        this.service = service;
     }
 
     @GetMapping(value = "/find/{username}")
@@ -42,5 +42,16 @@ public class UserController extends BaseController<UserDTO, String> {
     @Override
     public ResponseEntity<ServiceResponse<Boolean>> deleteById(String s) {
         return super.deleteById(s);
+    }
+
+    @PutMapping(value = "/change-language/{language}")
+    @Operation(summary = "Change Language", description = "Update User Language Preference")
+    public ResponseEntity<ServiceResponse<Object>> changeLanguage(@PathVariable String language) {
+        service.changeLanguage(language);
+        return ResponseEntity.ok(
+                ServiceResponse
+                        .builder()
+                        .data(null)
+                        .build());
     }
 }

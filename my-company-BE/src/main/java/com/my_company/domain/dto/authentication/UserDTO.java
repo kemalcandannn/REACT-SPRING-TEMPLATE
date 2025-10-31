@@ -2,6 +2,7 @@ package com.my_company.domain.dto.authentication;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.my_company.constants.enums.AuthProvider;
+import com.my_company.constants.enums.Language;
 import com.my_company.constants.enums.Status;
 import com.my_company.domain.dto.BaseDto;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,6 @@ public class UserDTO extends BaseDto<String> {
     private AuthProvider provider;
     private String providerId;
     private Status status;
+    private Language language;
     private LocalDateTime createdAt;
 }

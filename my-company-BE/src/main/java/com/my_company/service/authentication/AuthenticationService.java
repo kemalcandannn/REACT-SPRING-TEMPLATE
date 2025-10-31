@@ -94,7 +94,7 @@ public class AuthenticationService {
 
         UserTokenDTO userTokenDTO = userTokenMapper.extraxtAccountVerificationUserTokenDTO(userDTO, token, tokenExpirationMinutes);
         userTokenService.saveOrUpdate(userTokenDTO);
-        emailService.sendAccountVerificationMail(userDTO.getUsername(), userTokenDTO.getToken());
+        emailService.sendAccountVerificationMail(userDTO.getUsername(), userTokenDTO.getToken(), userDTO.getLanguage());
 
         return login(
                 LoginRequest
@@ -186,7 +186,7 @@ public class AuthenticationService {
 
         UserTokenDTO userTokenDTO = userTokenMapper.extraxtPasswordResetUserTokenDTO(userDTO, token, tokenExpirationMinutes);
         userTokenService.saveOrUpdate(userTokenDTO);
-        emailService.sendPasswordResetMail(userDTO.getUsername(), token);
+        emailService.sendPasswordResetMail(userDTO.getUsername(), token, userDTO.getLanguage());
     }
 
     public void changePassword(ChangePasswordRequest request) {
@@ -288,7 +288,7 @@ public class AuthenticationService {
 
             userTokenDTO.setExpiresAt(userTokenMapper.getExpiresAt(tokenExpirationMinutes));
             userTokenService.saveOrUpdate(userTokenDTO);
-            emailService.sendPasswordResetMail(user.getUsername(), userTokenDTO.getToken());
+            emailService.sendPasswordResetMail(user.getUsername(), userTokenDTO.getToken(), user.getLanguage());
             throw new InternalServerException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
         }
 
@@ -331,7 +331,7 @@ public class AuthenticationService {
 
             userTokenDTO.setExpiresAt(userTokenMapper.getExpiresAt(tokenExpirationMinutes));
             userTokenService.saveOrUpdate(userTokenDTO);
-            emailService.sendAccountVerificationMail(user.getUsername(), userTokenDTO.getToken());
+            emailService.sendAccountVerificationMail(user.getUsername(), userTokenDTO.getToken(), user.getLanguage());
             throw new InternalServerException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
         }
 
