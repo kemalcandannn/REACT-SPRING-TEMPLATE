@@ -10,6 +10,7 @@ const VerifyAccount: React.FC = () => {
     const navigate = useNavigate();
 
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+    const [message, setMessage] = useState(''); // Servisten gelen mesajı tutacağız
     const [searchParams] = useSearchParams();
     const token = searchParams.get('token'); // Onay linkinde token gönderiliyor
 
@@ -17,10 +18,19 @@ const VerifyAccount: React.FC = () => {
         const verifyAccount = async () => {
             setStatus("loading");
             try {
-                await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_VERIFY_ACCOUNT, { token });
+                const response = await BaseApiAxios.post(
+                    SERVICE_PATHS.API_V1_AUTHENTICATION_VERIFY_ACCOUNT,
+                    { token }
+                );
+
+                // Servisten mesaj varsa kullan, yoksa default mesaj
+                setMessage(response.data?.message || '🎉 Hesabınız başarıyla doğrulandı! Artık giriş yapabilirsiniz.');
                 setStatus("success");
+
                 setTimeout(() => navigate(NAVIGATE_PATHS.LOGIN), 3000);
             } catch (err: any) {
+                // Hata mesajını servis response'dan alabiliriz
+                setMessage(handleApiError(err));
                 setStatus("error");
             }
         };
@@ -28,22 +38,10 @@ const VerifyAccount: React.FC = () => {
         if (token) {
             verifyAccount();
         } else {
+            setMessage('⚠️ Token bulunamadı. Lütfen linki kontrol edin.');
             setStatus('error');
         }
     }, [token]);
-
-    const getMessage = () => {
-        switch (status) {
-            case 'loading':
-                return 'Hesabınız doğrulanıyor, lütfen bekleyin...';
-            case 'success':
-                return '🎉 Hesabınız başarıyla doğrulandı! Artık giriş yapabilirsiniz.';
-            case 'error':
-                return '⚠️ Hesap doğrulama başarısız oldu. Lütfen linki kontrol edin veya destek ile iletişime geçin.';
-            default:
-                return '';
-        }
-    };
 
     return (
         <Container
@@ -67,7 +65,8 @@ const VerifyAccount: React.FC = () => {
             >
                 {status === 'loading' && <CircularProgress sx={{ mb: 3 }} />}
                 <Typography variant="h6" mb={3}>
-                    {getMessage()}
+                    {status === 'loading' ? 'Hesabınız doğrulanıyor, lütfen bekleyin...'
+                        : message ?? '⚠️ Hesap doğrulama başarısız oldu. Lütfen linki kontrol edin veya destek ile iletişime geçin.'}
                 </Typography>
 
                 {status === 'error' && (
