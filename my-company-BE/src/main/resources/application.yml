@@ -48,3 +48,6 @@ app:
   frontend:
     url: http://localhost:8080
 
+
+google:
+  client-id: 565885343897-2vr71634jmikomenpsn96b7fvteq5gqf.apps.googleusercontent.com

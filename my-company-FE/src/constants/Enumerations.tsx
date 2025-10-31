@@ -6,9 +6,7 @@ export type STATUS = typeof STATUS[keyof typeof STATUS];
 
 export const PROVIDER = {
     LOCAL: "LOCAL",
-    GOOGLE: "GOOGLE",
-    FACEBOOK: "FACEBOOK",
-    APPLE: "APPLE"
+    GOOGLE: "GOOGLE"
 } as const;
 export type PROVIDER = typeof PROVIDER[keyof typeof PROVIDER];
 

@@ -51,6 +51,16 @@ public class AuthenticationController {
                         .build());
     }
 
+    @PostMapping(PathConstants.GOOGLE_LOGIN_URL)
+    public ResponseEntity<ServiceResponse<LoginResponse>> googleLogin(@Valid @RequestBody GoogleLoginRequest request) {
+        LoginResponse loginResponse = authenticationService.googleLogin(request);
+        return ResponseEntity.ok(
+                ServiceResponse
+                        .<LoginResponse>builder()
+                        .data(loginResponse)
+                        .build());
+    }
+
     @PostMapping(PathConstants.RESET_PASSWORD_URL)
     @Operation(summary = "Reset Password", description = "Reset Password Operation")
     public ResponseEntity<ServiceResponse<Void>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {

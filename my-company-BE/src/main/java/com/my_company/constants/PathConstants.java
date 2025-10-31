@@ -8,11 +8,13 @@ public class PathConstants {
     public static final String API_V1_AUTHENTICATION_URL = "/api/v1/authentication";
     public static final String API_V1_AUTHENTICATION_ALL_URL = "/api/v1/authentication/**";
     public static final String LOGIN_URL = "/login";
+    public static final String GOOGLE_LOGIN_URL = "/google-login";
     public static final String REGISTER_URL = "/register";
     public static final String VERIFY_ACCOUNT_URL = "/verify-account";
     public static final String SEND_PASSWORD_RESET_LINK_URL = "/send-password-reset-link";
     public static final String RESET_PASSWORD_URL = "/reset-password";
     public static final String API_V1_AUTHENTICATION_LOGIN_URL = API_V1_AUTHENTICATION_URL + LOGIN_URL;
+    public static final String API_V1_AUTHENTICATION_GOOGLE_LOGIN_URL = API_V1_AUTHENTICATION_URL + GOOGLE_LOGIN_URL;
     public static final String API_V1_AUTHENTICATION_REGISTER_URL = API_V1_AUTHENTICATION_URL + REGISTER_URL;
     public static final String API_V1_AUTHENTICATION_VERIFY_ACCOUNT_URL = API_V1_AUTHENTICATION_URL + VERIFY_ACCOUNT_URL;
     public static final String API_V1_AUTHENTICATION_SEND_PASSWORD_RESET_LINK_URL = API_V1_AUTHENTICATION_URL + SEND_PASSWORD_RESET_LINK_URL;

@@ -30,6 +30,7 @@ public class SecurityConfig {
                                 PathConstants.API_V1_AUTHENTICATION_VERIFY_ACCOUNT_URL,
                                 PathConstants.API_V1_AUTHENTICATION_SEND_PASSWORD_RESET_LINK_URL,
                                 PathConstants.API_V1_AUTHENTICATION_RESET_PASSWORD_URL,
+                                PathConstants.API_V1_AUTHENTICATION_GOOGLE_LOGIN_URL,
                                 PathConstants.SWAGGER_UI_ALL_URL,
                                 PathConstants.V3_API_DOCS_ALL_URL
                         ).permitAll()

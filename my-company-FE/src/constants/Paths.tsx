@@ -18,5 +18,8 @@ export const SERVICE_PATHS = {
     API_V1_AUTHENTICATION_CHANGE_PASSWORD: "api/v1/authentication/change-password",
     API_V1_AUTHENTICATION_RESET_PASSWORD: "api/v1/authentication/reset-password",
     API_V1_AUTHENTICATION_USER: "api/v1/authentication/user",
-    API_V1_AUTHENTICATION_VERIFY_ACCOUNT: "api/v1/authentication/verify-account"
+    API_V1_AUTHENTICATION_VERIFY_ACCOUNT: "api/v1/authentication/verify-account",
+    API_V1_AUTHENTICATION_GOOGLE_LOGIN: "api/v1/authentication/google-login"
 }
+
+export const GOOGLE_CLIENT_ID = "565885343897-2vr71634jmikomenpsn96b7fvteq5gqf.apps.googleusercontent.com";

@@ -18,6 +18,7 @@ import BaseApiAxios from '../helpers/BaseApiAxios';
 import { NAVIGATE_PATHS, SERVICE_PATHS } from '../constants/Paths';
 import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
 import { useApiErrorHandler } from '../helpers/ApiErrorHandler';
+import GoogleLoginButton from './GoogleLoginButton';
 
 const Login: React.FC = () => {
     const { fillToken } = useAuthentication();
@@ -168,21 +169,7 @@ const Login: React.FC = () => {
                 {/* Divider */}
                 <Divider sx={{ width: '100%', my: 2 }}>VEYA</Divider>
 
-                {/* Google ile Giriş */}
-                <Button
-                    variant="outlined"
-                    fullWidth
-                    startIcon={<FcGoogle />}
-                    onClick={handleGoogleLogin}
-                    sx={{
-                        py: 1.5,
-                        fontWeight: 'bold',
-                        borderRadius: 2,
-                        textTransform: 'none',
-                    }}
-                >
-                    Google ile Devam Et
-                </Button>
+                <GoogleLoginButton />
 
                 {/* Kaydol Linki */}
                 <Box mt={3} textAlign="center">

@@ -3,7 +3,6 @@ package com.my_company.mapper.authentication;
 
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.entity.authentication.User;
-import com.my_company.domain.request.authentication.RegisterRequest;
 import com.my_company.domain.response.authentication.UserResponse;
 import com.my_company.mapper.BaseMapper;
 import org.mapstruct.Context;
@@ -16,12 +15,16 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper extends BaseMapper<User, UserDTO, String> {
-    @Mapping(target = "password", expression = "java(passwordEncoder.encode(request.getPassword()))")
     @Mapping(target = "passwordValidUntil", expression = "java(passwordExpirationDays == null ? null : getLocalDateTimeNow().plusDays(passwordExpirationDays))")
     @Mapping(target = "provider", constant = "LOCAL")
     @Mapping(target = "status", constant = "PASSIVE")
     @Mapping(target = "createdAt", expression = "java(getLocalDateTimeNow())")
-    UserDTO registerRequestToDTO(RegisterRequest request, @Context PasswordEncoder passwordEncoder, Integer passwordExpirationDays);
+    UserDTO registerRequestToDTO(String username, String password, Integer passwordExpirationDays);
+
+    @Mapping(target = "provider", constant = "GOOGLE")
+    @Mapping(target = "status", constant = "ACTIVE")
+    @Mapping(target = "createdAt", expression = "java(getLocalDateTimeNow())")
+    UserDTO createGoogleUserDTO(String username, String password, String providerId);
 
     @Mapping(target = "password3", expression = "java(user.getPassword2())")
     @Mapping(target = "password2", expression = "java(user.getPassword())")

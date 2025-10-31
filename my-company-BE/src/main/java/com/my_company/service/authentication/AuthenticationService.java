@@ -1,5 +1,9 @@
 package com.my_company.service.authentication;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import com.my_company.cache.ParameterCache;
 import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
@@ -22,13 +26,17 @@ import com.my_company.mapper.authentication.UserMapper;
 import com.my_company.mapper.authentication.UserTokenMapper;
 import com.my_company.service.email.EmailService;
 import com.my_company.utils.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -44,6 +52,9 @@ public class AuthenticationService {
     private final UserMenuService userMenuService;
     private final RoleMenuService roleMenuService;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${google.client-id}")
+    private String googleClientId;
 
     public LoginResponse register(RegisterRequest request) {
         if (Objects.isNull(request)) {
@@ -75,7 +86,7 @@ public class AuthenticationService {
 
         Integer passwordExpirationDays = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.PASSWORD_EXPIRATION_CONTROL, ParameterCode.PASSWORD_EXPIRATION_DAYS);
 
-        userDTO = userMapper.registerRequestToDTO(request, passwordEncoder, passwordExpirationDays);
+        userDTO = userMapper.registerRequestToDTO(request.getUsername(), passwordEncoder.encode(request.getPassword()), passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
         String token = userTokenService.getRandomToken();
@@ -120,6 +131,42 @@ public class AuthenticationService {
         return LoginResponse
                 .builder()
                 .token(JwtUtils.generateToken(request.getUsername()))
+                .build();
+    }
+
+    public LoginResponse googleLogin(@Valid GoogleLoginRequest request) {
+
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+                .setAudience(Collections.singletonList(googleClientId))
+                .build();
+
+        GoogleIdToken idToken;
+        try {
+            idToken = verifier.verify(request.getCredential());
+
+            if (idToken == null) {
+                throw new InternalServerException(ErrorCode.GOOGLE_TOKEN_ERROR, "Invalid ID token");
+            }
+        } catch (GeneralSecurityException | IOException e) {
+            throw new InternalServerException(ErrorCode.GOOGLE_TOKEN_ERROR, "Token invalid");
+        }
+
+        GoogleIdToken.Payload payload = idToken.getPayload();
+        String email = payload.getEmail();
+        String providerId = payload.getSubject();
+
+        UserDTO userDTO = userService.findById(email, false);
+
+        if (userDTO == null) {
+            String password = new PasswordGenerator(8, true, true, true, true).generate();
+            userDTO = userMapper.createGoogleUserDTO(email, passwordEncoder.encode(password), providerId);
+
+            userService.saveOrUpdate(userDTO);
+        }
+
+        return LoginResponse
+                .builder()
+                .token(JwtUtils.generateToken(userDTO.getUsername()))
                 .build();
     }
 
