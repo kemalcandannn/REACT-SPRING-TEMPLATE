@@ -10,14 +10,15 @@ declare global {
 }
 
 const GoogleLoginButton: React.FC = () => {
-    const { fillToken } = useAuthentication();
+    const { fillToken, language } = useAuthentication();
     const handleCredentialResponse = async (credentialResponse: any) => {
         console.log("Encoded JWT ID token: " + credentialResponse.credential);
 
         // BE'ye gönder
         try {
             const response = await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_GOOGLE_LOGIN, {
-                credential: credentialResponse.credential
+                credential: credentialResponse.credential,
+                language: language
             });
 
             fillToken(response?.data?.data?.token);

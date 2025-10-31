@@ -9,7 +9,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ChangePassword from "./pages/ChangePassword";
 import VerifyAccount from "./pages/VerifyAccount";
 import Dashboard from "./pages/Dashboard";
-import LanguageSwitcher from "./contexts/language/LanguageSwitcher";
+import LanguageSwitcher from "./component/LanguageSwitcher";
 import ResetPassword from "./pages/ResetPassword";
 
 const AppRouter: React.FC = () => {

@@ -14,11 +14,11 @@ import {
 import { FcGoogle } from 'react-icons/fc';
 import BaseApiAxios from '../helpers/BaseApiAxios';
 import { SERVICE_PATHS } from '../constants/Paths';
-import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
 import { useApiErrorHandler } from '../helpers/ApiErrorHandler';
+import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
 
 const Register: React.FC = () => {
-    const { fillToken } = useAuthentication();
+    const { language } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
 
     const [email, setEmail] = useState('');
@@ -60,10 +60,11 @@ const Register: React.FC = () => {
 
         setLoading(true);
         try {
-            const response = await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_REGISTER, {
+            await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_REGISTER, {
                 username: email,
                 password: password,
-                confirmPassword: confirmPassword
+                confirmPassword: confirmPassword,
+                language: language
             });
 
             // Token geri dönerse fillToken ile session açabilirsiniz

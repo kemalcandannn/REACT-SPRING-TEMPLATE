@@ -12,7 +12,6 @@ import {
     InputAdornment,
     Alert,
 } from '@mui/material';
-import { FcGoogle } from 'react-icons/fc';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import BaseApiAxios from '../helpers/BaseApiAxios';
 import { NAVIGATE_PATHS, SERVICE_PATHS } from '../constants/Paths';
@@ -70,10 +69,6 @@ const Login: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleGoogleLogin = () => {
-        console.log('Login with Google');
     };
 
     return (

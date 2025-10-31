@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Container, Box, Paper, Button, Grid, Select, type SelectChangeEvent, MenuItem } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
-import { STATUS } from '../constants/Enumerations';
+import { LANGUAGES, type LANGUAGE, STATUSES } from '../constants/Enumerations';
 import ChangePassword from './ChangePassword';
 import { NAVIGATE_PATHS } from '../constants/Paths';
-import { useLanguage } from '../contexts/language/LanguageContext';
-import { LANGUGAGES, type Language } from '../contexts/language/LanguageSwitcher';
-import { ChangeCircle, ChangeHistory } from '@mui/icons-material';
+import { ChangeCircle } from '@mui/icons-material';
 
 const Dashboard: React.FC = () => {
-    const { sessionUser } = useAuthentication();
-    const { language, setLanguage } = useLanguage();
+    const { sessionUser, language, setLanguage } = useAuthentication();
     const [clickedChangePassword, setClickedChangePassword] = useState<boolean>(false);
 
     return (
@@ -29,7 +26,7 @@ const Dashboard: React.FC = () => {
                         <Select
                             value={language}
                             onChange={(event: SelectChangeEvent<string>) => {
-                                setLanguage(event.target.value as Language);
+                                setLanguage(event.target.value as LANGUAGE);
                             }}
                             size="small"
                             variant="outlined"
@@ -47,7 +44,7 @@ const Dashboard: React.FC = () => {
                                 minWidth: 80,
                             }}
                         >
-                            {LANGUGAGES.map((lang) => (
+                            {Object.values(LANGUAGES).map((lang) => (
                                 <MenuItem key={lang} value={lang}>
                                     {lang.toUpperCase()}
                                 </MenuItem>
@@ -90,7 +87,7 @@ const Dashboard: React.FC = () => {
 
             {/* Content */}
             <Container sx={{ flex: 1, mt: 4, mb: 4 }}>
-                {sessionUser?.status == STATUS.ACTIVE &&
+                {sessionUser?.status == STATUSES.ACTIVE &&
                     (clickedChangePassword ?
                         <ChangePassword setClickedChangePassword={setClickedChangePassword} />
                         :

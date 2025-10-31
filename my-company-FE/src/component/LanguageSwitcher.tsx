@@ -1,13 +1,10 @@
 import React from "react";
-import { useLanguage } from "./LanguageContext";
 import { Button, Stack, Box } from "@mui/material";
-
-//export const LANGUGAGES = ["tr", "en", "de", "ru", "ar"] as const;
-export const LANGUGAGES = ["tr", "en"] as const;
-export type Language = typeof LANGUGAGES[number];
+import { useAuthentication } from "../contexts/authentication/AuthenticationContext";
+import { LANGUAGES } from "../constants/Enumerations";
 
 const LanguageSwitcher: React.FC = () => {
-    const { setLanguage } = useLanguage();
+    const { setLanguage } = useAuthentication();
 
     return (
         <Box
@@ -19,7 +16,7 @@ const LanguageSwitcher: React.FC = () => {
             }}
         >
             <Stack direction="row" spacing={1}>
-                {LANGUGAGES.map((lang) => (
+                {Object.values(LANGUAGES).map((lang) => (
                     <Button
                         key={lang}
                         variant="outlined"

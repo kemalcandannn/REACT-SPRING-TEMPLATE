@@ -48,7 +48,7 @@ public class User implements BaseEntity<String> {
 
     @Column(name = "LANGUAGE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Language language;
+    private Language language = Language.EN;
 
     @Column(name = "CREATED_AT", updatable = false, insertable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

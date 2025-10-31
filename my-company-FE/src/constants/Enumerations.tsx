@@ -1,17 +1,21 @@
-export const STATUS = {
+export const STATUSES = {
     ACTIVE: "ACTIVE",
     PASSIVE: "PASSIVE",
 } as const;
-export type STATUS = typeof STATUS[keyof typeof STATUS];
+export type STATUS = typeof STATUSES[keyof typeof STATUSES];
 
-export const PROVIDER = {
+//export const LANGUAGES = ["tr", "en", "de", "ru", "ar"] as const;
+export const LANGUAGES = { TR: "tr", EN: "en" } as const;
+export type LANGUAGE = typeof LANGUAGES[keyof typeof LANGUAGES];
+
+export const PROVIDERS = {
     LOCAL: "LOCAL",
     GOOGLE: "GOOGLE"
 } as const;
-export type PROVIDER = typeof PROVIDER[keyof typeof PROVIDER];
+export type PROVIDER = typeof PROVIDERS[keyof typeof PROVIDERS];
 
 
-export const ERROR_CODE = {
+export const ERROR_CODES = {
     REQUIRED_FIELD: "REQUIRED_FIELD",
     TOKEN_EXPIRED: "TOKEN_EXPIRED",
     RESET_PASSWORD_TOKEN_EXPIRED: "RESET_PASSWORD_TOKEN_EXPIRED",
@@ -32,4 +36,4 @@ export const ERROR_CODE = {
     USED_BY_THE_SYSTEM: "USED_BY_THE_SYSTEM",
     RECORD_WITH_ID_NOT_FOUND: "RECORD_WITH_ID_NOT_FOUND"
 } as const;
-export type ERROR_CODE = typeof ERROR_CODE[keyof typeof ERROR_CODE];
+export type ERROR_CODE = typeof ERROR_CODES[keyof typeof ERROR_CODES];

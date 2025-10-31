@@ -1,6 +1,7 @@
 package com.my_company.domain.response.authentication;
 
 import com.my_company.constants.enums.AuthProvider;
+import com.my_company.constants.enums.Language;
 import com.my_company.constants.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class UserResponse {
     private AuthProvider provider;
     private String providerId;
     private Status status;
+    private Language language;
     private LocalDateTime createdAt;
     private List<String> roleList;
     private List<String> menuList;
