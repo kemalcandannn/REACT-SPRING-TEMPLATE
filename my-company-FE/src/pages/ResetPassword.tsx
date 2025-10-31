@@ -29,10 +29,10 @@ const ResetPassword: React.FC = () => {
 
     const validate = () => {
         const newErrors: { newPassword?: string; confirmPassword?: string } = {};
-        if (!newPassword) newErrors.newPassword = 'Yeni parola boş olamaz';
-        if (!confirmPassword) newErrors.confirmPassword = 'Parola doğrulama boş olamaz';
+        if (!newPassword) newErrors.newPassword = 'New Password is a required field.';
+        if (!confirmPassword) newErrors.confirmPassword = 'Confirm Password is a required field.';
         else if (confirmPassword !== newPassword)
-            newErrors.confirmPassword = 'Parolalar eşleşmiyor';
+            newErrors.confirmPassword = 'Passwords don\'t match';
 
         setError(Object.values(newErrors).join(', '));
         return Object.keys(newErrors).length === 0;
@@ -53,7 +53,7 @@ const ResetPassword: React.FC = () => {
                 confirmPassword: confirmPassword,
             });
 
-            setSuccess('Parolanız başarıyla değiştirildi!');
+            setSuccess('Your password successfully changed!');
             setNewPassword('');
             setConfirmPassword('');
 
@@ -87,10 +87,10 @@ const ResetPassword: React.FC = () => {
             >
                 <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
-                        Parolanızı Sıfırlayın
+                        Reset Password
                     </Typography>
                     <Typography variant="body2" color="text.secondary" align="center">
-                        Lütfen yeni parolanızı girin ve doğrulayın
+                        Please enter and confirm your new password.
                     </Typography>
                 </Box>
 
@@ -98,7 +98,7 @@ const ResetPassword: React.FC = () => {
                 {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
 
                 <TextField
-                    label="Yeni Parola"
+                    label="New Password"
                     type="password"
                     fullWidth
                     margin="normal"
@@ -108,7 +108,7 @@ const ResetPassword: React.FC = () => {
                 />
 
                 <TextField
-                    label="Parola Doğrulama"
+                    label="Confirm Password"
                     type="password"
                     fullWidth
                     margin="normal"
@@ -130,9 +130,9 @@ const ResetPassword: React.FC = () => {
 
                 <Box mt={3} textAlign="center">
                     <Typography variant="body2">
-                        Hatırladınız mı?{' '}
+                        Did you remember?{' '}
                         <Link href={NAVIGATE_PATHS.LOGIN} underline="hover">
-                            Giriş Yap
+                            Login
                         </Link>
                     </Typography>
                 </Box>

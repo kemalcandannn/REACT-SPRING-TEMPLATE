@@ -33,12 +33,12 @@ const ForgotPassword: React.FC = () => {
         setSuccess('');
 
         if (!email) {
-            setError('E-posta boş olamaz.');
+            setError('Email is a required field.');
             return;
         }
 
         if (!validateEmail(email)) {
-            setError('Geçerli bir e-posta adresi girin.');
+            setError('Please enter a valid email address.');
             return;
         }
 
@@ -50,7 +50,7 @@ const ForgotPassword: React.FC = () => {
                 { username: email }
             );
 
-            setSuccess('Parola sıfırlama linki e-postanıza gönderildi!');
+            setSuccess('The password reset link has been sent to your email!');
             setEmail('');
             setTimeout(() => navigate(NAVIGATE_PATHS.LOGIN), 1500);
         } catch (err: any) {
@@ -81,10 +81,10 @@ const ForgotPassword: React.FC = () => {
             >
                 <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
-                        Parolanızı mı unuttunuz?
+                        Forgot your password?
                     </Typography>
                     <Typography variant="body2" color="text.secondary" align="center">
-                        E-postanızı girin, size parola sıfırlama linki göndereceğiz.
+                        Enter your email, and we will send you a password reset link.
                     </Typography>
                 </Box>
 
@@ -100,7 +100,7 @@ const ForgotPassword: React.FC = () => {
                 )}
 
                 <TextField
-                    label="E-Posta"
+                    label="Email"
                     type="email"
                     fullWidth
                     margin="normal"
@@ -125,15 +125,15 @@ const ForgotPassword: React.FC = () => {
                     {loading ? (
                         <CircularProgress size={24} color="inherit" />
                     ) : (
-                        'Gönder'
+                        'Send'
                     )}
                 </Button>
 
                 <Box mt={3} textAlign="center">
                     <Typography variant="body2">
-                        Hatırladınız mı?{' '}
+                        Remembered it?{' '}
                         <Link href={NAVIGATE_PATHS.LOGIN} underline="hover">
-                            Giriş Yap
+                            Login
                         </Link>
                     </Typography>
                 </Box>

@@ -17,7 +17,7 @@ import BaseApiAxios from '../helpers/BaseApiAxios';
 import { NAVIGATE_PATHS, SERVICE_PATHS } from '../constants/Paths';
 import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
 import { useApiErrorHandler } from '../helpers/ApiErrorHandler';
-import GoogleLoginButton from './GoogleLoginButton';
+import GoogleLoginButton from '../constants/components/GoogleLoginButton';
 
 const Login: React.FC = () => {
     const { fillToken } = useAuthentication();
@@ -34,13 +34,13 @@ const Login: React.FC = () => {
         const newErrors: { email?: string; password?: string } = {};
 
         if (!email) {
-            newErrors.email = 'E-Posta boş olamaz';
+            newErrors.email = 'Email is a required field.';
         } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-            newErrors.email = 'Geçerli bir e-posta girin';
+            newErrors.email = 'Please enter a valid email address.';
         }
 
         if (!password) {
-            newErrors.password = 'Parola boş olamaz';
+            newErrors.password = 'Password is a required field.';
         }
 
         setErrors(newErrors);
@@ -92,10 +92,10 @@ const Login: React.FC = () => {
             >
                 <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
-                        Giriş Yap
+                        Login
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Hesabınıza giriş yapın veya Google ile devam edin
+                        Sign in to your account or continue with Google.
                     </Typography>
                 </Box>
 
@@ -108,7 +108,7 @@ const Login: React.FC = () => {
 
                 {/* E-Posta */}
                 <TextField
-                    label="E-Posta"
+                    label="Email"
                     type="email"
                     fullWidth
                     margin="normal"
@@ -120,7 +120,7 @@ const Login: React.FC = () => {
 
                 {/* Parola */}
                 <TextField
-                    label="Parola"
+                    label="Password"
                     type={showPassword ? 'text' : 'password'}
                     fullWidth
                     margin="normal"
@@ -145,7 +145,7 @@ const Login: React.FC = () => {
                 {/* Parolanızı mı unuttunuz */}
                 <Box width="100%" textAlign="right" mt={0.5} mb={2}>
                     <Link href={NAVIGATE_PATHS.FORGOT_PASSWORD} underline="hover" variant="body2">
-                        Parolanızı mı unuttunuz?
+                        Forgot your password?
                     </Link>
                 </Box>
 
@@ -158,20 +158,19 @@ const Login: React.FC = () => {
                     disabled={loading}
                     sx={{ py: 1.5, mb: 2, fontWeight: 'bold', borderRadius: 2 }}
                 >
-                    {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+                    {loading ? 'Logging in...' : 'Login'}
                 </Button>
 
                 {/* Divider */}
-                <Divider sx={{ width: '100%', my: 2 }}>VEYA</Divider>
+                <Divider sx={{ width: '100%', textTransform: "uppercase", my: 2 }}>or</Divider>
 
                 <GoogleLoginButton />
 
-                {/* Kaydol Linki */}
                 <Box mt={3} textAlign="center">
                     <Typography variant="body2">
-                        Hesabın yok mu?{' '}
+                        Don't have an account?{' '}
                         <Link href={NAVIGATE_PATHS.REGISTER} underline="hover">
-                            Kaydol
+                            Register
                         </Link>
                     </Typography>
                 </Box>

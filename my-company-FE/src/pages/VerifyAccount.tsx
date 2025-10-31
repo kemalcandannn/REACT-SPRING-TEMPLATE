@@ -24,7 +24,7 @@ const VerifyAccount: React.FC = () => {
                 );
 
                 // Servisten mesaj varsa kullan, yoksa default mesaj
-                setMessage(response.data?.message || '🎉 Hesabınız başarıyla doğrulandı! Artık giriş yapabilirsiniz.');
+                setMessage(response.data?.message || '🎉 Your account has been successfully verified! You can now log in.');
                 setStatus("success");
 
                 setTimeout(() => navigate(NAVIGATE_PATHS.LOGIN), 3000);
@@ -38,7 +38,7 @@ const VerifyAccount: React.FC = () => {
         if (token) {
             verifyAccount();
         } else {
-            setMessage('⚠️ Token bulunamadı. Lütfen linki kontrol edin.');
+            setMessage('⚠️ Token not found. Please check the link.');
             setStatus('error');
         }
     }, [token]);
@@ -65,8 +65,8 @@ const VerifyAccount: React.FC = () => {
             >
                 {status === 'loading' && <CircularProgress sx={{ mb: 3 }} />}
                 <Typography variant="h6" mb={3}>
-                    {status === 'loading' ? 'Hesabınız doğrulanıyor, lütfen bekleyin...'
-                        : message ?? '⚠️ Hesap doğrulama başarısız oldu. Lütfen linki kontrol edin veya destek ile iletişime geçin.'}
+                    {status === 'loading' ? 'Your account is being verified, please wait...'
+                        : message ?? '⚠️ Account verification failed. Please check the link or contact support.'}
                 </Typography>
 
                 {status === 'error' && (
@@ -74,10 +74,10 @@ const VerifyAccount: React.FC = () => {
                         variant="outlined"
                         color="secondary"
                         component={RouterLink}
-                        to="/"
+                        to={NAVIGATE_PATHS.LOGIN}
                         sx={{ mt: 2 }}
                     >
-                        Ana Sayfaya Dön
+                        Return to Login Page
                     </Button>
                 )}
             </Paper>

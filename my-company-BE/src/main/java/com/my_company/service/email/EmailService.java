@@ -1,7 +1,6 @@
 package com.my_company.service.email;
 
 import com.my_company.cache.ParameterCache;
-import com.my_company.constants.enums.Language;
 import com.my_company.constants.enums.ParameterCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,30 +22,52 @@ public class EmailService {
     @Value("${app.frontend.url}")
     private String frontendBaseUrl;
 
-    public void sendPasswordResetMail(String to, String token, Language language) {
+    public void sendPasswordResetMail(String to, String token) {
         String resetLink = frontendBaseUrl + "/resetPassword?token=" + token;
-        String subject = Language.getPasswordResetMailSubject(language);
+        String subject = "🔐 Password Reset Request";
 
         Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_CONTROL, ParameterCode.RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES);
 
-        String body = Language.getPasswordResetMail(language)
+        String body = """
+                Hello,
+                
+                Click the link below to reset your password:
+                %s
+                
+                %s
+                
+                If you did not request this, you can ignore this email.
+                
+                Best regards,
+                MyCompany Support Team
+                """
                 .formatted(resetLink,
                         (Objects.isNull(tokenExpirationMinutes) ? "" :
-                                String.format(Language.getLinkExpireText(language), tokenExpirationMinutes)));
+                                String.format("This link will expire in %d minutes.", tokenExpirationMinutes)));
 
         sendEmail(to, subject, body);
     }
 
-    public void sendAccountVerificationMail(String to, String token, Language language) {
+    public void sendAccountVerificationMail(String to, String token) {
         String verificationLink = frontendBaseUrl + "/verifyAccount?token=" + token;
-        String subject = Language.getAccountVerificationMailSubject(language);
+        String subject = "🔐 Verify Your Account";
 
         Integer tokenExpirationMinutes = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_CONTROL, ParameterCode.VERIFY_ACCOUNT_TOKEN_EXPIRATION_MINUTES);
 
-        String body = Language.getAccountVerificationMail(language)
+        String body = """
+                Hello,
+                
+                Click the link below to activate your account:
+                %s
+                
+                %s
+                
+                Thank you,
+                MyCompany Team
+                """
                 .formatted(verificationLink,
                         (Objects.isNull(tokenExpirationMinutes) ? "" :
-                                String.format(Language.getLinkExpireText(language), tokenExpirationMinutes)));
+                                String.format("This link will expire in %d minutes.", tokenExpirationMinutes)));
 
         sendEmail(to, subject, body);
     }

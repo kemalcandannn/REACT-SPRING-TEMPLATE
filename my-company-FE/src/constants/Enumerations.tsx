@@ -4,10 +4,6 @@ export const STATUSES = {
 } as const;
 export type STATUS = typeof STATUSES[keyof typeof STATUSES];
 
-//export const LANGUAGES = ["tr", "en", "de", "ru", "ar"] as const;
-export const LANGUAGES = { TR: "tr", EN: "en" } as const;
-export type LANGUAGE = typeof LANGUAGES[keyof typeof LANGUAGES];
-
 export const PROVIDERS = {
     LOCAL: "LOCAL",
     GOOGLE: "GOOGLE"

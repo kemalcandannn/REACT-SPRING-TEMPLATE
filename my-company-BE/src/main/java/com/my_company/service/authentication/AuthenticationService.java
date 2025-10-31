@@ -7,7 +7,10 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.my_company.cache.ParameterCache;
 import com.my_company.constants.ApplicationConstants;
 import com.my_company.constants.TextConstants;
-import com.my_company.constants.enums.*;
+import com.my_company.constants.enums.ErrorCode;
+import com.my_company.constants.enums.ParameterCode;
+import com.my_company.constants.enums.Status;
+import com.my_company.constants.enums.TokenStatus;
 import com.my_company.domain.dto.authentication.RoleMenuDTO;
 import com.my_company.domain.dto.authentication.UserDTO;
 import com.my_company.domain.dto.authentication.UserMenuDTO;
@@ -83,7 +86,7 @@ public class AuthenticationService {
 
         Integer passwordExpirationDays = ParameterCache.getParamValueAsIntegerWithControl(ParameterCode.PASSWORD_EXPIRATION_CONTROL, ParameterCode.PASSWORD_EXPIRATION_DAYS);
 
-        userDTO = userMapper.registerRequestToDTO(request.getUsername(), passwordEncoder.encode(request.getPassword()), passwordExpirationDays, Language.getLanguage(request.getLanguage()));
+        userDTO = userMapper.registerRequestToDTO(request.getUsername(), passwordEncoder.encode(request.getPassword()), passwordExpirationDays);
         userDTO = userService.saveOrUpdate(userDTO);
 
         String token = userTokenService.getRandomToken();
@@ -91,7 +94,7 @@ public class AuthenticationService {
 
         UserTokenDTO userTokenDTO = userTokenMapper.extraxtAccountVerificationUserTokenDTO(userDTO, token, tokenExpirationMinutes);
         userTokenService.saveOrUpdate(userTokenDTO);
-        emailService.sendAccountVerificationMail(userDTO.getUsername(), userTokenDTO.getToken(), userDTO.getLanguage());
+        emailService.sendAccountVerificationMail(userDTO.getUsername(), userTokenDTO.getToken());
 
         return login(
                 LoginRequest
@@ -156,7 +159,7 @@ public class AuthenticationService {
 
         if (userDTO == null) {
             String password = new PasswordGenerator(8, true, true, true, true).generate();
-            userDTO = userMapper.createGoogleUserDTO(email, passwordEncoder.encode(password), providerId, Language.getLanguage(request.getLanguage()));
+            userDTO = userMapper.createGoogleUserDTO(email, passwordEncoder.encode(password), providerId);
 
             userService.saveOrUpdate(userDTO);
         }
@@ -183,7 +186,7 @@ public class AuthenticationService {
 
         UserTokenDTO userTokenDTO = userTokenMapper.extraxtPasswordResetUserTokenDTO(userDTO, token, tokenExpirationMinutes);
         userTokenService.saveOrUpdate(userTokenDTO);
-        emailService.sendPasswordResetMail(userDTO.getUsername(), token, userDTO.getLanguage());
+        emailService.sendPasswordResetMail(userDTO.getUsername(), token);
     }
 
     public void changePassword(ChangePasswordRequest request) {
@@ -285,7 +288,7 @@ public class AuthenticationService {
 
             userTokenDTO.setExpiresAt(userTokenMapper.getExpiresAt(tokenExpirationMinutes));
             userTokenService.saveOrUpdate(userTokenDTO);
-            emailService.sendPasswordResetMail(user.getUsername(), userTokenDTO.getToken(), user.getLanguage());
+            emailService.sendPasswordResetMail(user.getUsername(), userTokenDTO.getToken());
             throw new InternalServerException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
         }
 
@@ -328,7 +331,7 @@ public class AuthenticationService {
 
             userTokenDTO.setExpiresAt(userTokenMapper.getExpiresAt(tokenExpirationMinutes));
             userTokenService.saveOrUpdate(userTokenDTO);
-            emailService.sendAccountVerificationMail(user.getUsername(), userTokenDTO.getToken(), user.getLanguage());
+            emailService.sendAccountVerificationMail(user.getUsername(), userTokenDTO.getToken());
             throw new InternalServerException(ErrorCode.RESET_PASSWORD_TOKEN_EXPIRED, "Reset Password Token has expired.");
         }
 

@@ -63,7 +63,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
             setNewPassword('');
             setConfirmPassword('');
             initSessionUser();
-            setSuccess('Parolanız başarıyla değiştirildi!');
+            setSuccess('Your password has been successfully changed!');
             setTimeout(() => setSuccess(''), 3000);
 
             setTimeout(() => {
@@ -102,10 +102,10 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
             >
                 <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
-                        Parola Değiştir
+                        Change Password
                     </Typography>
                     <Typography variant="body2" color="text.secondary" align="center">
-                        Eski parolanızı girin ve yeni parolanızı oluşturun
+                        Enter your old password and create a new password.
                     </Typography>
                 </Box>
 
@@ -122,7 +122,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
                 )}
 
                 <TextField
-                    label="Eski Parola"
+                    label="Old Password"
                     type="password"
                     fullWidth
                     margin="normal"
@@ -134,7 +134,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
                 />
 
                 <TextField
-                    label="Yeni Parola"
+                    label="New Password"
                     type="password"
                     fullWidth
                     margin="normal"
@@ -146,7 +146,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
                 />
 
                 <TextField
-                    label="Parola Doğrulama"
+                    label="Confirm Password"
                     type="password"
                     fullWidth
                     margin="normal"
@@ -171,7 +171,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
                         textTransform: 'none',
                     }}
                 >
-                    {loading ? <CircularProgress size={24} color="inherit" /> : 'Parolayı Değiştir'}
+                    {loading ? <CircularProgress size={24} color="inherit" /> : 'Change Password'}
                 </Button>
 
                 <Box width="100%" textAlign="right" mt={1}>
@@ -185,11 +185,11 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
                                 if (!loading) setClickedChangePassword((prev) => !prev);
                             }}
                         >
-                            Geri
+                            Back
                         </Link>
                     ) : (
                         <Link href={NAVIGATE_PATHS.LOGOUT} underline="hover" variant="body2">
-                            Çıkış
+                            Logout
                         </Link>
                     )}
                 </Box>

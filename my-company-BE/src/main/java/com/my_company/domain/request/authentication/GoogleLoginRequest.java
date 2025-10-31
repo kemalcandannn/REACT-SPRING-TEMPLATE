@@ -11,5 +11,4 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 public class GoogleLoginRequest {
     private String credential;
-    private String language;
 }

@@ -1,7 +1,7 @@
 import React from "react";
-import BaseApiAxios from "../helpers/BaseApiAxios";
-import { GOOGLE_CLIENT_ID, SERVICE_PATHS } from "../constants/Paths";
-import { useAuthentication } from "../contexts/authentication/AuthenticationContext";
+import BaseApiAxios from "../../helpers/BaseApiAxios";
+import { GOOGLE_CLIENT_ID, SERVICE_PATHS } from "../Paths";
+import { useAuthentication } from "../../contexts/authentication/AuthenticationContext";
 
 declare global {
     interface Window {
@@ -10,15 +10,14 @@ declare global {
 }
 
 const GoogleLoginButton: React.FC = () => {
-    const { fillToken, language } = useAuthentication();
+    const { fillToken } = useAuthentication();
     const handleCredentialResponse = async (credentialResponse: any) => {
         console.log("Encoded JWT ID token: " + credentialResponse.credential);
 
         // BE'ye gönder
         try {
             const response = await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_GOOGLE_LOGIN, {
-                credential: credentialResponse.credential,
-                language: language
+                credential: credentialResponse.credential
             });
 
             fillToken(response?.data?.data?.token);
@@ -36,7 +35,7 @@ const GoogleLoginButton: React.FC = () => {
 
         (window as any).google.accounts.id.renderButton(
             document.getElementById("googleSignIn")!,
-            { theme: "outline", size: "large" } // opsiyonel stil
+            { theme: "outline", size: "large", text: "continue_with" } // opsiyonel stil
         );
     }, []);
 

@@ -9,7 +9,6 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ChangePassword from "./pages/ChangePassword";
 import VerifyAccount from "./pages/VerifyAccount";
 import Dashboard from "./pages/Dashboard";
-import LanguageSwitcher from "./component/LanguageSwitcher";
 import ResetPassword from "./pages/ResetPassword";
 
 const AppRouter: React.FC = () => {
@@ -17,8 +16,6 @@ const AppRouter: React.FC = () => {
 
     return (
         <Router>
-            {jwtToken == null && <LanguageSwitcher />}
-
             <Routes>
                 <Route
                     path={NAVIGATE_PATHS.LOGIN}

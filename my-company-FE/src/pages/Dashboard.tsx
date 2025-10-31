@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Container, Box, Paper, Button, Grid, Select, type SelectChangeEvent, MenuItem } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
-import { LANGUAGES, type LANGUAGE, STATUSES } from '../constants/Enumerations';
+import { STATUSES } from '../constants/Enumerations';
 import ChangePassword from './ChangePassword';
 import { NAVIGATE_PATHS } from '../constants/Paths';
 import { ChangeCircle } from '@mui/icons-material';
+import { PROJECT_NAME } from '../constants/Constants';
 
 const Dashboard: React.FC = () => {
-    const { sessionUser, language, setLanguage } = useAuthentication();
+    const { sessionUser } = useAuthentication();
     const [clickedChangePassword, setClickedChangePassword] = useState<boolean>(false);
 
     return (
@@ -18,39 +19,11 @@ const Dashboard: React.FC = () => {
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     {/* Sol taraf: Logo / Başlık */}
                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                        My Company
+                        {PROJECT_NAME}
                     </Typography>
 
                     {/* Sağ taraf: Kullanıcı adı + Dil Seçici + Çıkış */}
                     <Box display="flex" alignItems="center" gap={1}>
-                        <Select
-                            value={language}
-                            onChange={(event: SelectChangeEvent<string>) => {
-                                setLanguage(event.target.value as LANGUAGE);
-                            }}
-                            size="small"
-                            variant="outlined"
-                            sx={{
-                                color: 'white',
-                                borderColor: 'white',
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: 'rgba(255,255,255,0.3)',
-                                },
-                                '& .MuiSvgIcon-root': { color: 'white' },
-                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: 'white',
-                                },
-                                mr: 1,
-                                minWidth: 80,
-                            }}
-                        >
-                            {Object.values(LANGUAGES).map((lang) => (
-                                <MenuItem key={lang} value={lang}>
-                                    {lang.toUpperCase()}
-                                </MenuItem>
-                            ))}
-                        </Select>
-
                         <Typography variant="body1" sx={{ mr: 1 }}>
                             {sessionUser?.username}
                         </Typography>
@@ -66,7 +39,7 @@ const Dashboard: React.FC = () => {
                             }}
                             onClick={() => setClickedChangePassword(true)}
                         >
-                            Parola Değiştir
+                            Change Password
                         </Button>
 
                         <Button
@@ -79,7 +52,7 @@ const Dashboard: React.FC = () => {
                                 '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' },
                             }}
                         >
-                            Çıkış
+                            Logout
                         </Button>
                     </Box>
                 </Toolbar>
@@ -133,7 +106,7 @@ const Dashboard: React.FC = () => {
                 }}
             >
                 <Typography variant="body2" color="text.secondary">
-                    © 2025 My Company. Tüm hakları saklıdır.
+                    © {new Date().getFullYear().toString()} {PROJECT_NAME}. All rights reserved.
                 </Typography>
             </Box>
         </Box>

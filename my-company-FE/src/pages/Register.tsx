@@ -11,14 +11,12 @@ import {
     Alert,
     CircularProgress,
 } from '@mui/material';
-import { FcGoogle } from 'react-icons/fc';
 import BaseApiAxios from '../helpers/BaseApiAxios';
 import { SERVICE_PATHS } from '../constants/Paths';
 import { useApiErrorHandler } from '../helpers/ApiErrorHandler';
-import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
+import GoogleLoginButton from '../constants/components/GoogleLoginButton';
 
 const Register: React.FC = () => {
-    const { language } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
 
     const [email, setEmail] = useState('');
@@ -63,8 +61,7 @@ const Register: React.FC = () => {
             await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_REGISTER, {
                 username: email,
                 password: password,
-                confirmPassword: confirmPassword,
-                language: language
+                confirmPassword: confirmPassword
             });
 
             // Token geri dönerse fillToken ile session açabilirsiniz
@@ -91,10 +88,10 @@ const Register: React.FC = () => {
             <Paper elevation={6} sx={{ p: 4, width: '100%', maxWidth: 400, borderRadius: 3 }}>
                 <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
-                        Kaydol
+                        Register
                     </Typography>
                     <Typography variant="body2" color="text.secondary" align="center">
-                        Hesap oluşturmak için bilgilerinizi girin
+                        Enter your information to create an account.
                     </Typography>
                 </Box>
 
@@ -102,7 +99,7 @@ const Register: React.FC = () => {
                 {successMessage && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
 
                 <TextField
-                    label="E-Posta"
+                    label="Email"
                     type="email"
                     fullWidth
                     margin="normal"
@@ -113,7 +110,7 @@ const Register: React.FC = () => {
                 />
 
                 <TextField
-                    label="Parola"
+                    label="Password"
                     type="password"
                     fullWidth
                     margin="normal"
@@ -124,7 +121,7 @@ const Register: React.FC = () => {
                 />
 
                 <TextField
-                    label="Parola Doğrulama"
+                    label="Confirm Password"
                     type="password"
                     fullWidth
                     margin="normal"
@@ -142,26 +139,18 @@ const Register: React.FC = () => {
                     sx={{ py: 1.5, mt: 2, fontWeight: 'bold', borderRadius: 2 }}
                     disabled={loading}
                 >
-                    {loading ? <CircularProgress size={24} /> : 'Kaydol'}
+                    {loading ? <CircularProgress size={24} /> : 'Register'}
                 </Button>
 
-                <Divider sx={{ width: '100%', my: 2 }}>VEYA</Divider>
+                <Divider sx={{ width: '100%', textTransform: "uppercase", my: 2 }}>or</Divider>
 
-                <Button
-                    variant="outlined"
-                    fullWidth
-                    startIcon={<FcGoogle />}
-                    onClick={handleGoogleRegister}
-                    sx={{ py: 1.5, fontWeight: 'bold', borderRadius: 2, textTransform: 'none' }}
-                >
-                    Google ile Devam Et
-                </Button>
+                <GoogleLoginButton />
 
                 <Box mt={3} textAlign="center">
                     <Typography variant="body2">
-                        Zaten hesabınız var mı?{' '}
+                        Already have an account?{' '}
                         <Link href="/login" underline="hover">
-                            Giriş Yap
+                            Login
                         </Link>
                     </Typography>
                 </Box>
