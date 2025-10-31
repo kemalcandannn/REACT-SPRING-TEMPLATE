@@ -1,4 +1,4 @@
-import { ERROR_CODE } from "../constants/ErrorCodes";
+import { ERROR_CODE } from "../constants/Enumerations";
 import { PARAMETER_CODE } from "../constants/ParameterCodes";
 import { useAuthentication } from "../contexts/authentication/AuthenticationContext";
 
@@ -29,6 +29,8 @@ export const useApiErrorHandler = () => {
                     ? "[%s] zorunlu alandır, lütfen kontrol ediniz.".replace("%s", value)
                     : "Zorunlu alanları kontrol ediniz.";
             }
+            case ERROR_CODE.PASSIVE_USER:
+                return "Kullanıcı henüz aktifleştirilmemiştir, gelen kutunuzu kontrol ediniz.";
             case ERROR_CODE.INCORRECT_USERNAME_OR_PASSWORD:
                 return "Kullanıcı adı veya Parola Hatalı, girdiğiniz bilgileri kontrol ediniz.";
             case ERROR_CODE.INCORRECT_OLD_PASSWORD:

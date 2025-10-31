@@ -9,6 +9,7 @@ import {
     Link,
     Paper,
     Alert,
+    CircularProgress,
 } from '@mui/material';
 import { FcGoogle } from 'react-icons/fc';
 import BaseApiAxios from '../helpers/BaseApiAxios';
@@ -25,7 +26,8 @@ const Register: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
     const [loading, setLoading] = useState(false);
-    const [apiError, setApiError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const validate = () => {
         const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
@@ -51,23 +53,26 @@ const Register: React.FC = () => {
     };
 
     const handleRegister = async () => {
-        setApiError('');
+        setSuccessMessage('');
+        setErrorMessage('');
+
         if (!validate()) return;
 
         setLoading(true);
-
         try {
             const response = await BaseApiAxios.post(SERVICE_PATHS.API_V1_AUTHENTICATION_REGISTER, {
                 username: email,
-                password,
-                confirmPassword,
+                password: password,
+                confirmPassword: confirmPassword
             });
 
-            const token = response.data.data.token;
-            fillToken(token);
+            // Token geri dönerse fillToken ile session açabilirsiniz
+            // const token = response.data.data.token;
+            // fillToken(token);
+
+            setSuccessMessage('Mailinize aktivasyon linki iletilmiştir. Linke tıkladıktan sonra uygulamaya giriş yapabilirsiniz.');
         } catch (err: any) {
-            setApiError(handleApiError(err));
-            setTimeout(() => setApiError(''), 3000); // 3 saniye sonra hata kaybolacak
+            setErrorMessage(handleApiError(err));
         } finally {
             setLoading(false);
         }
@@ -80,22 +85,9 @@ const Register: React.FC = () => {
     return (
         <Container
             maxWidth="sm"
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minHeight: '100vh',
-            }}
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}
         >
-            <Paper
-                elevation={6}
-                sx={{
-                    p: 4,
-                    width: '100%',
-                    maxWidth: 400,
-                    borderRadius: 3,
-                }}
-            >
+            <Paper elevation={6} sx={{ p: 4, width: '100%', maxWidth: 400, borderRadius: 3 }}>
                 <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
                         Kaydol
@@ -105,14 +97,9 @@ const Register: React.FC = () => {
                     </Typography>
                 </Box>
 
-                {/* API Hata Mesajı */}
-                {apiError && (
-                    <Alert severity="error" sx={{ mb: 2, width: '100%' }}>
-                        {apiError}
-                    </Alert>
-                )}
+                {errorMessage && <Alert severity="error" sx={{ mb: 2 }}>{errorMessage}</Alert>}
+                {successMessage && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
 
-                {/* E-Posta */}
                 <TextField
                     label="E-Posta"
                     type="email"
@@ -124,7 +111,6 @@ const Register: React.FC = () => {
                     helperText={errors.email}
                 />
 
-                {/* Parola */}
                 <TextField
                     label="Parola"
                     type="password"
@@ -136,7 +122,6 @@ const Register: React.FC = () => {
                     helperText={errors.password}
                 />
 
-                {/* Parola Doğrulama */}
                 <TextField
                     label="Parola Doğrulama"
                     type="password"
@@ -148,38 +133,29 @@ const Register: React.FC = () => {
                     helperText={errors.confirmPassword}
                 />
 
-                {/* Kayıt Butonu */}
                 <Button
                     variant="contained"
                     color="primary"
                     fullWidth
                     onClick={handleRegister}
-                    disabled={loading}
                     sx={{ py: 1.5, mt: 2, fontWeight: 'bold', borderRadius: 2 }}
+                    disabled={loading}
                 >
-                    {loading ? 'Kaydol...' : 'Kaydol'}
+                    {loading ? <CircularProgress size={24} /> : 'Kaydol'}
                 </Button>
 
-                {/* Divider */}
                 <Divider sx={{ width: '100%', my: 2 }}>YA DA</Divider>
 
-                {/* Google ile Kayıt */}
                 <Button
                     variant="outlined"
                     fullWidth
                     startIcon={<FcGoogle />}
                     onClick={handleGoogleRegister}
-                    sx={{
-                        py: 1.5,
-                        fontWeight: 'bold',
-                        borderRadius: 2,
-                        textTransform: 'none',
-                    }}
+                    sx={{ py: 1.5, fontWeight: 'bold', borderRadius: 2, textTransform: 'none' }}
                 >
                     Google ile Devam Et
                 </Button>
 
-                {/* Girişe Dön Linki */}
                 <Box mt={3} textAlign="center">
                     <Typography variant="body2">
                         Zaten hesabınız var mı?{' '}

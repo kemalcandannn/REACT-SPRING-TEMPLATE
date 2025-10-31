@@ -113,6 +113,10 @@ public class AuthenticationService {
             throw new UserAuthenticationException(ErrorCode.INCORRECT_USERNAME_OR_PASSWORD, TextConstants.INCORRECT_USERNAME_OR_PASSWORD_MESSAGE);
         }
 
+        if (!Status.ACTIVE.equals(user.getStatus())) {
+            throw new UserAuthenticationException(ErrorCode.PASSIVE_USER, "User has not been activated yet, please check your mail inbox.");
+        }
+
         return LoginResponse
                 .builder()
                 .token(JwtUtils.generateToken(request.getUsername()))
