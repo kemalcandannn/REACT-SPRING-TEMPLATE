@@ -13,17 +13,17 @@ import {
 import { NAVIGATE_PATHS, SERVICE_PATHS } from '../constants/Paths';
 import BaseApiAxios from '../helpers/BaseApiAxios';
 import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useApiErrorHandler } from '../helpers/ApiErrorHandler';
 
-interface ChangePasswordProps {
-    setClickedChangePassword?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePassword }) => {
+const ChangePassword: React.FC = () => {
     const { initSessionUser } = useAuthentication();
     const { handleApiError } = useApiErrorHandler();
+    const location = useLocation();
     const navigate = useNavigate();
+
+    // navigate ile gönderilen state
+    const from = (location.state as { from?: string })?.from;
 
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -67,8 +67,8 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
             setTimeout(() => setSuccess(''), 3000);
 
             setTimeout(() => {
-                if (setClickedChangePassword) {
-                    setClickedChangePassword((prev) => !prev);
+                if (from) {
+                    navigate(-1);
                 } else {
                     navigate(NAVIGATE_PATHS.DASHBOARD);
                 }
@@ -174,15 +174,15 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ setClickedChangePasswor
                     {loading ? <CircularProgress size={24} color="inherit" /> : 'Change Password'}
                 </Button>
 
-                <Box width="100%" textAlign="right" mt={1}>
-                    {setClickedChangePassword ? (
+                <Box width="100%" textAlign="center" mt={1}>
+                    {from ? (
                         <Link
                             href="#"
                             underline="hover"
                             variant="body2"
                             onClick={(e) => {
                                 e.preventDefault();
-                                if (!loading) setClickedChangePassword((prev) => !prev);
+                                navigate(-1);
                             }}
                         >
                             Back

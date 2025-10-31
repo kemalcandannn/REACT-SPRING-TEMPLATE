@@ -5,10 +5,12 @@ import com.my_company.constants.PathConstants;
 import com.my_company.constants.TextConstants;
 import com.my_company.controller.BaseController;
 import com.my_company.domain.dto.system.ParameterDTO;
+import com.my_company.domain.request.system.UpdateAllParameterRequest;
 import com.my_company.domain.response.ServiceResponse;
 import com.my_company.service.system.ParameterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,11 @@ import java.util.List;
 @Slf4j
 @Tag(name = TextConstants.PARAMETER, description = TextConstants.CRUD_SERVICES_FOR + TextConstants.PARAMETER)
 public class ParameterController extends BaseController<ParameterDTO, String> {
+    private final ParameterService service;
+
     public ParameterController(ParameterService service) {
         super(service);
+        this.service = service;
     }
 
     @GetMapping(value = "/find-all-from-cache")
@@ -46,5 +51,16 @@ public class ParameterController extends BaseController<ParameterDTO, String> {
     @Override
     public ResponseEntity<ServiceResponse<Boolean>> deleteById(@PathVariable String code) {
         return super.deleteById(code);
+    }
+
+    @PutMapping(value = "/update-all-parameters")
+    @Operation(summary = "Update All Parameters", description = "Update All Parameters by Request Body")
+    public ResponseEntity<ServiceResponse<Object>> updateAllParameters(@Valid @RequestBody UpdateAllParameterRequest request) {
+        service.updateAllParameters(request);
+        return ResponseEntity.ok(
+                ServiceResponse
+                        .builder()
+                        .data(null)
+                        .build());
     }
 }

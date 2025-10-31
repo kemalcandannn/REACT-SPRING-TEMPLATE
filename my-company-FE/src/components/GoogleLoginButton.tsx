@@ -1,7 +1,7 @@
 import React from "react";
-import BaseApiAxios from "../../helpers/BaseApiAxios";
-import { GOOGLE_CLIENT_ID, SERVICE_PATHS } from "../Paths";
-import { useAuthentication } from "../../contexts/authentication/AuthenticationContext";
+import BaseApiAxios from "../helpers/BaseApiAxios";
+import { GOOGLE_CLIENT_ID, SERVICE_PATHS } from "../constants/Paths";
+import { useAuthentication } from "../contexts/authentication/AuthenticationContext";
 
 declare global {
     interface Window {

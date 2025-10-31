@@ -17,7 +17,7 @@ import BaseApiAxios from '../helpers/BaseApiAxios';
 import { NAVIGATE_PATHS, SERVICE_PATHS } from '../constants/Paths';
 import { useAuthentication } from '../contexts/authentication/AuthenticationContext';
 import { useApiErrorHandler } from '../helpers/ApiErrorHandler';
-import GoogleLoginButton from '../constants/components/GoogleLoginButton';
+import GoogleLoginButton from '../components/GoogleLoginButton';
 
 const Login: React.FC = () => {
     const { fillToken } = useAuthentication();
